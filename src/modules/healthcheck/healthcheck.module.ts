@@ -1,4 +1,4 @@
-// src/modules/healthcheck.module.ts
+// src/modules/healthcheck/healthcheck.module.ts
 import { Module } from '@nestjs/common';
 import { HealthcheckController } from './healthcheck.controller';
 

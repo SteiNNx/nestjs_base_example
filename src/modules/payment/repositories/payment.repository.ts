@@ -1,27 +1,19 @@
-// src/modules/payment/repositories/payment.repository.ts
-import { Injectable } from '@nestjs/common';
-import { DynamoDBClient, PutItemCommand, GetItemCommand } from '@aws-sdk/client-dynamodb';
-import { ConfigService } from '@nestjs/config';
+import { Injectable, Logger } from '@nestjs/common';
 import { IPayment } from 'src/common/interfaces/payment.interface';
+import { DynamoDBService } from 'src/common/db/dynamodb.client';
 
 @Injectable()
 export class PaymentRepository {
-    private readonly client: DynamoDBClient;
-    private readonly tableName: string;
+    private readonly logger = new Logger(PaymentRepository.name);
 
-    constructor(private readonly configService: ConfigService) {
-        this.tableName = this.configService.get<string>('dynamoDB.tableName', 'payments'); // Nombre de la tabla, con default 'payments'
-        this.client = new DynamoDBClient({
-            region: this.configService.get<string>('region', 'us-west-2'),
-            credentials: {
-                accessKeyId: this.configService.get<string>('accessKeyId', 'fakeAccessKeyId123'),
-                secretAccessKey: this.configService.get<string>('secretAccessKey', 'fakeSecretAccessKey123'),
-            },
-            endpoint: this.configService.get<string>('endpoint', 'http://localhost:8000'),
-        });
-    }
+    constructor(private readonly dynamoDBService: DynamoDBService) { }
 
-    async createPayment(payment: IPayment): Promise<void> {
+    /**
+     * Crea un nuevo pago en la base de datos DynamoDB.
+     * @param payment El pago a crear.
+     * @returns true si la inserción fue exitosa, false en caso contrario.
+     */
+    async createPayment(payment: IPayment): Promise<boolean> {
         const item = {
             transaction_id: { S: payment.transaction_id },
             card_number: { S: payment.card_number },
@@ -74,22 +66,22 @@ export class PaymentRepository {
             },
         };
 
-        const command = new PutItemCommand({
-            TableName: this.tableName,
-            Item: item,
-        });
-
-        await this.client.send(command);
+        const success = await this.dynamoDBService.putItem(item);
+        if (!success) {
+            this.logger.error(`No se pudo crear el pago con transaction_id: ${payment.transaction_id}`);
+        }
+        return success;
     }
 
+    /**
+     * Obtiene un pago por su transaction_id desde la base de datos DynamoDB.
+     * @param transactionId El ID de la transacción a obtener.
+     * @returns El pago si existe, de lo contrario null.
+     */
     async getPayment(transactionId: string): Promise<IPayment | null> {
-        const command = new GetItemCommand({
-            TableName: this.tableName,
-            Key: { transaction_id: { S: transactionId } },
-        });
-
-        const response = await this.client.send(command);
-        return response.Item ? this.mapDynamoDBItemToPayment(response.Item) : null;
+        const key = { transaction_id: { S: transactionId } };
+        const item = await this.dynamoDBService.getItem(key);
+        return item ? this.mapDynamoDBItemToPayment(item) : null;
     }
 
     private mapDynamoDBItemToPayment(item: Record<string, any>): IPayment {

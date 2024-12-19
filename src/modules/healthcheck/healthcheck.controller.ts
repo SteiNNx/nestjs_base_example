@@ -1,4 +1,4 @@
-// src/modules/healthcheck.controller.ts
+// src/modules/healthcheck/healthcheck.controller.ts
 import { Controller, Get, HttpCode } from '@nestjs/common';
 
 import { HeadersMetadata } from 'src/common/decorators/headers-metadata.decorator';
