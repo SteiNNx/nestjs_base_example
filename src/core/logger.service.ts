@@ -8,9 +8,9 @@ export class LoggerService implements NestLoggerService {
   private pinoLogger: pino.Logger;
 
   constructor(private readonly configService: ConfigService) {
-    const env = this.configService.get<string>('NODE_ENV', 'development');
-    const logLevel = this.configService.get<string>('LOG_LEVEL', env === 'production' ? 'info' : 'debug');
-    const projectName = this.configService.get<string>('PROJECT_NAME', 'default-project');
+    const env = this.configService.get<string>('environment', 'development');
+    const logLevel = this.configService.get<string>('logLevel', env === 'production' ? 'info' : 'debug');
+    const projectName = this.configService.get<string>('projectName', 'default-project');
 
     this.pinoLogger = pino({
       level: logLevel,

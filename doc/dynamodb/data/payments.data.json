@@ -1,0 +1,569 @@
+{
+    "payments": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "transaction_id": {
+                        "S": "txn-1003-abcdef123458"
+                    },
+                    "card_number": {
+                        "S": "411111******2222"
+                    },
+                    "amount": {
+                        "N": "200.50"
+                    },
+                    "currency": {
+                        "S": "CLP"
+                    },
+                    "timestamp": {
+                        "S": "2024-05-10T10:15:00Z"
+                    },
+                    "merchant": {
+                        "M": {
+                            "merchant_id": {
+                                "S": "m-2003"
+                            },
+                            "name": {
+                                "S": "Supermercado La Esperanza"
+                            },
+                            "category": {
+                                "S": "Supermercado"
+                            },
+                            "location": {
+                                "M": {
+                                    "address": {
+                                        "S": "Av. Providencia 456"
+                                    },
+                                    "city": {
+                                        "S": "Santiago"
+                                    },
+                                    "country": {
+                                        "S": "Chile"
+                                    },
+                                    "latitude": {
+                                        "N": "-33.4500"
+                                    },
+                                    "longitude": {
+                                        "N": "-70.6667"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "transaction_type": {
+                        "S": "Pago"
+                    },
+                    "auth_code": {
+                        "S": "AUTH789012"
+                    },
+                    "response_code": {
+                        "S": "00"
+                    },
+                    "terminal_id": {
+                        "S": "term-3003"
+                    },
+                    "issuer": {
+                        "M": {
+                            "bank_id": {
+                                "S": "bank-4003"
+                            },
+                            "name": {
+                                "S": "Banco de Chile"
+                            },
+                            "country": {
+                                "S": "Chile"
+                            }
+                        }
+                    },
+                    "cardholder_verification_method": {
+                        "S": "PIN"
+                    },
+                    "emv_data": {
+                        "M": {
+                            "application_id": {
+                                "S": "A0000000042020"
+                            },
+                            "application_label": {
+                                "S": "VISA DEBITO"
+                            },
+                            "transaction_counter": {
+                                "N": "7"
+                            },
+                            "unpredictable_number": {
+                                "S": "1B2C3D4E"
+                            },
+                            "issuer_application_data": {
+                                "S": "0A0B0C0D"
+                            }
+                        }
+                    },
+                    "additional_data": {
+                        "M": {
+                            "installments": {
+                                "N": "1"
+                            },
+                            "tip_amount": {
+                                "N": "0.00"
+                            },
+                            "cashback_amount": {
+                                "N": "20.00"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "transaction_id": {
+                        "S": "txn-1004-abcdef123459"
+                    },
+                    "card_number": {
+                        "S": "550000******3333"
+                    },
+                    "amount": {
+                        "N": "350.00"
+                    },
+                    "currency": {
+                        "S": "CLP"
+                    },
+                    "timestamp": {
+                        "S": "2024-05-11T12:30:00Z"
+                    },
+                    "merchant": {
+                        "M": {
+                            "merchant_id": {
+                                "S": "m-2004"
+                            },
+                            "name": {
+                                "S": "Librería El Saber"
+                            },
+                            "category": {
+                                "S": "Librería"
+                            },
+                            "location": {
+                                "M": {
+                                    "address": {
+                                        "S": "Calle Los Leones 789"
+                                    },
+                                    "city": {
+                                        "S": "Santiago"
+                                    },
+                                    "country": {
+                                        "S": "Chile"
+                                    },
+                                    "latitude": {
+                                        "N": "-33.4520"
+                                    },
+                                    "longitude": {
+                                        "N": "-70.6640"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "transaction_type": {
+                        "S": "Pago"
+                    },
+                    "auth_code": {
+                        "S": "AUTH345678"
+                    },
+                    "response_code": {
+                        "S": "00"
+                    },
+                    "terminal_id": {
+                        "S": "term-3004"
+                    },
+                    "issuer": {
+                        "M": {
+                            "bank_id": {
+                                "S": "bank-4004"
+                            },
+                            "name": {
+                                "S": "Banco Santander Chile"
+                            },
+                            "country": {
+                                "S": "Chile"
+                            }
+                        }
+                    },
+                    "cardholder_verification_method": {
+                        "S": "Firma"
+                    },
+                    "emv_data": {
+                        "M": {
+                            "application_id": {
+                                "S": "A0000000053030"
+                            },
+                            "application_label": {
+                                "S": "MasterCard DEBITO"
+                            },
+                            "transaction_counter": {
+                                "N": "8"
+                            },
+                            "unpredictable_number": {
+                                "S": "2C3D4E5F"
+                            },
+                            "issuer_application_data": {
+                                "S": "1B1C1D1E"
+                            }
+                        }
+                    },
+                    "additional_data": {
+                        "M": {
+                            "installments": {
+                                "N": "1"
+                            },
+                            "tip_amount": {
+                                "N": "0.00"
+                            },
+                            "cashback_amount": {
+                                "N": "0.00"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "transaction_id": {
+                        "S": "txn-1005-abcdef123450"
+                    },
+                    "card_number": {
+                        "S": "411111******4444"
+                    },
+                    "amount": {
+                        "N": "500.00"
+                    },
+                    "currency": {
+                        "S": "CLP"
+                    },
+                    "timestamp": {
+                        "S": "2024-05-12T09:45:00Z"
+                    },
+                    "merchant": {
+                        "M": {
+                            "merchant_id": {
+                                "S": "m-2005"
+                            },
+                            "name": {
+                                "S": "Cine Plaza"
+                            },
+                            "category": {
+                                "S": "Cine"
+                            },
+                            "location": {
+                                "M": {
+                                    "address": {
+                                        "S": "Av. Apoquindo 1234"
+                                    },
+                                    "city": {
+                                        "S": "Santiago"
+                                    },
+                                    "country": {
+                                        "S": "Chile"
+                                    },
+                                    "latitude": {
+                                        "N": "-33.4505"
+                                    },
+                                    "longitude": {
+                                        "N": "-70.6670"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "transaction_type": {
+                        "S": "Anulado"
+                    },
+                    "auth_code": {
+                        "S": "AUTH901234"
+                    },
+                    "response_code": {
+                        "S": "01"
+                    },
+                    "terminal_id": {
+                        "S": "term-3005"
+                    },
+                    "issuer": {
+                        "M": {
+                            "bank_id": {
+                                "S": "bank-4005"
+                            },
+                            "name": {
+                                "S": "Banco BCI"
+                            },
+                            "country": {
+                                "S": "Chile"
+                            }
+                        }
+                    },
+                    "cardholder_verification_method": {
+                        "S": "PIN"
+                    },
+                    "emv_data": {
+                        "M": {
+                            "application_id": {
+                                "S": "A0000000064040"
+                            },
+                            "application_label": {
+                                "S": "VISA PREPAGO"
+                            },
+                            "transaction_counter": {
+                                "N": "3"
+                            },
+                            "unpredictable_number": {
+                                "S": "3D4E5F6G"
+                            },
+                            "issuer_application_data": {
+                                "S": "2C2D2E2F"
+                            }
+                        }
+                    },
+                    "additional_data": {
+                        "M": {
+                            "installments": {
+                                "N": "1"
+                            },
+                            "tip_amount": {
+                                "N": "0.00"
+                            },
+                            "cashback_amount": {
+                                "N": "0.00"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "transaction_id": {
+                        "S": "txn-1006-abcdef123451"
+                    },
+                    "card_number": {
+                        "S": "550000******5555"
+                    },
+                    "amount": {
+                        "N": "750.00"
+                    },
+                    "currency": {
+                        "S": "CLP"
+                    },
+                    "timestamp": {
+                        "S": "2024-05-13T14:20:00Z"
+                    },
+                    "merchant": {
+                        "M": {
+                            "merchant_id": {
+                                "S": "m-2006"
+                            },
+                            "name": {
+                                "S": "Taller Mecánico Express"
+                            },
+                            "category": {
+                                "S": "Automotriz"
+                            },
+                            "location": {
+                                "M": {
+                                    "address": {
+                                        "S": "Ruta 5 Sur Km 45"
+                                    },
+                                    "city": {
+                                        "S": "Valparaíso"
+                                    },
+                                    "country": {
+                                        "S": "Chile"
+                                    },
+                                    "latitude": {
+                                        "N": "-33.0472"
+                                    },
+                                    "longitude": {
+                                        "N": "-71.6127"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "transaction_type": {
+                        "S": "Reversado"
+                    },
+                    "auth_code": {
+                        "S": "AUTH567890"
+                    },
+                    "response_code": {
+                        "S": "00"
+                    },
+                    "terminal_id": {
+                        "S": "term-3006"
+                    },
+                    "issuer": {
+                        "M": {
+                            "bank_id": {
+                                "S": "bank-4006"
+                            },
+                            "name": {
+                                "S": "Banco Itaú Chile"
+                            },
+                            "country": {
+                                "S": "Chile"
+                            }
+                        }
+                    },
+                    "cardholder_verification_method": {
+                        "S": "PIN"
+                    },
+                    "emv_data": {
+                        "M": {
+                            "application_id": {
+                                "S": "A0000000075050"
+                            },
+                            "application_label": {
+                                "S": "MasterCard PREPAGO"
+                            },
+                            "transaction_counter": {
+                                "N": "10"
+                            },
+                            "unpredictable_number": {
+                                "S": "4E5F6G7H"
+                            },
+                            "issuer_application_data": {
+                                "S": "3D3E3F3G"
+                            }
+                        }
+                    },
+                    "additional_data": {
+                        "M": {
+                            "installments": {
+                                "N": "1"
+                            },
+                            "tip_amount": {
+                                "N": "0.00"
+                            },
+                            "cashback_amount": {
+                                "N": "0.00"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "transaction_id": {
+                        "S": "txn-1007-abcdef123452"
+                    },
+                    "card_number": {
+                        "S": "411111******6666"
+                    },
+                    "amount": {
+                        "N": "1200.00"
+                    },
+                    "currency": {
+                        "S": "CLP"
+                    },
+                    "timestamp": {
+                        "S": "2024-05-14T18:55:00Z"
+                    },
+                    "merchant": {
+                        "M": {
+                            "merchant_id": {
+                                "S": "m-2007"
+                            },
+                            "name": {
+                                "S": "Farmacia Salud"
+                            },
+                            "category": {
+                                "S": "Farmacia"
+                            },
+                            "location": {
+                                "M": {
+                                    "address": {
+                                        "S": "Calle San Martín 321"
+                                    },
+                                    "city": {
+                                        "S": "Concepción"
+                                    },
+                                    "country": {
+                                        "S": "Chile"
+                                    },
+                                    "latitude": {
+                                        "N": "-36.8201"
+                                    },
+                                    "longitude": {
+                                        "N": "-73.0444"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "transaction_type": {
+                        "S": "Anulado_Reversa"
+                    },
+                    "auth_code": {
+                        "S": "AUTH112233"
+                    },
+                    "response_code": {
+                        "S": "00"
+                    },
+                    "terminal_id": {
+                        "S": "term-3007"
+                    },
+                    "issuer": {
+                        "M": {
+                            "bank_id": {
+                                "S": "bank-4007"
+                            },
+                            "name": {
+                                "S": "Banco Falabella"
+                            },
+                            "country": {
+                                "S": "Chile"
+                            }
+                        }
+                    },
+                    "cardholder_verification_method": {
+                        "S": "Firma"
+                    },
+                    "emv_data": {
+                        "M": {
+                            "application_id": {
+                                "S": "A0000000086060"
+                            },
+                            "application_label": {
+                                "S": "VISA BUSINESS"
+                            },
+                            "transaction_counter": {
+                                "N": "15"
+                            },
+                            "unpredictable_number": {
+                                "S": "5F6G7H8I"
+                            },
+                            "issuer_application_data": {
+                                "S": "4E4F4G4H"
+                            }
+                        }
+                    },
+                    "additional_data": {
+                        "M": {
+                            "installments": {
+                                "N": "1"
+                            },
+                            "tip_amount": {
+                                "N": "0.00"
+                            },
+                            "cashback_amount": {
+                                "N": "0.00"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

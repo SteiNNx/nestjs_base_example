@@ -12,6 +12,7 @@ import { HealthcheckModule } from './modules/healthcheck/healthcheck.module';
 
 import { LoggerService } from './core/logger.service';
 import { MonitoreoService } from './core/monitoreo.service';
+import { PaymentModule } from './modules/payment/payment.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MonitoreoService } from './core/monitoreo.service';
     }),
     CoreModule,
     HealthcheckModule,
+    PaymentModule,
   ],
   providers: [
     Reflector,

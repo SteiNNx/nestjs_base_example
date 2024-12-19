@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  dynamodb:
+    image: amazon/dynamodb-local:2.4.0
+    container_name: dynamodb-local
+    command: "-jar DynamoDBLocal.jar -sharedDb"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -v http://localhost:8000 || exit 1"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+      start_period: 3s
+    ports:
+      - "8000:8000"
+    volumes:
+      - dynamodb_data:/home/dynamodblocal/data
+    environment:
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_REGION: ${AWS_REGION}
+      DYNAMODB_ENDPOINT: ${DYNAMODB_ENDPOINT}
+
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin:4.6.1
+    container_name: dynamodb-admin
+    depends_on:
+      dynamodb:
+        condition: service_healthy
+    ports:
+      - "8001:8001"
+    environment:
+      DYNAMO_ENDPOINT: http://dynamodb:8000
+      AWS_REGION: ${AWS_REGION}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+
+volumes:
+  dynamodb_data:
