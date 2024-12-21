@@ -1,3 +1,4 @@
+// src/common/db/dynamodb.client.ts
 import { Injectable, Logger } from '@nestjs/common';
 import { DynamoDBClient, PutItemCommand, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { ConfigService } from '@nestjs/config';

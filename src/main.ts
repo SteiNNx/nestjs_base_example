@@ -3,9 +3,13 @@ import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
 import { LoggerService } from './core/logger.service';
+import helmet from 'helmet'; // Importa Helmet
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Aplica Helmet como middleware de seguridad
+  app.use(helmet());
 
   // Obtener ConfigService y LoggerService
   const configService = app.get(ConfigService);

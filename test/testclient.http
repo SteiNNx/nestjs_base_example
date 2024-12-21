@@ -1,9 +1,22 @@
 ### Healthcheck Endpoint
 GET http://localhost:3000/api/healthcheck
 
-### Crear un nuevo pago
+### Login Endpoint
+POST http://localhost:3000/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "test",
+  "password": "test"
+}
+
+###
+@access_token = {{response.body.access_token}}
+
+### Crear un Nuevo Pago
 POST http://localhost:3000/api/payments
 Content-Type: application/json
+Authorization: Bearer {{access_token}}
 
 {
   "transaction_id": "txn-2001-abcdesf123459",
