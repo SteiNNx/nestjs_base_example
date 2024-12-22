@@ -4,10 +4,10 @@ import {
     PipeTransform,
     Injectable,
     ArgumentMetadata,
-    BadRequestException,
 } from '@nestjs/common';
 import { ClassConstructor, plainToInstance } from 'class-transformer';
 import { validateSync } from 'class-validator';
+import { ValidationError as CustomValidationError } from 'src/common/exceptions/validation.exception';
 
 @Injectable()
 export class AuthValidationPipe<T extends object> implements PipeTransform<unknown, T> {
@@ -24,11 +24,21 @@ export class AuthValidationPipe<T extends object> implements PipeTransform<unkno
         });
 
         if (errors.length > 0) {
-            // Construyes un mensaje de error unificado
-            const errMsg = errors
-                .map((err) => Object.values(err.constraints || {}))
-                .join(', ');
-            throw new BadRequestException(`Error de validación: ${errMsg}`);
+            // Mapeamos los errores de class-validator a tu formato de "validationIssues"
+            const validationIssues = errors.map((err) => {
+                const field = err.property;
+                const messages = Object.values(err.constraints ?? {});
+                return { field, message: messages.join(', ') };
+            });
+
+            // Lanzamos ValidationError personalizado
+            throw new CustomValidationError(
+                'VALIDATION.001',
+                'Datos de entrada no válidos.',
+                422,           // Unprocessable Entity
+                undefined,     // Opcionalmente puedes pasar un objeto Error como 'cause'
+                validationIssues,
+            );
         }
 
         // Retorna el objeto validado y transformado a DTO

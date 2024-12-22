@@ -3,8 +3,11 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { AuthRepository } from './repositories/auth.repository';
-// Opcional: importar la interfaz
 import { IUser } from './interfaces/auth.interface';
+
+// Ejemplo de uso de excepciones personalizadas:
+import { BusinessError } from 'src/common/exceptions/business.exception';
+// Podrías usar TechnicalError, AdapterError, etc. según necesites.
 
 @Injectable()
 export class AuthService {
@@ -17,15 +20,24 @@ export class AuthService {
    * Valida las credenciales del usuario consultando en DynamoDB.
    * @param username Nombre de usuario.
    * @param pass Contraseña del usuario.
-   * @returns Objeto de usuario (sin password) si las credenciales son válidas, de lo contrario null.
+   * @returns Objeto de usuario (sin password) si las credenciales son válidas, de lo contrario lanza excepción.
    */
-  async validateUser(username: string, pass: string): Promise<IUser | null> {
+  async validateUser(username: string, pass: string): Promise<IUser> {
     const user = await this.authRepository.getUserByUsername(username);
+
+    // Si el usuario existe y el password coincide, retornamos el objeto sin password.
     if (user && user.password === pass) {
       const { password, ...result } = user;
-      return result as IUser; // casteo a la interfaz sin el password
+      return result as IUser;
     }
-    return null;
+
+    // Si no, lanzamos un BusinessError con código 401 o 400, según prefieras.
+    // "BUSINESS.401" es un código interno de ejemplo
+    throw new BusinessError(
+      'BUSINESS.401',
+      'Credenciales inválidas',
+      401,
+    );
   }
 
   /**

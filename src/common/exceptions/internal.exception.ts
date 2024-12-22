@@ -1,17 +1,15 @@
-// src/common/exceptions/technical.exception.ts
+// src/common/exceptions/internal.exception.ts
 
 import { HttpStatus } from '@nestjs/common';
 import { BaseError } from './base.exception';
 
 /**
- * Clase para manejar errores técnicos.
- * Hereda de `BaseError` y se utiliza para representar errores específicos
- * relacionados con problemas técnicos durante el funcionamiento de la aplicación.
+ * Clase para representar un error interno no contemplado en otras categorías.
  */
-export class TechnicalError extends BaseError {
+export class InternalError extends BaseError {
     constructor(
         code: string,
-        message: string,
+        message: string = 'Ha ocurrido un error interno en el servidor.',
         statusCode: number = HttpStatus.INTERNAL_SERVER_ERROR,
         cause?: Error,
         errors: any[] = [],
@@ -19,7 +17,7 @@ export class TechnicalError extends BaseError {
         super({
             message,
             code,
-            name: 'TechnicalError',
+            name: 'InternalError',
             statusCode,
             cause,
             errors,

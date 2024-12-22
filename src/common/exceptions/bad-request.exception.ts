@@ -1,25 +1,24 @@
-// src/common/exceptions/business.exception.ts
+// src/common/exceptions/bad-request.exception.ts
 
 import { HttpStatus } from '@nestjs/common';
 import { BaseError } from './base.exception';
 
 /**
- * Clase para manejar errores de negocio.
- * Hereda de `BaseError` y se utiliza para representar errores específicos
- * relacionados con la lógica de negocio.
+ * Clase para manejar peticiones mal formadas (Bad Request).
+ * Hereda de `BaseError`.
  */
-export class BusinessError extends BaseError {
+export class BadRequestError extends BaseError {
     constructor(
         code: string,
         message: string,
-        statusCode: number = HttpStatus.INTERNAL_SERVER_ERROR,
+        statusCode: number = HttpStatus.BAD_REQUEST,
         cause?: Error,
         errors: any[] = [],
     ) {
         super({
             message,
             code,
-            name: 'BusinessError',
+            name: 'BadRequestError',
             statusCode,
             cause,
             errors,

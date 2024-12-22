@@ -1,29 +1,37 @@
+# Ejemplos de Uso de Excepciones Personalizadas
+
+A continuación encontrarás **ejemplos de uso** de **todas las clases** de error personalizadas, incluyendo:
+- BusinessError
+- TechnicalError
+- AdapterError
+- ValidationError
+- BadRequestError
+- InternalError
+
+Cada una **hereda** de `BaseError` y comparte la misma **estructura de respuesta JSON**, variando el `code`, `statusCode` y la `name` interna.
+
+---
+
+## Importación de las Excepciones
+
+```ts
 import { BusinessError } from 'src/common/exceptions/business.exception';
 import { TechnicalError } from 'src/common/exceptions/technical.exception';
+import { AdapterError } from 'src/common/exceptions/adapter.exception';
+import { ValidationError } from 'src/common/exceptions/validation.exception';
+import { BadRequestError } from 'src/common/exceptions/bad-request.exception';
+import { InternalError } from 'src/common/exceptions/internal.exception';
+```
 
-// Caso 1: Error de negocio sin causa
+---
+
+## Ejemplos
+
+### Caso 1: **BusinessError** sin causa
+```ts
 throw new BusinessError('BUSINESS.001', 'Ocurrió un error de negocio inesperado.');
-
-// Caso 2: Error de negocio con código de estado personalizado
-throw new BusinessError('BUSINESS.002', 'El proceso de pago ha fallado.', 400);
-
-// Caso 3: Error de negocio con causa
-const causeError = new Error('Fallo en el servicio de pagos.');
-throw new BusinessError('BUSINESS.003', 'Error al procesar la solicitud de pago.', 500, causeError);
-
-// Caso 4: Error técnico sin causa
-throw new TechnicalError('TECH.001', 'Ocurrió un error técnico inesperado.');
-
-// Caso 5: Error técnico con código de estado personalizado
-throw new TechnicalError('TECH.002', 'Error de conexión con el servidor.', 503);
-
-// Caso 6: Error técnico con causa
-const dbError = new Error('Timeout en el servicio de base de datos.');
-throw new TechnicalError('TECH.003', 'Error al acceder a los datos.', 500, dbError);
-
-
-### Caso 1: Error de negocio sin causa
-
+```
+**Respuesta JSON:**
 ```json
 {
   "statusCode": 500,
@@ -34,8 +42,11 @@ throw new TechnicalError('TECH.003', 'Error al acceder a los datos.', 500, dbErr
 }
 ```
 
-### Caso 2: Error de negocio con código de estado personalizado
-
+### Caso 2: **BusinessError** con código de estado personalizado
+```ts
+throw new BusinessError('BUSINESS.002', 'El proceso de pago ha fallado.', 400);
+```
+**Respuesta JSON:**
 ```json
 {
   "statusCode": 400,
@@ -46,8 +57,12 @@ throw new TechnicalError('TECH.003', 'Error al acceder a los datos.', 500, dbErr
 }
 ```
 
-### Caso 3: Error de negocio con causa
-
+### Caso 3: **BusinessError** con causa
+```ts
+const causeError = new Error('Fallo en el servicio de pagos.');
+throw new BusinessError('BUSINESS.003', 'Error al procesar la solicitud de pago.', 500, causeError);
+```
+**Respuesta JSON:**
 ```json
 {
   "statusCode": 500,
@@ -62,11 +77,15 @@ throw new TechnicalError('TECH.003', 'Error al acceder a los datos.', 500, dbErr
   }
 }
 ```
+> Nota: `STACK_TRACE_DEL_ERROR_ORIGINAL` será el stack trace real del error.
 
-> Nota: `STACK_TRACE_DEL_ERROR_ORIGINAL` representará el stack trace real del error original, que será una cadena larga con la traza de la función.
+---
 
-### Caso 4: Error técnico sin causa
-
+### Caso 4: **TechnicalError** sin causa
+```ts
+throw new TechnicalError('TECH.001', 'Ocurrió un error técnico inesperado.');
+```
+**Respuesta JSON:**
 ```json
 {
   "statusCode": 500,
@@ -77,8 +96,11 @@ throw new TechnicalError('TECH.003', 'Error al acceder a los datos.', 500, dbErr
 }
 ```
 
-### Caso 5: Error técnico con código de estado personalizado
-
+### Caso 5: **TechnicalError** con código de estado personalizado
+```ts
+throw new TechnicalError('TECH.002', 'Error de conexión con el servidor.', 503);
+```
+**Respuesta JSON:**
 ```json
 {
   "statusCode": 503,
@@ -89,8 +111,12 @@ throw new TechnicalError('TECH.003', 'Error al acceder a los datos.', 500, dbErr
 }
 ```
 
-### Caso 6: Error técnico con causa
-
+### Caso 6: **TechnicalError** con causa
+```ts
+const dbError = new Error('Timeout en el servicio de base de datos.');
+throw new TechnicalError('TECH.003', 'Error al acceder a los datos.', 500, dbError);
+```
+**Respuesta JSON:**
 ```json
 {
   "statusCode": 500,
@@ -106,4 +132,83 @@ throw new TechnicalError('TECH.003', 'Error al acceder a los datos.', 500, dbErr
 }
 ```
 
-De esta forma, el frontend recibirá un cuerpo JSON consistente con información sobre el error, el código HTTP, el código interno de error, un mensaje descriptivo, posibles errores adicionales en un arreglo `errors`, y una `cause` (causa) opcional con más contexto cuando corresponda.
+---
+
+### Caso 7: **AdapterError** (por ejemplo, problema con servicio externo)
+```ts
+const externalServiceError = new Error('El servicio de mensajería respondió con 503');
+throw new AdapterError('ADAPTER.001', 'Fallo en la comunicación con el servicio de mensajería.', 502, externalServiceError);
+```
+**Respuesta JSON:**
+```json
+{
+  "statusCode": 502,
+  "code": "ADAPTER.001",
+  "message": "Fallo en la comunicación con el servicio de mensajería.",
+  "errors": [],
+  "cause": {
+    "code": "",
+    "name": "Error",
+    "message": "El servicio de mensajería respondió con 503",
+    "stack": "STACK_TRACE_DEL_ERROR_ORIGINAL"
+  }
+}
+```
+
+---
+
+### Caso 8: **ValidationError** (ej. datos de dominio inválidos)
+```ts
+const validationIssues = [
+  { field: 'email', message: 'Formato de email inválido.' },
+  { field: 'age', message: 'La edad debe ser mayor o igual a 18.' }
+];
+throw new ValidationError('VALIDATION.001', 'Datos de entrada no válidos.', 422, undefined, validationIssues);
+```
+**Respuesta JSON:**
+```json
+{
+  "statusCode": 422,
+  "code": "VALIDATION.001",
+  "message": "Datos de entrada no válidos.",
+  "errors": [
+    { "field": "email", "message": "Formato de email inválido." },
+    { "field": "age", "message": "La edad debe ser mayor o igual a 18." }
+  ],
+  "cause": undefined
+}
+```
+
+---
+
+### Caso 9: **BadRequestError** (petición mal formada)
+```ts
+throw new BadRequestError('BAD_REQUEST.001', 'JSON mal formateado en la petición.', 400);
+```
+**Respuesta JSON:**
+```json
+{
+  "statusCode": 400,
+  "code": "BAD_REQUEST.001",
+  "message": "JSON mal formateado en la petición.",
+  "errors": [],
+  "cause": undefined
+}
+```
+
+---
+
+### Caso 10: **InternalError** (error interno inesperado)
+```ts
+throw new InternalError('INTERNAL.001', 'Error interno no previsto en el servidor.');
+```
+**Respuesta JSON:**
+```json
+{
+  "statusCode": 500,
+  "code": "INTERNAL.001",
+  "message": "Error interno no previsto en el servidor.",
+  "errors": [],
+  "cause": undefined
+}
+```
