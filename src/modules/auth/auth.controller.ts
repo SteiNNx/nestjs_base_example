@@ -1,6 +1,9 @@
 // src/modules/auth/auth.controller.ts
-import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
+
+import { Controller, Post, Body, UnauthorizedException, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { AuthValidationPipe } from './pipes/auth-validation.pipe';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -16,11 +19,9 @@ export class AuthController {
      * @throws UnauthorizedException Si las credenciales son inválidas.
      */
     @Post('login')
-    async login(@Body() body: { username: string; password: string }) {
-        const user = await this.authService.validateUser(
-            body.username,
-            body.password,
-        );
+    @UsePipes(new AuthValidationPipe(LoginDto))
+    async login(@Body() body: LoginDto) {
+        const user = await this.authService.validateUser(body.username, body.password);
         if (!user) {
             throw new UnauthorizedException('Credenciales inválidas');
         }

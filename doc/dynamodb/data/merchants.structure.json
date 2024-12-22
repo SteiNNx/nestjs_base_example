@@ -1,0 +1,94 @@
+{
+    "TableName": "merchants",
+    "KeySchema": [
+      {
+        "AttributeName": "merchant_id",
+        "KeyType": "HASH"
+      }
+    ],
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "merchant_id",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "name",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "category",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "city",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 10,
+      "WriteCapacityUnits": 10
+    },
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "MerchantNameIndex",
+        "KeySchema": [
+          {
+            "AttributeName": "name",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "merchant_id",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        }
+      },
+      {
+        "IndexName": "MerchantCategoryIndex",
+        "KeySchema": [
+          {
+            "AttributeName": "category",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "merchant_id",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        }
+      },
+      {
+        "IndexName": "MerchantCityIndex",
+        "KeySchema": [
+          {
+            "AttributeName": "city",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "merchant_id",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        }
+      }
+    ]
+  }
+  

@@ -49,7 +49,11 @@ export class AppConfiguration {
 
       // Configuración DynamoDB
       dynamoDB: {
-        tableName: process.env.DYNAMODB_TABLE_NAME || 'payments',
+        tables: {
+          merchants: process.env.DYNAMODB_TABLE_NAME_MERCHANTS || 'merchants',
+          payments: process.env.DYNAMODB_TABLE_NAME_PAYMENTS || 'payments',
+          users: process.env.DYNAMODB_TABLE_NAME_USERS || 'users',
+        },
         endpoint: process.env.DYNAMODB_ENDPOINT || 'http://localhost:8000',
         accessKeyId: process.env.AWS_ACCESS_KEY_ID || 'fakeAccessKeyId123',
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || 'fakeSecretAccessKey123',

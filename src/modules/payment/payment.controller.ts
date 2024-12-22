@@ -1,7 +1,7 @@
 import { Controller, Post, Body, UsePipes, HttpStatus } from '@nestjs/common';
 import { PaymentValidationPipe } from './pipes/payment-validation.pipe';
 import { PaymentService } from './payment.service';
-import { IPayment } from 'src/common/interfaces/payment.interface';
+import { IPayment } from 'src/modules/payment/interfaces/payment.interface';
 import { OutputMessageSuccess } from 'src/common/interfaces/output-message-success';
 
 @Controller('payments')

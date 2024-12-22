@@ -1,0 +1,174 @@
+{
+    "merchants": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "merchant_id": {
+                        "S": "m-2003"
+                    },
+                    "name": {
+                        "S": "Supermercado La Esperanza"
+                    },
+                    "category": {
+                        "S": "Supermercado"
+                    },
+                    "location": {
+                        "M": {
+                            "address": {
+                                "S": "Av. Providencia 456"
+                            },
+                            "city": {
+                                "S": "Santiago"
+                            },
+                            "country": {
+                                "S": "Chile"
+                            },
+                            "latitude": {
+                                "N": "-33.4500"
+                            },
+                            "longitude": {
+                                "N": "-70.6667"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "merchant_id": {
+                        "S": "m-2004"
+                    },
+                    "name": {
+                        "S": "Librería El Saber"
+                    },
+                    "category": {
+                        "S": "Librería"
+                    },
+                    "location": {
+                        "M": {
+                            "address": {
+                                "S": "Calle Los Leones 789"
+                            },
+                            "city": {
+                                "S": "Santiago"
+                            },
+                            "country": {
+                                "S": "Chile"
+                            },
+                            "latitude": {
+                                "N": "-33.4520"
+                            },
+                            "longitude": {
+                                "N": "-70.6640"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "merchant_id": {
+                        "S": "m-2005"
+                    },
+                    "name": {
+                        "S": "Cine Plaza"
+                    },
+                    "category": {
+                        "S": "Cine"
+                    },
+                    "location": {
+                        "M": {
+                            "address": {
+                                "S": "Av. Apoquindo 1234"
+                            },
+                            "city": {
+                                "S": "Santiago"
+                            },
+                            "country": {
+                                "S": "Chile"
+                            },
+                            "latitude": {
+                                "N": "-33.4505"
+                            },
+                            "longitude": {
+                                "N": "-70.6670"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "merchant_id": {
+                        "S": "m-2006"
+                    },
+                    "name": {
+                        "S": "Taller Mecánico Express"
+                    },
+                    "category": {
+                        "S": "Automotriz"
+                    },
+                    "location": {
+                        "M": {
+                            "address": {
+                                "S": "Ruta 5 Sur Km 45"
+                            },
+                            "city": {
+                                "S": "Valparaíso"
+                            },
+                            "country": {
+                                "S": "Chile"
+                            },
+                            "latitude": {
+                                "N": "-33.0472"
+                            },
+                            "longitude": {
+                                "N": "-71.6127"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "merchant_id": {
+                        "S": "m-2007"
+                    },
+                    "name": {
+                        "S": "Farmacia Salud"
+                    },
+                    "category": {
+                        "S": "Farmacia"
+                    },
+                    "location": {
+                        "M": {
+                            "address": {
+                                "S": "Calle San Martín 321"
+                            },
+                            "city": {
+                                "S": "Concepción"
+                            },
+                            "country": {
+                                "S": "Chile"
+                            },
+                            "latitude": {
+                                "N": "-36.8201"
+                            },
+                            "longitude": {
+                                "N": "-73.0444"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}

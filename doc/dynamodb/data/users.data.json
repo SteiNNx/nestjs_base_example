@@ -1,0 +1,46 @@
+{
+    "users": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "username": {
+                        "S": "admin"
+                    },
+                    "password": {
+                        "S": "admin123"
+                    },
+                    "userId": {
+                        "N": "1"
+                    },
+                    "role": {
+                        "S": "ADMIN"
+                    },
+                    "created_at": {
+                        "S": "2024-01-01T00:00:00Z"
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "username": {
+                        "S": "test"
+                    },
+                    "password": {
+                        "S": "test"
+                    },
+                    "userId": {
+                        "N": "2"
+                    },
+                    "role": {
+                        "S": "USER"
+                    },
+                    "created_at": {
+                        "S": "2024-01-02T10:15:00Z"
+                    }
+                }
+            }
+        }
+    ]
+}

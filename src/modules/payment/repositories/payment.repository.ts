@@ -1,12 +1,21 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { IPayment } from 'src/common/interfaces/payment.interface';
+import { ConfigService } from '@nestjs/config';
+
 import { DynamoDBService } from 'src/common/db/dynamodb.client';
+import { IPayment } from 'src/modules/payment/interfaces/payment.interface';
 
 @Injectable()
 export class PaymentRepository {
     private readonly logger = new Logger(PaymentRepository.name);
+    private readonly tableName: string;
 
-    constructor(private readonly dynamoDBService: DynamoDBService) { }
+    constructor(
+        private readonly dynamoDBService: DynamoDBService,
+        private readonly configService: ConfigService,
+    ) {
+        // Obtenemos el nombre de la tabla 'payments' desde la configuración
+        this.tableName = this.configService.get<string>('dynamoDB.tables.payments') || 'payments';
+    }
 
     /**
      * Crea un nuevo pago en la base de datos DynamoDB.
@@ -66,7 +75,7 @@ export class PaymentRepository {
             },
         };
 
-        const success = await this.dynamoDBService.putItem(item);
+        const success = await this.dynamoDBService.putItem(this.tableName, item);
         if (!success) {
             this.logger.error(`No se pudo crear el pago con transaction_id: ${payment.transaction_id}`);
         }
@@ -80,7 +89,7 @@ export class PaymentRepository {
      */
     async getPayment(transactionId: string): Promise<IPayment | null> {
         const key = { transaction_id: { S: transactionId } };
-        const item = await this.dynamoDBService.getItem(key);
+        const item = await this.dynamoDBService.getItem(this.tableName, key);
         return item ? this.mapDynamoDBItemToPayment(item) : null;
     }
 

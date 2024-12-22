@@ -1,0 +1,50 @@
+{
+    "TableName": "users",
+    "KeySchema": [
+      {
+        "AttributeName": "username",
+        "KeyType": "HASH"
+      }
+    ],
+    "AttributeDefinitions": [
+      {
+        "AttributeName": "username",
+        "AttributeType": "S"
+      },
+      {
+        "AttributeName": "userId",
+        "AttributeType": "N"
+      },
+      {
+        "AttributeName": "created_at",
+        "AttributeType": "S"
+      }
+    ],
+    "ProvisionedThroughput": {
+      "ReadCapacityUnits": 5,
+      "WriteCapacityUnits": 5
+    },
+    "GlobalSecondaryIndexes": [
+      {
+        "IndexName": "UserIdIndex",
+        "KeySchema": [
+          {
+            "AttributeName": "userId",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "created_at",
+            "KeyType": "RANGE"
+          }
+        ],
+        "Projection": {
+          "ProjectionType": "ALL"
+        },
+        "ProvisionedThroughput": {
+          "ReadCapacityUnits": 5,
+          "WriteCapacityUnits": 5
+        }
+      }
+    ]
+  }
+  

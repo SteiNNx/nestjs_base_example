@@ -1,7 +1,7 @@
 // src/modules/payment/payment.service.ts
 import { Injectable } from '@nestjs/common';
 import { PaymentRepository } from './repositories/payment.repository';
-import { IPayment } from 'src/common/interfaces/payment.interface';
+import { IPayment } from 'src/modules/payment/interfaces/payment.interface';
 
 @Injectable()
 export class PaymentService {

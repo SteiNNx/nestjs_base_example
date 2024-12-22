@@ -1,4 +1,5 @@
 // src/common/db/dynamodb.client.ts
+
 import { Injectable, Logger } from '@nestjs/common';
 import { DynamoDBClient, PutItemCommand, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { ConfigService } from '@nestjs/config';
@@ -6,11 +7,9 @@ import { ConfigService } from '@nestjs/config';
 @Injectable()
 export class DynamoDBService {
     private readonly client: DynamoDBClient;
-    private readonly tableName: string;
     private readonly logger = new Logger(DynamoDBService.name);
 
     constructor(private readonly configService: ConfigService) {
-        this.tableName = this.configService.get<string>('dynamoDB.tableName', 'payments');
         this.client = new DynamoDBClient({
             region: this.configService.get<string>('dynamoDB.region', 'us-west-2'),
             credentials: {
@@ -22,39 +21,41 @@ export class DynamoDBService {
     }
 
     /**
-     * Inserta un ítem en la tabla DynamoDB.
+     * Inserta un ítem en la tabla DynamoDB especificada.
+     * @param tableName Nombre de la tabla.
      * @param item El ítem a insertar.
      * @returns true si la operación fue exitosa, false en caso contrario.
      */
-    async putItem(item: Record<string, any>): Promise<boolean> {
+    async putItem(tableName: string, item: Record<string, any>): Promise<boolean> {
         try {
             const command = new PutItemCommand({
-                TableName: this.tableName,
+                TableName: tableName,
                 Item: item,
             });
             await this.client.send(command);
             return true;
         } catch (error) {
-            this.logger.error(`Error al insertar item en DynamoDB: ${error}`);
+            this.logger.error(`Error al insertar item en DynamoDB (tabla: ${tableName}): ${error}`);
             return false;
         }
     }
 
     /**
-     * Obtiene un ítem desde la tabla DynamoDB por su key.
+     * Obtiene un ítem desde la tabla DynamoDB especificada, usando la clave primaria.
+     * @param tableName Nombre de la tabla.
      * @param key La clave primaria del ítem.
      * @returns El ítem si existe, o null si no se encuentra.
      */
-    async getItem(key: Record<string, any>): Promise<Record<string, any> | null> {
+    async getItem(tableName: string, key: Record<string, any>): Promise<Record<string, any> | null> {
         try {
             const command = new GetItemCommand({
-                TableName: this.tableName,
+                TableName: tableName,
                 Key: key,
             });
             const response = await this.client.send(command);
             return response.Item || null;
         } catch (error) {
-            this.logger.error(`Error al obtener item de DynamoDB: ${error}`);
+            this.logger.error(`Error al obtener item de DynamoDB (tabla: ${tableName}): ${error}`);
             return null;
         }
     }

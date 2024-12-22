@@ -31,8 +31,8 @@ export class HeadersMetadataInterceptor implements NestInterceptor {
 
                 // 1. Establecer encabezados estáticos
                 const additionalHeaders = {
-                    nombreAplicacion: 'Back for front - Auto Enrolamiento Compraqui/Caja Vecina - Compraqui',
-                    codigoAplicacion: 'ESA',
+                    nombreAplicacion: 'Microservicio PAGOS - Proyecto Ejemplo Nesjs Cuuuurrao XD',
+                    codigoAplicacion: 'CXD',
                     canal: 'Presencial',
                 };
 

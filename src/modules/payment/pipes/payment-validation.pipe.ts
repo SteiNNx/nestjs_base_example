@@ -1,7 +1,7 @@
 import { Injectable, PipeTransform, BadRequestException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
-import { Payment } from 'src/common/interfaces/payment.interface';
+import { Payment } from 'src/modules/payment/interfaces/payment.interface';
 
 @Injectable()
 export class PaymentValidationPipe implements PipeTransform {
