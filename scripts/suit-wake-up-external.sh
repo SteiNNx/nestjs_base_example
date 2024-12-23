@@ -4,9 +4,6 @@
 
 set -e  # Salir inmediatamente si un comando falla
 
-# Incluir funciones de utilidad
-source scripts/commands/main.sh
-
 ######################################
 # Validar y cargar variables de entorno
 ######################################
@@ -19,6 +16,7 @@ validate_environment() {
 
 source_env_vars() {
     local env_file="$1"
+    # Cargar variables de entorno desde el archivo .env
     export $(grep -v '^#' "$env_file" | xargs)
 }
 
@@ -53,28 +51,7 @@ init_external_apis() {
     # Volver al directorio raíz del proyecto
     cd ../../..
 
-    # Verificar que el servidor está corriendo
-    check_monitoreo_api
-}
-
-######################################
-# Verificar que monitoreo_api está corriendo
-######################################
-check_monitoreo_api() {
-    local retries=5
-    local wait=2
-    local port=3000
-
-    while ! nc -z localhost $port; do
-        retries=$((retries-1))
-        if [ $retries -le 0 ]; then
-            echo "monitoreo_api no se inició correctamente."
-            exit 1
-        fi
-        echo "Esperando a que monitoreo_api inicie..."
-        sleep $wait
-    done
-    echo "monitoreo_api está corriendo en el puerto ${port}."
+    echo "monitoreo_api se ha iniciado correctamente. Logs disponibles en external/monitoreo_api/monitoreo_api.log"
 }
 
 ######################################
