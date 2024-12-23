@@ -1,4 +1,4 @@
-// src/modules/auth/pipes/auth-validation.pipe.ts
+// src/common/pipes/validation.pipe.ts
 
 import {
     PipeTransform,
@@ -10,10 +10,14 @@ import { validateSync } from 'class-validator';
 import { ValidationError as CustomValidationError } from 'src/common/exceptions/validation.exception';
 
 @Injectable()
-export class AuthValidationPipe<T extends object> implements PipeTransform<unknown, T> {
+export class ValidationPipe<T extends object> implements PipeTransform<any, T> {
     constructor(private readonly dto: ClassConstructor<T>) { }
 
-    transform(value: unknown, metadata: ArgumentMetadata): T {
+    transform(value: any, metadata: ArgumentMetadata): T {
+        if (!metadata.metatype || !this.toValidate(metadata.metatype)) {
+            return value;
+        }
+
         // Convertimos el objeto a una instancia de la clase DTO
         const dtoObj = plainToInstance(this.dto, value);
 
@@ -43,5 +47,10 @@ export class AuthValidationPipe<T extends object> implements PipeTransform<unkno
 
         // Retorna el objeto validado y transformado a DTO
         return dtoObj;
+    }
+
+    private toValidate(metatype: Function): boolean {
+        const types: Function[] = [String, Boolean, Number, Array, Object];
+        return !types.includes(metatype);
     }
 }

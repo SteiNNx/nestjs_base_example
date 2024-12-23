@@ -6,16 +6,20 @@ import {
     Body,
     UsePipes,
     HttpCode,
+    HttpStatus,
 } from '@nestjs/common';
+
+import { ApiOkResponse, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+
 import { AuthService } from './auth.service';
-import { AuthValidationPipe } from './pipes/auth-validation.pipe';
+import { LoggerService } from 'src/core/logger.service';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
-import { LoggerService } from 'src/core/logger.service';
-import { ApiOkResponse, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { HeadersMetadata } from 'src/common/decorators/headers-metadata.decorator';
 import { OutputMessageSuccess } from 'src/common/interfaces/output-message-success';
+import { ValidationPipe } from 'src/common/pipes/validation.pipe';
 
-@ApiTags('auth') // Categoriza este controlador en Swagger bajo "auth"
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -32,19 +36,38 @@ export class AuthController {
      * @returns Objeto con el `access_token`.
      */
     @Post('login')
-    @UsePipes(new AuthValidationPipe(LoginDto))
-    @HttpCode(200) // Indica explícitamente que la respuesta es 200 OK
+    @UsePipes(new ValidationPipe(LoginDto))
+    @HttpCode(HttpStatus.OK)
+    @HeadersMetadata({
+        funcionalidad: 'endpoints.auth_login.funcionalidad',
+        etapa: 'endpoints.auth_login.etapa',
+        operacion: 'endpoints.auth_login.operacion',
+    })
     @ApiOperation({ summary: 'Autenticar usuario y obtener token JWT' })
     @ApiOkResponse({
         description: 'Login exitoso',
         type: OutputMessageSuccess,
     })
+    @ApiResponse({
+        status: 400,
+        description: 'Datos de login inválidos',
+    })
     async login(@Body() body: LoginDto) {
-        this.logger.log(`Intento de login para usuario: ${body.username}`);
+        this.logger.log(`[${AuthController.name}][login] Intento de login para usuario: ${body.username}`);
+
         const user = await this.authService.validateUser(body.username, body.password);
-        this.logger.log(`Login exitoso para usuario: ${body.username}`);
         const token = await this.authService.getToken(user);
-        return new OutputMessageSuccess(200, 'SUCCESS.LOGIN', 'Login exitoso', { access_token: token });
+
+        this.logger.log(`[${AuthController.name}][login] Login exitoso para usuario: ${body.username}`);
+
+        const response = new OutputMessageSuccess(
+            HttpStatus.OK,
+            '0000',
+            'Login exitoso',
+            { access_token: token }
+        );
+
+        return response;
     }
 
     /**
@@ -55,17 +78,34 @@ export class AuthController {
      * @returns Objeto con el `access_token`.
      */
     @Post('register')
-    @UsePipes(new AuthValidationPipe(RegisterDto))
-    @HttpCode(200)
+    @UsePipes(new ValidationPipe(RegisterDto))
+    @HttpCode(HttpStatus.CREATED)
+    @HeadersMetadata({
+        funcionalidad: 'endpoints.auth_register.funcionalidad',
+        etapa: 'endpoints.auth_register.etapa',
+        operacion: 'endpoints.auth_register.operacion',
+    })
     @ApiOperation({ summary: 'Registrar un nuevo usuario y obtener token JWT' })
     @ApiOkResponse({
         description: 'Registro exitoso',
         type: OutputMessageSuccess,
     })
+    @ApiResponse({
+        status: 400,
+        description: 'Datos de registro inválidos',
+    })
     async register(@Body() body: RegisterDto) {
-        this.logger.log(`Intento de registro para usuario: ${body.username}`);
+        this.logger.log(`[${AuthController.name}][register] Intento de registro para usuario: ${body.username}`);
+
         const token = await this.authService.register(body);
-        this.logger.log(`Registro exitoso para usuario: ${body.username}`);
-        return new OutputMessageSuccess(200, 'SUCCESS.REGISTER', 'Registro exitoso', { access_token: token });
+
+        this.logger.log(`[${AuthController.name}][register] Registro exitoso para usuario: ${body.username}`);
+        const response = new OutputMessageSuccess(
+            HttpStatus.CREATED,
+            '0000',
+            'Registro exitoso',
+            { access_token: token }
+        )
+        return response;
     }
 }

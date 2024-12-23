@@ -1,8 +1,11 @@
+// src/modules/payment/repositories/payment.repository.ts
+
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { DynamoDBService } from 'src/common/db/dynamodb.client';
-import { IPayment } from 'src/modules/payment/interfaces/payment.interface';
+import { IPayment } from '../interfaces/payment.interface';
+import { CreatePaymentDto } from '../dto/payment.dto';
 
 @Injectable()
 export class PaymentRepository {
@@ -20,11 +23,11 @@ export class PaymentRepository {
     /**
      * Crea un nuevo pago en la base de datos DynamoDB.
      * @param payment El pago a crear.
-     * @returns true si la inserción fue exitosa, false en caso contrario.
+     * @returns El pago creado.
      */
-    async createPayment(payment: IPayment): Promise<boolean> {
+    async createPayment(payment: CreatePaymentDto): Promise<IPayment> {
         const item = {
-            transaction_id: { S: payment.transaction_id },
+            transaction_id: { S: payment.transaction_id || '' },
             card_number: { S: payment.card_number },
             amount: { N: payment.amount.toString() },
             currency: { S: payment.currency },
@@ -78,8 +81,15 @@ export class PaymentRepository {
         const success = await this.dynamoDBService.putItem(this.tableName, item);
         if (!success) {
             this.logger.error(`No se pudo crear el pago con transaction_id: ${payment.transaction_id}`);
+            throw new Error('Failed to create payment');
         }
-        return success;
+
+        // Retornar el objeto IPayment recién creado
+        const createdPayment: IPayment = {
+            ...payment,
+        };
+
+        return createdPayment;
     }
 
     /**
@@ -95,7 +105,7 @@ export class PaymentRepository {
 
     private mapDynamoDBItemToPayment(item: Record<string, any>): IPayment {
         return {
-            transaction_id: item.transaction_id.S,
+            transaction_id: item.transaction_id.S || undefined,
             card_number: item.card_number.S,
             amount: parseFloat(item.amount.N),
             currency: item.currency.S,
