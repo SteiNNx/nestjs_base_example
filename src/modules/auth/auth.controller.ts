@@ -49,7 +49,7 @@ export class AuthController {
         type: OutputMessageSuccess,
     })
     @ApiResponse({
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
         description: 'Datos de login inválidos',
     })
     async login(@Body() body: LoginDto) {

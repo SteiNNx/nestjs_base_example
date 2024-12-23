@@ -1,5 +1,3 @@
-// src/modules/payment/repositories/payment.repository.ts
-
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
@@ -7,11 +5,19 @@ import { DynamoDBService } from 'src/common/db/dynamodb.client';
 import { IPayment } from '../interfaces/payment.interface';
 import { CreatePaymentDto } from '../dto/payment.dto';
 
+/**
+ * Repositorio encargado de interactuar con la base de datos DynamoDB para operaciones de pago.
+ */
 @Injectable()
 export class PaymentRepository {
     private readonly logger = new Logger(PaymentRepository.name);
     private readonly tableName: string;
 
+    /**
+     * Crea una instancia de PaymentRepository.
+     * @param dynamoDBService Servicio para interactuar con DynamoDB.
+     * @param configService Servicio para acceder a las variables de configuración.
+     */
     constructor(
         private readonly dynamoDBService: DynamoDBService,
         private readonly configService: ConfigService,
@@ -22,8 +28,9 @@ export class PaymentRepository {
 
     /**
      * Crea un nuevo pago en la base de datos DynamoDB.
-     * @param payment El pago a crear.
-     * @returns El pago creado.
+     * @param payment DTO que contiene los detalles del pago a crear.
+     * @returns Promesa que resuelve con el pago creado.
+     * @throws Error si la operación de creación falla.
      */
     async createPayment(payment: CreatePaymentDto): Promise<IPayment> {
         const item = {
@@ -95,7 +102,7 @@ export class PaymentRepository {
     /**
      * Obtiene un pago por su transaction_id desde la base de datos DynamoDB.
      * @param transactionId El ID de la transacción a obtener.
-     * @returns El pago si existe, de lo contrario null.
+     * @returns Promesa que resuelve con el pago si existe, de lo contrario null.
      */
     async getPayment(transactionId: string): Promise<IPayment | null> {
         const key = { transaction_id: { S: transactionId } };
@@ -103,6 +110,11 @@ export class PaymentRepository {
         return item ? this.mapDynamoDBItemToPayment(item) : null;
     }
 
+    /**
+     * Mapea un ítem de DynamoDB a la interfaz IPayment.
+     * @param item Ítem obtenido de DynamoDB.
+     * @returns Objeto que implementa la interfaz IPayment.
+     */
     private mapDynamoDBItemToPayment(item: Record<string, any>): IPayment {
         return {
             transaction_id: item.transaction_id.S || undefined,

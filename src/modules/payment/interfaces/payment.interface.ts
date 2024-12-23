@@ -1,5 +1,6 @@
-// src/modules/payment/interfaces/payment.interface.ts
-
+/**
+ * Interfaz que representa la ubicación del comerciante.
+ */
 export interface IMerchantLocation {
     address: string;
     city: string;
@@ -8,6 +9,9 @@ export interface IMerchantLocation {
     longitude: number;
 }
 
+/**
+ * Interfaz que representa la información del comerciante.
+ */
 export interface IMerchant {
     merchant_id: string;
     name: string;
@@ -15,12 +19,18 @@ export interface IMerchant {
     location: IMerchantLocation;
 }
 
+/**
+ * Interfaz que representa la información del emisor de la tarjeta.
+ */
 export interface IIssuer {
     bank_id: string;
     name: string;
     country: string;
 }
 
+/**
+ * Interfaz que representa los datos EMV asociados a una transacción.
+ */
 export interface IEmvData {
     application_id: string;
     application_label: string;
@@ -29,12 +39,18 @@ export interface IEmvData {
     issuer_application_data: string;
 }
 
+/**
+ * Interfaz que representa datos adicionales de la transacción.
+ */
 export interface IAdditionalData {
     installments: number;
     tip_amount: number;
     cashback_amount: number;
 }
 
+/**
+ * Interfaz que representa un pago.
+ */
 export interface IPayment {
     transaction_id?: string;
     card_number: string;

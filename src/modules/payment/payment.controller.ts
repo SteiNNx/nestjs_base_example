@@ -1,5 +1,3 @@
-// src/modules/payment/payment.controller.ts
-
 import {
     Controller,
     Post,
@@ -17,9 +15,16 @@ import { OutputMessageSuccess } from 'src/common/interfaces/output-message-succe
 import { HeadersMetadata } from 'src/common/decorators/headers-metadata.decorator';
 import { ValidationPipe } from 'src/common/pipes/validation.pipe';
 
+/**
+ * Controlador encargado de manejar las solicitudes relacionadas con pagos.
+ */
 @ApiTags('payments')
 @Controller('payments')
 export class PaymentController {
+    /**
+     * Crea una instancia de PaymentController.
+     * @param paymentService Servicio encargado de la lógica de pagos.
+     */
     constructor(private readonly paymentService: PaymentService) { }
 
     /**
@@ -43,14 +48,14 @@ export class PaymentController {
         type: OutputMessageSuccess,
     })
     @ApiResponse({
-        status: 400,
+        status: HttpStatus.BAD_REQUEST,
         description: 'Datos de pago inválidos',
     })
     @ApiResponse({
-        status: 500,
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
         description: 'Error interno al crear el pago',
     })
-    async createPayment(@Body() createPaymentDto: CreatePaymentDto) {
+    async createPayment(@Body() createPaymentDto: CreatePaymentDto): Promise<OutputMessageSuccess> {
         const payment = await this.paymentService.createPayment(createPaymentDto);
         return new OutputMessageSuccess(
             HttpStatus.OK,
