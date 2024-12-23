@@ -2,35 +2,13 @@
 import { registerAs } from '@nestjs/config';
 import * as fs from 'fs';
 import * as path from 'path';
+import { loadJwtKeys } from 'src/common/factories/jwt-load-keys.factory';
 
 export class AppConfiguration {
   static getConfig() {
-    const privateKeyPath = process.env.JWT_PRIVATE_KEY_PATH;
-    const publicKeyPath = process.env.JWT_PUBLIC_KEY_PATH;
-
-    console.log('JWT_PRIVATE_KEY_PATH:', privateKeyPath);
-    console.log('JWT_PUBLIC_KEY_PATH:', publicKeyPath);
-
-    if (!privateKeyPath || !publicKeyPath) {
-      throw new Error('Las rutas de las claves PEM no están definidas en las variables de entorno.');
-    }
-
-    const resolvedPrivateKeyPath = path.resolve(process.cwd(), privateKeyPath);
-    const resolvedPublicKeyPath = path.resolve(process.cwd(), publicKeyPath);
-
-    console.log('Resolved Private Key Path:', resolvedPrivateKeyPath);
-    console.log('Resolved Public Key Path:', resolvedPublicKeyPath);
-
-    if (!fs.existsSync(resolvedPrivateKeyPath)) {
-      throw new Error(`La clave privada no existe en la ruta: ${resolvedPrivateKeyPath}`);
-    }
-
-    if (!fs.existsSync(resolvedPublicKeyPath)) {
-      throw new Error(`La clave pública no existe en la ruta: ${resolvedPublicKeyPath}`);
-    }
-
-    const privateKey = fs.readFileSync(resolvedPrivateKeyPath, 'utf8');
-    const publicKey = fs.readFileSync(resolvedPublicKeyPath, 'utf8');
+    // Cargamos las claves JWT usando la función del factory.
+    // Si algo falla, se lanza un TechnicalError que saldrá con tu formato JSON.
+    const { privateKey, publicKey } = loadJwtKeys();
 
     return {
       environment: process.env.NODE_ENV || 'development',

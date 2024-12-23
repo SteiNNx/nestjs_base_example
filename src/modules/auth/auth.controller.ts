@@ -27,6 +27,6 @@ export class AuthController {
     async login(@Body() body: LoginDto) {
         // Si las credenciales son inválidas, se lanzará un BusinessError (o la excepción que definimos en AuthService).
         const user = await this.authService.validateUser(body.username, body.password);
-        return this.authService.login(user);
+        return this.authService.getToken(user);
     }
 }

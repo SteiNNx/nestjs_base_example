@@ -5,6 +5,9 @@ import { ConfigService } from '@nestjs/config';
 import { DynamoDBService } from 'src/common/db/dynamodb.client';
 import { IUser } from '../interfaces/auth.interface';
 
+// Importamos excepciones personalizadas
+import { TechnicalError } from 'src/common/exceptions/technical.exception';
+
 @Injectable()
 export class AuthRepository {
     private readonly logger = new Logger(AuthRepository.name);
@@ -28,7 +31,13 @@ export class AuthRepository {
             return item ? this.mapDynamoDBItemToUser(item) : null;
         } catch (error) {
             this.logger.error(`Error al obtener usuario: ${error}`);
-            return null;
+            // Lanzamos un error técnico que envuelve el error original
+            throw new TechnicalError(
+                'TECH.001',
+                `Error interno al consultar la tabla '${this.tableName}'.`,
+                500,
+                error,
+            );
         }
     }
 
@@ -36,19 +45,35 @@ export class AuthRepository {
      * Crea un nuevo usuario en la base de datos DynamoDB.
      */
     async createUser(user: IUser): Promise<boolean> {
-        const item = {
-            username: { S: user.username },
-            password: { S: user.password },
-            userId: { N: user.userId.toString() },
-            role: { S: user.role },
-            created_at: { S: user.created_at },
-        };
+        try {
+            const item = {
+                username: { S: user.username },
+                password: { S: user.password },
+                userId: { N: user.userId.toString() },
+                role: { S: user.role },
+                created_at: { S: user.created_at },
+            };
 
-        const success = await this.dynamoDBService.putItem(this.tableName, item);
-        if (!success) {
-            this.logger.error(`No se pudo crear el usuario: ${user.username}`);
+            const success = await this.dynamoDBService.putItem(this.tableName, item);
+            if (!success) {
+                // Si `putItem` devolvió false, consideramos que hubo un problema técnico
+                throw new TechnicalError(
+                    'TECH.002',
+                    `No se pudo crear el usuario: ${user.username}`,
+                    500,
+                );
+            }
+
+            return true;
+        } catch (error) {
+            this.logger.error(`Error al crear usuario: ${error}`);
+            throw new TechnicalError(
+                'TECH.003',
+                `Error interno al insertar en la tabla '${this.tableName}'.`,
+                500,
+                error,
+            );
         }
-        return success;
     }
 
     private mapDynamoDBItemToUser(item: Record<string, any>): IUser {

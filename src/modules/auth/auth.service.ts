@@ -45,7 +45,7 @@ export class AuthService {
    * @param user Objeto de usuario (sin password).
    * @returns Objeto con el `access_token`.
    */
-  async login(user: IUser) {
+  async getToken(user: IUser) {
     const payload = {
       username: user.username,
       sub: user.userId,
