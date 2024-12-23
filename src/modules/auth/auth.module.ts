@@ -1,20 +1,20 @@
 // src/modules/auth/auth.module.ts
 
 import { Module } from '@nestjs/common';
-import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
-import { ConfigService, ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
-import { Algorithm } from 'jsonwebtoken';
+import { JwtStrategy } from '../../common/strategies/jwt.strategy';
 
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { JwtStrategy } from '../../common/strategies/jwt.strategy';
-import { DynamoDBService } from 'src/common/db/dynamodb.client';
 import { AuthRepository } from './repositories/auth.repository';
+import { DynamoDBService } from 'src/common/db/dynamodb.client';
 import { createJwtConfig } from './factories/jwt-config.factory';
 
 @Module({
   imports: [
+    ConfigModule,
     PassportModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
@@ -25,9 +25,9 @@ import { createJwtConfig } from './factories/jwt-config.factory';
   controllers: [AuthController],
   providers: [
     AuthService,
-    JwtStrategy,
     AuthRepository,
     DynamoDBService,
+    JwtStrategy,
   ],
   exports: [AuthService],
 })

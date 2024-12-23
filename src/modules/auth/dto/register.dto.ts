@@ -1,12 +1,12 @@
-// src/modules/auth/dto/create-user.dto.ts
+// src/modules/auth/dto/register.dto.ts
 
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNumber, IsOptional, MinLength } from 'class-validator';
+import { IsString, IsNumber, MinLength } from 'class-validator';
 
-export class CreateUserDto {
+export class RegisterDto {
     @ApiProperty({
-        description: 'Nombre de usuario único',
-        example: 'john_doe',
+        description: 'Nombre de usuario para el nuevo registro',
+        example: 'jane_doe',
         minLength: 3,
     })
     @IsString()
@@ -17,25 +17,25 @@ export class CreateUserDto {
 
     @ApiProperty({
         description: 'Contraseña segura del usuario',
-        example: 'strongPassword123',
-        minLength: 3,
+        example: 'anotherStrongPassword123',
+        minLength: 6,
     })
     @IsString()
-    @MinLength(3, {
-        message: 'La contraseña debe tener al menos 3 caracteres',
+    @MinLength(6, {
+        message: 'La contraseña debe tener al menos 6 caracteres',
     })
     password: string;
 
     @ApiProperty({
         description: 'Identificador único del usuario',
-        example: 1,
+        example: 2,
     })
     @IsNumber()
     userId: number;
 
     @ApiProperty({
         description: 'Rol asignado al usuario',
-        example: 'admin',
+        example: 'user',
     })
     @IsString()
     role: string;
