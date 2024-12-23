@@ -57,11 +57,12 @@ export class PaymentController {
     })
     async createPayment(@Body() createPaymentDto: CreatePaymentDto): Promise<OutputMessageSuccess> {
         const payment = await this.paymentService.createPayment(createPaymentDto);
-        return new OutputMessageSuccess(
+        const response = new OutputMessageSuccess(
             HttpStatus.OK,
             '0000',
             'Pago creado exitosamente',
             { transaction_id: payment.transaction_id }
         );
+        return response;
     }
 }

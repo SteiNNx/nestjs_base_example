@@ -1,5 +1,5 @@
 #!/bin/bash
-# suit-dynamodb-local.sh
+# wake-up-local.sh
 # Autor: Jorge Reyes
 
 set -e  # Salir inmediatamente si un comando falla
@@ -100,6 +100,7 @@ main() {
     source_env_vars ".env"
     init_dynamodb_suite_containers "$1"
     init_seed_dynamodb_suite_containers
+    echo "Inicialización de DynamoDB completada exitosamente."
 }
 
 # Ejecutar función principal
