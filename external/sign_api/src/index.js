@@ -1,17 +1,44 @@
 // src/index.js
 
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const xmlbuilder = require('xmlbuilder');
-const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
+const { DOMParser } = require('xmldom');
+const xpath = require('xpath');
+const { SignedXml } = require('xml-crypto');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.EXTERNAL_API_SIGN_PORT || 3001;
+
+// Cargar llaves y certificado
+const privateKey = fs.readFileSync(path.resolve(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH), 'utf-8');
+const certificate = fs.readFileSync(path.resolve(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH), 'utf-8');
 
 // Middleware
 app.use(bodyParser.json());
+
+// Función para convertir JSON a XML
+function jsonToXml(json) {
+    const xml = xmlbuilder.create('Payment');
+    for (const key in json) {
+        if (json.hasOwnProperty(key)) {
+            if (typeof json[key] === 'object') {
+                const child = xml.ele(key);
+                for (const subKey in json[key]) {
+                    if (json[key].hasOwnProperty(subKey)) {
+                        child.ele(subKey, json[key][subKey]);
+                    }
+                }
+            } else {
+                xml.ele(key, json[key]);
+            }
+        }
+    }
+    return xml.end({ pretty: true });
+}
 
 // Ruta para firmar los datos de pago
 app.post('/sign', (req, res) => {
@@ -22,33 +49,41 @@ app.post('/sign', (req, res) => {
         return res.status(400).send('Datos de pago inválidos');
     }
 
-    // Generar XML a partir de los datos de pago
-    const xml = xmlbuilder.create('Payment');
+    // Convertir JSON a XML
+    const xmlString = jsonToXml(payment);
 
-    for (const key in payment) {
-        if (payment.hasOwnProperty(key)) {
-            if (typeof payment[key] === 'object') {
-                const child = xml.ele(key);
-                for (const subKey in payment[key]) {
-                    if (payment[key].hasOwnProperty(subKey)) {
-                        child.ele(subKey, payment[key][subKey]);
-                    }
-                }
-            } else {
-                xml.ele(key, payment[key]);
-            }
+    // Parsear el XML
+    const doc = new DOMParser().parseFromString(xmlString);
+
+    // Crear una instancia de SignedXml
+    const sig = new SignedXml();
+
+    sig.addReference("/*", // Referencia al elemento raíz
+        ["http://www.w3.org/2000/09/xmldsig#enveloped-signature"],
+        "http://www.w3.org/2000/09/xmldsig#sha1");
+
+    sig.signingKey = privateKey;
+
+    // Incluir el certificado en KeyInfo
+    sig.keyInfoProvider = {
+        getKeyInfo: function () {
+            return `<X509Data><X509Certificate>${certificate.replace(/-----BEGIN CERTIFICATE-----|-----END CERTIFICATE-----|\n/g, '')}</X509Certificate></X509Data>`;
         }
-    }
+    };
 
-    const xmlString = xml.end({ pretty: true });
+    // Calcular la firma
+    sig.computeSignature(xmlString, {
+        location: {
+            reference: "/*",
+            action: "append"
+        }
+    });
 
-    // Firmar el XML usando JWT como ejemplo (puedes usar otro método)
-    const secretKey = 'tu_clave_secreta'; // Debe estar en una variable de entorno
-    const token = jwt.sign({ data: xmlString }, secretKey, { algorithm: 'HS256' });
+    const signedXml = sig.getSignedXml();
 
-    // Retornar el archivo firmado (en este caso, el token JWT)
-    res.setHeader('Content-Type', 'application/octet-stream');
-    res.send(token);
+    // Retornar el XML firmado
+    res.setHeader('Content-Type', 'application/xml');
+    res.send(signedXml);
 });
 
 // Iniciar el servidor
