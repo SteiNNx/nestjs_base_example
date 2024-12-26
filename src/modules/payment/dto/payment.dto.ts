@@ -1,4 +1,5 @@
 import {
+    IsIn,
     IsString,
     IsNumber,
     Min,
@@ -122,6 +123,16 @@ export class CreatePaymentDto {
     @IsOptional()
     @IsString()
     transaction_id?: string;
+
+    @ApiProperty({
+        description: 'Estado de la transacción',
+        example: 'pending',
+        default: 'pending',
+    })
+    @IsOptional()
+    @IsString()
+    @IsIn(['pending', 'completed', 'failed'])
+    status: string = 'pending';
 
     @ApiProperty({ description: 'Número de la tarjeta de crédito', example: '4111111111111111' })
     @IsString()

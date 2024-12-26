@@ -66,4 +66,6 @@ export interface IPayment {
     cardholder_verification_method: string;
     emv_data: IEmvData;
     additional_data: IAdditionalData;
+    status?: string;
+    signed_data?: string; 
 }

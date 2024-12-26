@@ -4,7 +4,6 @@ import { Injectable, HttpStatus, HttpException, Logger } from '@nestjs/common';
 import { HttpClientService } from 'src/core/http-client.service';
 import { ConfigService } from '@nestjs/config';
 import { IPayment } from 'src/modules/payment/interfaces/payment.interface';
-import { AxiosResponse } from 'axios';
 
 @Injectable()
 export class SignClient {
@@ -15,7 +14,7 @@ export class SignClient {
         private readonly httpClientService: HttpClientService,
         private readonly configService: ConfigService,
     ) {
-        this.url_endpoint = this.configService.get<string>('SIGN_SERVICE_URL');
+        this.url_endpoint = this.configService.get<string>('EXTERNAL_API_SIGN_ENPOINT_SIGN');
         if (!this.url_endpoint) {
             throw new HttpException('URL del servicio de firma no configurada', HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -29,7 +28,7 @@ export class SignClient {
     async signPayment(payment: IPayment): Promise<Buffer> {
         try {
             this.logger.log('Enviando datos de pago al servicio de firma');
-            const response: AxiosResponse<Buffer> = await this.httpClientService.post<Buffer>(
+            const signedData: Buffer = await this.httpClientService.post<Buffer>(
                 this.url_endpoint,
                 payment,
                 {
@@ -41,15 +40,11 @@ export class SignClient {
                 },
             );
 
-            if (response.status !== HttpStatus.OK) {
-                this.logger.error(`Error al firmar el pago: ${response.statusText}`);
-                throw new HttpException('Error al firmar el pago', response.status);
-            }
-
             this.logger.log('Pago firmado exitosamente');
-            return response.data;
+            return signedData;
         } catch (error) {
             this.logger.error(`Excepción al firmar el pago: ${error.message}`);
+            // Optionally, you can differentiate error types here
             throw new HttpException('Error al comunicarse con el servicio de firma', HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

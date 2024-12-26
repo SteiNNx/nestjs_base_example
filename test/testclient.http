@@ -18,6 +18,7 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
 
 {
   "transaction_id": "txn-2001-abcdesf123459",
+  "status": "pending",
   "card_number": "411111******1234",
   "amount": 150.25,
   "currency": "CLP",

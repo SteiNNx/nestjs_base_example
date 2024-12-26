@@ -34,7 +34,7 @@ export class PaymentRepository {
      */
     async createPayment(payment: CreatePaymentDto): Promise<IPayment> {
         const item = {
-            transaction_id: { S: payment.transaction_id || '' },
+            transaction_id: { S: payment.transaction_id || this.generateTransactionId() },
             card_number: { S: payment.card_number },
             amount: { N: payment.amount.toString() },
             currency: { S: payment.currency },
@@ -83,6 +83,7 @@ export class PaymentRepository {
                     cashback_amount: { N: payment.additional_data.cashback_amount.toString() },
                 },
             },
+            status: { S: payment.status || 'pending' }, // Añadir estado
         };
 
         const success = await this.dynamoDBService.putItem(this.tableName, item);
@@ -108,6 +109,68 @@ export class PaymentRepository {
         const key = { transaction_id: { S: transactionId } };
         const item = await this.dynamoDBService.getItem(this.tableName, key);
         return item ? this.mapDynamoDBItemToPayment(item) : null;
+    }
+
+    /**
+     * Actualiza el estado de un pago.
+     * @param transactionId ID de la transacción del pago a actualizar.
+     * @param status Nuevo estado del pago.
+     * @returns Promesa que resuelve cuando la actualización es completa.
+     */
+    async updatePaymentStatus(transactionId: string, status: string): Promise<void> {
+        const updateExpression = 'SET #s = :status';
+        const expressionAttributeNames = {
+            '#s': 'status',
+        };
+        const expressionAttributeValues = {
+            ':status': { S: status },
+        };
+
+        const params = {
+            TableName: this.tableName,
+            Key: { transaction_id: { S: transactionId } },
+            UpdateExpression: updateExpression,
+            ExpressionAttributeNames: expressionAttributeNames,
+            ExpressionAttributeValues: expressionAttributeValues,
+        };
+
+        const success = await this.dynamoDBService.updateItem(params);
+        if (!success) {
+            this.logger.error(`No se pudo actualizar el estado del pago con transaction_id: ${transactionId}`);
+            throw new Error('Failed to update payment status');
+        }
+    }
+
+    /**
+     * Actualiza el estado y los datos firmados de un pago.
+     * @param transactionId ID de la transacción del pago a actualizar.
+     * @param status Nuevo estado del pago.
+     * @param signedData Datos firmados del pago.
+     * @returns Promesa que resuelve cuando la actualización es completa.
+     */
+    async updatePaymentStatusAndSignedData(transactionId: string, status: string, signedData: string): Promise<void> {
+        const updateExpression = 'SET #s = :status, signed_data = :signedData';
+        const expressionAttributeNames = {
+            '#s': 'status',
+        };
+        const expressionAttributeValues = {
+            ':status': { S: status },
+            ':signedData': { S: signedData },
+        };
+
+        const params = {
+            TableName: this.tableName,
+            Key: { transaction_id: { S: transactionId } },
+            UpdateExpression: updateExpression,
+            ExpressionAttributeNames: expressionAttributeNames,
+            ExpressionAttributeValues: expressionAttributeValues,
+        };
+
+        const success = await this.dynamoDBService.updateItem(params);
+        if (!success) {
+            this.logger.error(`No se pudo actualizar el estado y los datos firmados del pago con transaction_id: ${transactionId}`);
+            throw new Error('Failed to update payment status and signed data');
+        }
     }
 
     /**
@@ -156,6 +219,16 @@ export class PaymentRepository {
                 tip_amount: parseFloat(item.additional_data.M.tip_amount.N),
                 cashback_amount: parseFloat(item.additional_data.M.cashback_amount.N),
             },
+            status: item.status?.S, // Mapeo del nuevo campo
+            signed_data: item.signed_data?.S, // Mapeo del nuevo campo
         };
+    }
+
+    /**
+     * Genera un ID de transacción único.
+     * @returns ID de transacción.
+     */
+    private generateTransactionId(): string {
+        return `txn_${Date.now()}_${Math.floor(Math.random() * 1000)}`;
     }
 }

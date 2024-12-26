@@ -1,6 +1,7 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
-const port =  process.env.EXTERNAL_API_MONITOREO_PORT;
+const PORT =  process.env.EXTERNAL_API_MONITOREO_PORT;
 
 // Middleware para parsear JSON y URL-encoded
 app.use(express.json());
@@ -20,6 +21,6 @@ app.all('*', (req, res) => {
 });
 
 // Iniciar el servidor
-app.listen(port, () => {
-    console.log(`Servidor escuchando en http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });

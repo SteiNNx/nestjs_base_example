@@ -88,5 +88,5 @@ app.post('/sign', (req, res) => {
 
 // Iniciar el servidor
 app.listen(PORT, () => {
-    console.log(`Servicio de firma escuchando en el puerto ${PORT}`);
+    console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });

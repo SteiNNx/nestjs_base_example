@@ -1,7 +1,5 @@
-// src/common/db/dynamodb.client.ts
-
 import { Injectable, Logger } from '@nestjs/common';
-import { DynamoDBClient, PutItemCommand, GetItemCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, PutItemCommand, GetItemCommand, UpdateItemCommand } from '@aws-sdk/client-dynamodb';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -57,6 +55,22 @@ export class DynamoDBService {
         } catch (error) {
             this.logger.error(`Error al obtener item de DynamoDB (tabla: ${tableName}): ${error}`);
             return null;
+        }
+    }
+
+    /**
+     * Actualiza un ítem en la tabla DynamoDB especificada.
+     * @param params Parámetros de actualización.
+     * @returns true si la operación fue exitosa, false en caso contrario.
+     */
+    async updateItem(params: any): Promise<boolean> {
+        try {
+            const command = new UpdateItemCommand(params);
+            await this.client.send(command);
+            return true;
+        } catch (error) {
+            this.logger.error(`Error al actualizar item en DynamoDB (tabla: ${params.TableName}): ${error}`);
+            return false;
         }
     }
 }
