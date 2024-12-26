@@ -17,6 +17,18 @@ const PORT = process.env.EXTERNAL_API_SIGN_PORT || 3001;
 const privateKey = fs.readFileSync(path.resolve(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH), 'utf-8');
 const certificate = fs.readFileSync(path.resolve(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH), 'utf-8');
 
+console.group("pems logs");
+
+console.log(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH);
+console.log(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH);
+console.log(path.resolve(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH));
+console.log(path.resolve(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH));
+
+console.log({ privateKey });
+console.log({ certificate });
+
+console.groupEnd("pems logs");
+
 // Middleware
 app.use(bodyParser.json());
 
@@ -58,9 +70,16 @@ app.post('/sign', (req, res) => {
     // Crear una instancia de SignedXml
     const sig = new SignedXml();
 
-    sig.addReference("/*", // Referencia al elemento raíz
-        ["http://www.w3.org/2000/09/xmldsig#enveloped-signature"],
-        "http://www.w3.org/2000/09/xmldsig#sha1");
+    sig.canonicalizationAlgorithm = "http://www.w3.org/TR/2001/REC-xml-c14n-20010315"
+    sig.signatureAlgorithm = "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
+    sig.addReference(xpath, ["http://www.w3.org/2000/09/xmldsig#enveloped-signature", "http://www.w3.org/TR/2001/REC-xml-c14n-20010315"])
+
+    console.log({ sig });
+
+
+    sig.addReference("/*",
+        ["http://www.w3.org/2000/09/xmldsig#enveloped-signature"]);
+
 
     sig.signingKey = privateKey;
 

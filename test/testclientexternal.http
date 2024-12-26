@@ -1,5 +1,54 @@
+### Monitoreo
+POST http://localhost:3001/monitoreo
+Content-Type: application/json
+
+{
+  "transaction_id": "txn-2001-abcdesf123459",
+  "card_number": "411111******1234",
+  "amount": 150.25,
+  "currency": "CLP",
+  "timestamp": "2024-06-01T10:15:00Z",
+  "merchant": {
+    "merchant_id": "m-3001",
+    "name": "Restaurante Don Pepe",
+    "category": "Restaurante",
+    "location": {
+      "address": "Calle Larga 123",
+      "city": "Santiago",
+      "country": "Chile",
+      "latitude": -33.4489,
+      "longitude": -70.6693
+    }
+  },
+  "transaction_type": "Pago",
+  "auth_code": "AUTH123456",
+  "response_code": "00",
+  "terminal_id": "term-4001",
+  "issuer": {
+    "bank_id": "bank-5001",
+    "name": "Banco Estado",
+    "country": "Chile"
+  },
+  "cardholder_verification_method": "Firma",
+  "emv_data": {
+    "application_id": "A0000000031010",
+    "application_label": "VISA CREDITO",
+    "transaction_counter": 5,
+    "unpredictable_number": "1A2B3C4D",
+    "issuer_application_data": "01020304"
+  },
+  "additional_data": {
+    "installments": 1,
+    "tip_amount": 0.00,
+    "cashback_amount": 0.00
+  }
+}
+
+
+
+### Sign
 ### Firmar Datos de Pago
-POST http://localhost:3001/sign
+POST http://localhost:3002/sign
 Content-Type: application/json
 
 {
