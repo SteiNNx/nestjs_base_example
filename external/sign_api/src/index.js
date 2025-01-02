@@ -1,111 +1,49 @@
 // src/index.js
-
-require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const xmlbuilder = require('xmlbuilder');
 const fs = require('fs');
-const path = require('path');
-const { DOMParser } = require('xmldom');
-const xpath = require('xpath');
-const { SignedXml } = require('xml-crypto');
+
+const { port, privateKeyPath, certificatePath } = require('./config');
+const { jsonToXml } = require('./xmlUtils');
+const { signXml } = require('./signatureService');
 
 const app = express();
-const PORT = process.env.EXTERNAL_API_SIGN_PORT || 3001;
 
-// Cargar llaves y certificado
-const privateKey = fs.readFileSync(path.resolve(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH), 'utf-8');
-const certificate = fs.readFileSync(path.resolve(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH), 'utf-8');
-
-console.group("pems logs");
-
-console.log(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH);
-console.log(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH);
-console.log(path.resolve(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH));
-console.log(path.resolve(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH));
-
-console.log({ privateKey });
-console.log({ certificate });
-
-console.groupEnd("pems logs");
-
-// Middleware
+// Middleware para parsear JSON
 app.use(bodyParser.json());
 
-// Función para convertir JSON a XML
-function jsonToXml(json) {
-    const xml = xmlbuilder.create('Payment');
-    for (const key in json) {
-        if (json.hasOwnProperty(key)) {
-            if (typeof json[key] === 'object') {
-                const child = xml.ele(key);
-                for (const subKey in json[key]) {
-                    if (json[key].hasOwnProperty(subKey)) {
-                        child.ele(subKey, json[key][subKey]);
-                    }
-                }
-            } else {
-                xml.ele(key, json[key]);
-            }
-        }
-    }
-    return xml.end({ pretty: true });
-}
+// Cargar llaves y certificado al inicio
+const privateKey = fs.readFileSync(privateKeyPath, 'utf-8');
+const certificate = fs.readFileSync(certificatePath, 'utf-8');
 
-// Ruta para firmar los datos de pago
+/**
+ * Ruta principal para firmar datos de pago.
+ * Espera un JSON en el body con la información del pago.
+ * Devuelve un XML firmado.
+ */
 app.post('/sign', (req, res) => {
+  try {
     const payment = req.body;
-
-    // Validar los datos de pago
     if (!payment || typeof payment !== 'object') {
-        return res.status(400).send('Datos de pago inválidos');
+      return res.status(400).send('Datos de pago inválidos');
     }
 
     // Convertir JSON a XML
     const xmlString = jsonToXml(payment);
 
-    // Parsear el XML
-    const doc = new DOMParser().parseFromString(xmlString);
-
-    // Crear una instancia de SignedXml
-    const sig = new SignedXml();
-
-    sig.canonicalizationAlgorithm = "http://www.w3.org/TR/2001/REC-xml-c14n-20010315"
-    sig.signatureAlgorithm = "http://www.w3.org/2000/09/xmldsig#rsa-sha1"
-    sig.addReference(xpath, ["http://www.w3.org/2000/09/xmldsig#enveloped-signature", "http://www.w3.org/TR/2001/REC-xml-c14n-20010315"])
-
-    console.log({ sig });
-
-
-    sig.addReference("/*",
-        ["http://www.w3.org/2000/09/xmldsig#enveloped-signature"]);
-
-
-    sig.signingKey = privateKey;
-
-    // Incluir el certificado en KeyInfo
-    sig.keyInfoProvider = {
-        getKeyInfo: function () {
-            return `<X509Data><X509Certificate>${certificate.replace(/-----BEGIN CERTIFICATE-----|-----END CERTIFICATE-----|\n/g, '')}</X509Certificate></X509Data>`;
-        }
-    };
-
-    // Calcular la firma
-    sig.computeSignature(xmlString, {
-        location: {
-            reference: "/*",
-            action: "append"
-        }
-    });
-
-    const signedXml = sig.getSignedXml();
+    // Firmar el XML
+    const signedXml = signXml(xmlString, privateKey, certificate);
 
     // Retornar el XML firmado
     res.setHeader('Content-Type', 'application/xml');
-    res.send(signedXml);
+    return res.send(signedXml);
+  } catch (error) {
+    console.error('Error firmando XML:', error);
+    return res.status(500).send('Error interno al firmar el XML');
+  }
 });
 
 // Iniciar el servidor
-app.listen(PORT, () => {
-    console.log(`Servidor escuchando en http://localhost:${PORT}`);
+app.listen(port, () => {
+  console.log(`Servidor escuchando en http://localhost:${port}`);
 });
