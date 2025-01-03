@@ -1,17 +1,25 @@
-// src/signatureService.js
+
+const { config } = require('../config/config.js');
+const { XmlToDocument } = require('./xml.helper.js');
 const fs = require('fs');
 const { DOMParser } = require('xmldom');
 const { SignedXml } = require('xml-crypto');
 const xpath = require('xpath');
 
-/**
- * Firma el XML usando un certificado y una llave privada.
- * @param {String} xmlString - Cadena XML a firmar.
- * @param {String} privateKey - Contenido de la llave privada.
- * @param {String} certificate - Contenido del certificado público.
- * @returns {String} - XML firmado.
- */
-function signXml(xmlString, privateKey, certificate) {
+
+
+const signXml = (xmlString) => {
+    // Cargar llaves y certificado al inicio
+    const { port, privateKeyPath, certificatePath } = config;
+    const privateKey = fs.readFileSync(privateKeyPath, 'utf-8');
+    const certificate = fs.readFileSync(certificatePath, 'utf-8');
+    console.log("===== Llaves y Certificado Cargados =====");
+    console.log("privateKey length:", privateKey.length);
+    console.log("privateKey content:\n", privateKey);
+    console.log("certificate length:", certificate.length);
+    console.log("certificate content:\n", certificate);
+    console.log("===== Fin de las Llaves y Certificado =====");
+
     console.log("===== Iniciando firma del XML =====");
     console.log("[signXml] XML de entrada:\n", xmlString);
 
@@ -21,9 +29,10 @@ function signXml(xmlString, privateKey, certificate) {
         throw new Error('La llave privada (privateKey) está vacía o no se pudo leer correctamente.');
     }
 
-    // Parsear el XML
-    const doc = new DOMParser().parseFromString(xmlString);
+
+    const doc = XmlToDocument(xmlString);
     console.log("[signXml] XML parseado con DOMParser.");
+
 
     // Crear un objeto de configuración para SignedXml
     const signedXmlOptions = {
@@ -36,6 +45,7 @@ function signXml(xmlString, privateKey, certificate) {
     const sig = new SignedXml(signedXmlOptions);
     console.log("[signXml] Instancia de SignedXml creada.");
 
+
     // Agregar referencias:
     sig.addReference({
         xpath: '/*',
@@ -46,7 +56,6 @@ function signXml(xmlString, privateKey, certificate) {
         digestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256',
     });
     console.log("[signXml] Referencia añadida con digestAlgorithm = SHA256.");
-
 
 
     // Incluir el certificado en KeyInfo
@@ -75,6 +84,7 @@ function signXml(xmlString, privateKey, certificate) {
     console.log("===== Fin de la firma del XML =====");
 
     return signedXml;
+
 }
 
 module.exports = {

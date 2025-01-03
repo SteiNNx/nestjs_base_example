@@ -16,6 +16,14 @@ app.use(bodyParser.json());
 const privateKey = fs.readFileSync(privateKeyPath, 'utf-8');
 const certificate = fs.readFileSync(certificatePath, 'utf-8');
 
+console.log("===== Llaves y Certificado Cargados =====");
+console.log("privateKey length:", privateKey.length);
+console.log("privateKey content:\n", privateKey);
+console.log("certificate length:", certificate.length);
+console.log("certificate content:\n", certificate);
+console.log("===== Fin de las Llaves y Certificado =====");
+
+
 /**
  * Ruta principal para firmar datos de pago.
  * Espera un JSON en el body con la información del pago.
