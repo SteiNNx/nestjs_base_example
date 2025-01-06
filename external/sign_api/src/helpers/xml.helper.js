@@ -1,12 +1,20 @@
 // src/helpers/xml.helper.js
+
+/**
+ * Utilidades para convertir objetos JSON a XML y viceversa.
+ *
+ * @module xmlHelper
+ */
+
 const xmlbuilder = require('xmlbuilder');
 const { DOMParser } = require('xmldom');
 
 /**
  * Convierte un objeto JSON a XML.
+ *
  * @param {Object} json - Objeto JSON a convertir.
- * @param {String} rootName - Nombre del elemento raíz en el XML.
- * @returns {String} - Cadena XML resultante.
+ * @param {String} [rootName='Payment'] - Nombre del elemento raíz en el XML.
+ * @returns {String} Cadena XML resultante.
  */
 const jsonToXml = (json, rootName = 'Payment') => {
   const xml = xmlbuilder.create(rootName);
@@ -26,16 +34,18 @@ const jsonToXml = (json, rootName = 'Payment') => {
   }
 
   return xml.end({ pretty: true });
-}
+};
 
 /**
- *  @link https://developer.mozilla.org/es/docs/Web/API/Document
- * @param {String} xmlString 
- * @returns 
+ * Convierte un string con formato XML a un Document.
+ *
+ * @link https://developer.mozilla.org/es/docs/Web/API/Document
+ * @param {String} xmlString - La cadena XML a convertir.
+ * @returns {Document} Documento XML parseado.
  */
 const XmlToDocument = (xmlString) => {
   return new DOMParser().parseFromString(xmlString);
-}
+};
 
 module.exports = {
   jsonToXml,

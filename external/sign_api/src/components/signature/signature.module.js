@@ -1,25 +1,34 @@
 // src/components/signature/signature.module.js
+
 /**
- * @typedef {import('express').Request} Request
+ * Lógica adicional para la firma de XML, orquestando llamadas a servicios y controladores.
+ *
+ * @module signatureModule
  */
 
 const signXMLService = require('../../services/signature.service');
+const LoggerHelper = require('../../helpers/logger.helper');
+
+const logger = new LoggerHelper('signature.module');
 
 /**
- * Operacion para realizar un chequeo de salud del servidor.
- * 
+ * Operación para firmar un XML a partir de un objeto JSON.
+ *
+ * @async
  * @function signXMLModule
- * @param {Request} req - Objeto de solicitud HTTP de Express.
- * @returns {Object} Respuesta con el estado 200 y un mensaje "OK".
- * 
+ * @param {import('express').Request} req - Objeto de solicitud HTTP de Express.
+ * @returns {Promise<String>} - Cadena XML firmada.
  */
 const signXMLModule = async (req) => {
-    try {
-        const response = signXMLService(req.body);
-        return response;
-    } catch (error) {
-
-    }
-}
+  try {
+    logger.info('Iniciando signXMLModule...');
+    const response = await signXMLService(req.body);
+    logger.info('signXMLModule completado con éxito.');
+    return response;
+  } catch (error) {
+    logger.error('Error en signXMLModule: ', error);
+    throw error;
+  }
+};
 
 module.exports = signXMLModule;

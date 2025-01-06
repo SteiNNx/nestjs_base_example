@@ -1,3 +1,11 @@
+// src/components/healthcheck/healthcheck.route.js
+
+/**
+ * Rutas relacionadas con el chequeo de salud del servidor.
+ *
+ * @module healthCheckRoutes
+ */
+
 const LoggerHelper = require('../../helpers/logger.helper');
 const healthCheckController = require('./healthcheck.controller');
 
@@ -11,12 +19,9 @@ const logger = new LoggerHelper('healthcheck.route');
  * @param {string} pathPrefixApi - El prefijo para las rutas de la API.
  */
 const healthCheckRoutes = (app, pathPrefixApi) => {
-  app.get(
-    `${pathPrefixApi}/healthcheck`,
-    healthCheckController
-  );
+  app.get(`${pathPrefixApi}/healthcheck`, healthCheckController);
 
-  logger.info(`[RUTA REGISTRADA] [GET] ${pathPrefixApi}/healthcheck - healthcheck.route: healthCheckController`);
+  logger.info(`[RUTA REGISTRADA] [GET] ${pathPrefixApi}/healthcheck - healthcheck.controller: healthCheckController`);
 };
 
 module.exports = healthCheckRoutes;
