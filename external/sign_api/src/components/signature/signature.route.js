@@ -1,3 +1,5 @@
+// src/components/signature/signature.route.js
+
 const LoggerHelper = require('../../helpers/logger.helper');
 const { signXMLController } = require("./signature.controller");
 
@@ -11,12 +13,12 @@ const logger = new LoggerHelper('signature.route');
  * @param {string} pathPrefixApi - El prefijo para las rutas de la API.
  */
 const signatureRoutes = (app, pathPrefixApi) => {
-  app.get(
-    `${pathPrefixApi}/healthcheck`,
+  app.post(
+    `${pathPrefixApi}/sign_xml`,
     signXMLController
   );
 
-  logger.info(`[RUTA REGISTRADA] [GET] ${pathPrefixApi}/healthcheck - healthcheck.route: healthCheckController`);
+  logger.info(`[RUTA REGISTRADA] [POST] ${pathPrefixApi}/sign_xml - healthcheck.route: healthCheckController`);
 };
 
 module.exports = signatureRoutes;

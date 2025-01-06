@@ -1,4 +1,4 @@
-// src/config.js
+// src/config/config.js
 require('dotenv').config();
 const path = require('path');
 
