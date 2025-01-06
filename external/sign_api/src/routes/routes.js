@@ -8,7 +8,11 @@
 
 const healthCheckRoutes = require('../components/healthcheck/healthcheck.route');
 const signatureRoutes = require('../components/signature/signature.route');
+const globalErrorHandlerMiddleware = require('../middlewares/globalErrorHandler.middleware');
 const { config } = require('../config/config');
+
+
+
 const LoggerHelper = require('../helpers/logger.helper');
 
 const logger = new LoggerHelper('routes');
@@ -25,6 +29,8 @@ const routes = (app) => {
 
   healthCheckRoutes(app, prefixApi);
   signatureRoutes(app, prefixApi);
+
+  app.use(globalErrorHandlerMiddleware);
 
   logger.info(`Finalizando configuración de [routes]`);
 };

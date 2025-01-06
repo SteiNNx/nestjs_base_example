@@ -1,14 +1,8 @@
 // src/components/signature/signature.module.js
 
-/**
- * Lógica adicional para la firma de XML, orquestando llamadas a servicios y controladores.
- *
- * @module signatureModule
- */
-
 const signXMLService = require('../../services/signature.service');
-const LoggerHelper = require('../../helpers/logger.helper');
 const validateBodySchema = require('../../helpers/validate.helper');
+const LoggerHelper = require('../../helpers/logger.helper');
 const signXmlSchema = require('../../schemas/request/signXml.schema');
 
 const logger = new LoggerHelper('signature.module');
@@ -22,9 +16,9 @@ const logger = new LoggerHelper('signature.module');
  * @returns {Promise<String>} - Cadena XML firmada.
  */
 const signXMLModule = async (req) => {
-  try {
-    logger.info('Iniciando signXMLModule...');
+  logger.info('------------- INIT signXMLModule -------------');
 
+  try {
     logger.info('signXMLModule iniciando validacion Schema.');
     validateBodySchema(req.body, signXmlSchema, 'XXX.XXX.0001');
     logger.info('signXMLModule Schema validado.');
@@ -38,4 +32,4 @@ const signXMLModule = async (req) => {
   }
 };
 
-module.exports = signXMLModule;
+module.exports = { signXMLModule };
