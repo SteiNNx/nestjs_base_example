@@ -1,18 +1,17 @@
 
-const { config } = require('../config/config.js');
-const { XmlToDocument } = require('./xml.helper.js');
 const fs = require('fs');
-const { DOMParser } = require('xmldom');
-const { SignedXml } = require('xml-crypto');
 const xpath = require('xpath');
+const { SignedXml } = require('xml-crypto');
 
-
+const { config } = require('../config/config.js');
 
 const signXml = (xmlString) => {
     // Cargar llaves y certificado al inicio
-    const { port, privateKeyPath, certificatePath } = config;
+    const { privateKeyPath, certificatePath } = config;
+
     const privateKey = fs.readFileSync(privateKeyPath, 'utf-8');
     const certificate = fs.readFileSync(certificatePath, 'utf-8');
+
     console.log("===== Llaves y Certificado Cargados =====");
     console.log("privateKey length:", privateKey.length);
     console.log("privateKey content:\n", privateKey);
@@ -28,11 +27,6 @@ const signXml = (xmlString) => {
     if (!privateKey || !privateKey.trim()) {
         throw new Error('La llave privada (privateKey) está vacía o no se pudo leer correctamente.');
     }
-
-
-    const doc = XmlToDocument(xmlString);
-    console.log("[signXml] XML parseado con DOMParser.");
-
 
     // Crear un objeto de configuración para SignedXml
     const signedXmlOptions = {

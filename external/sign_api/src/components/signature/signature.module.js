@@ -1,8 +1,9 @@
 // src/components/signature/signature.module.js
 /**
  * @typedef {import('express').Request} Request
- * @typedef {import('express').NextFunction} NextFunction
  */
+
+const signXMLService = require('../../services/signature.service');
 
 /**
  * Operacion para realizar un chequeo de salud del servidor.

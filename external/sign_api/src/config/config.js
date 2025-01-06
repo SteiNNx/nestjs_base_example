@@ -4,7 +4,8 @@ const path = require('path');
 
 module.exports = {
     config: {
-        port: process.env.EXTERNAL_API_SIGN_PORT || 3001,
+        prefixApi: process.env.EXTERNAL_API_SIGN_PREFIX_ENDPOINTS || 'ms/v1/sign',
+        port: process.env.EXTERNAL_API_SIGN_PORT || 3002,
         privateKeyPath: path.resolve(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH),
         certificatePath: path.resolve(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH),
     }

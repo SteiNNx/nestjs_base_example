@@ -6,6 +6,7 @@ const fs = require('fs');
 const { port, privateKeyPath, certificatePath } = require('./config');
 const { jsonToXml } = require('./xmlUtils');
 const { signXml } = require('./signatureService');
+const routes = require('./routes/routes');
 
 const app = express();
 
@@ -50,6 +51,8 @@ app.post('/sign', (req, res) => {
     return res.status(500).send('Error interno al firmar el XML');
   }
 });
+
+routes(app);
 
 // Iniciar el servidor
 app.listen(port, () => {
