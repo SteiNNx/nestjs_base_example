@@ -19,9 +19,9 @@ const logger = new LoggerHelper('healthcheck.route');
  * @param {string} pathPrefixApi - El prefijo para las rutas de la API.
  */
 const healthCheckRoutes = (app, pathPrefixApi) => {
-  app.get(`${pathPrefixApi}/healthcheck`, healthCheckController);
+  logger.info(`--------- [healthcheck.route] [healthcheckRoutes] - Registrando ruta: [POST] ${pathPrefixApi}/healthcheck ---------`);
 
-  logger.info(`[RUTA REGISTRADA] [GET] ${pathPrefixApi}/healthcheck - healthcheck.controller: healthCheckController`);
+  app.get(`${pathPrefixApi}/healthcheck`, healthCheckController);
 };
 
 module.exports = healthCheckRoutes;

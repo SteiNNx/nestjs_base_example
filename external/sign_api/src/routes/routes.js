@@ -23,7 +23,7 @@ const logger = new LoggerHelper('routes');
  * @param {import('express').Application} app - La instancia de la aplicación Express.
  */
 const routes = (app) => {
-  logger.info(`Iniciando configuración de [routes]`);
+  logger.info(`--------- [routes] [routes] Iniciando configuración de [routes] ---------`);
 
   const { prefixApi } = config;
 
@@ -32,7 +32,7 @@ const routes = (app) => {
 
   app.use(globalErrorHandlerMiddleware);
 
-  logger.info(`Finalizando configuración de [routes]`);
+  logger.info(`--------- [routes] [routes] Finalizando configuración de [routes] ---------`);
 };
 
 module.exports = routes;

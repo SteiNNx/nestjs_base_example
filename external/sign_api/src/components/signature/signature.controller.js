@@ -28,13 +28,15 @@ const logger = new LoggerHelper('signature.controller');
  * @returns {Promise<Response>} Respuesta con el estado 200 y el XML firmado.
  */
 const signXMLController = async (req, res, next) => {
-  logger.info('------------- INIT signXMLController -------------');
+  logger.info('--------- [signature.controller] [signXMLController] - INIT ---------');
 
   try {
+    logger.info('--------- [signature.controller] [signXMLController] - Step: Llamando signXMLModule ---------');
+
     const response = await signXMLModule(req);
 
-    logger.info('------------- RESP signXMLController -------------', { response: response });
-    logger.info('------------- END signXMLController --------------');
+    logger.info('--------- [signature.controller] [signXMLController] - Step: Respuesta de signXMLModule ---------', { response: response });
+    logger.info('--------- [signature.controller] [signXMLController] - END ---------');
 
     // Configuración de cabeceras de seguridad
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
@@ -45,7 +47,7 @@ const signXMLController = async (req, res, next) => {
       .send(response);
 
   } catch (error) {
-    logger.error('------------- END_ERROR signXMLController -------------', { error: error.message });
+    logger.error('--------- [signature.controller] [signXMLController] - ERROR ---------', { error: error.message });
 
     // Manejo de errores específicos
     if (

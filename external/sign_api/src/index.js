@@ -35,7 +35,7 @@ routes(app);
  * Inicio del servidor en el puerto configurado.
  */
 app.listen(port, () => {
-  logger.info(`Servidor escuchando en http://localhost:${port}`);
+  logger.info(`--------- [index] [app.listen] - Servidor escuchando en http://localhost:${port} ---------`);
 });
 
 module.exports = { app };

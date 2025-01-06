@@ -19,12 +19,13 @@ const logger = new LoggerHelper('signature.route');
  * @param {string} pathPrefixApi - El prefijo para las rutas de la API.
  */
 const signatureRoutes = (app, pathPrefixApi) => {
+  logger.info(`--------- [signature.route] [signatureRoutes] - Registrando ruta: [POST] ${pathPrefixApi}/sign_xml ---------`);
+
   app.post(
     `${pathPrefixApi}/sign_xml`,
     signXMLController
   );
 
-  logger.info(`[RUTA REGISTRADA] [POST] ${pathPrefixApi}/sign_xml - signature.controller: signXMLController`);
 };
 
 module.exports = signatureRoutes;

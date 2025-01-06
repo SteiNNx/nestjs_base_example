@@ -16,18 +16,21 @@ const logger = new LoggerHelper('signature.module');
  * @returns {Promise<String>} - Cadena XML firmada.
  */
 const signXMLModule = async (req) => {
-  logger.info('------------- INIT signXMLModule -------------');
+  logger.info('--------- [signature.module] [signXMLModule] - INIT ---------');
 
   try {
-    logger.info('signXMLModule iniciando validacion Schema.');
+    logger.info('--------- [signature.module] [signXMLModule] - Step: Validando schema ---------');
     validateBodySchema(req.body, signXmlSchema, 'XXX.XXX.0001');
-    logger.info('signXMLModule Schema validado.');
+    logger.info('--------- [signature.module] [signXMLModule] - Step: Schema validado ---------');
 
+    logger.info('--------- [signature.module] [signXMLModule] - Step: Llamando signXMLService ---------');
     const response = await signXMLService(req.body);
-    logger.info('signXMLModule completado con éxito.');
+    logger.info('--------- [signature.module] [signXMLModule] - Step: Respuesta de signXMLService ---------', { response });
+    
+    logger.info('--------- [signature.module] [signXMLModule] - END ---------');
     return response;
   } catch (error) {
-    logger.error('Error en signXMLModule: ', error);
+    logger.error('--------- [signature.module] [signXMLModule] - ERROR ---------', { error });
     throw error;
   }
 };
