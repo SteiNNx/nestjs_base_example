@@ -48,7 +48,7 @@ Content-Type: application/json
 
 ### Sign
 ### Firmar Datos de Pago
-POST http://localhost:3002/sign
+POST http://localhost:3002/ms/v1/sign/sign_xml
 Content-Type: application/json
 
 {

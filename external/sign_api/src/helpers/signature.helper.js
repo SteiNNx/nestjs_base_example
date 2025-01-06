@@ -10,6 +10,11 @@ const fs = require('fs');
 const xpath = require('xpath');
 const { SignedXml } = require('xml-crypto');
 const { config } = require('../config/config.js');
+
+/**
+ * Reemplaza `LoggerHelper` por tu nuevo logger, si lo renombraste.
+ * Si mantienes el mismo, así estaría bien.
+ */
 const LoggerHelper = require('./logger.helper');
 
 const logger = new LoggerHelper('signature.helper');
@@ -22,17 +27,18 @@ const logger = new LoggerHelper('signature.helper');
  * @throws {Error} - Si la llave privada no está disponible o es inválida.
  */
 const signXml = (xmlString) => {
+  logger.info('--------- [signature.helper] [signXml] - INIT ---------');
+
   const { privateKeyPath, certificatePath } = config;
 
   // Cargar llaves y certificado
+  logger.info('--------- [signature.helper] [signXml] - Step: Cargando privateKey y certificate ---------');
   const privateKey = fs.readFileSync(privateKeyPath, 'utf-8');
   const certificate = fs.readFileSync(certificatePath, 'utf-8');
 
-  logger.info('===== Iniciando proceso de firma del XML =====');
-
   // Validar la llave privada
   if (!privateKey || !privateKey.trim()) {
-    logger.error('La llave privada (privateKey) está vacía o no se pudo leer correctamente.');
+    logger.error('--------- [signature.helper] [signXml] - ERROR: La llave privada (privateKey) está vacía o no se pudo leer correctamente ---------');
     throw new Error('La llave privada (privateKey) está vacía o no se pudo leer correctamente.');
   }
 
@@ -40,14 +46,14 @@ const signXml = (xmlString) => {
   const signedXmlOptions = {
     canonicalizationAlgorithm: 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
     signatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
-    privateKey: privateKey,
+    privateKey,
   };
 
-  // Crear instancia de SignedXml
+  logger.info('--------- [signature.helper] [signXml] - Step: Creando instancia de SignedXml ---------');
   const sig = new SignedXml(signedXmlOptions);
-  logger.info('Instancia de SignedXml creada correctamente.');
 
   // Agregar referencia
+  logger.info('--------- [signature.helper] [signXml] - Step: Agregando referencia (digestAlgorithm=SHA256) ---------');
   sig.addReference({
     xpath: '/*',
     transforms: [
@@ -56,12 +62,11 @@ const signXml = (xmlString) => {
     ],
     digestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256',
   });
-  logger.info('Referencia añadida a la firma (digestAlgorithm=SHA256).');
 
   // Incluir certificado en KeyInfo
   sig.keyInfoProvider = {
     getKeyInfo: () => {
-      logger.info('Generando KeyInfo con el certificado...');
+      logger.info('--------- [signature.helper] [signXml] - Step: Generando KeyInfo con el certificado ---------');
       const cleanCert = certificate
         .replace(/-----BEGIN CERTIFICATE-----/g, '')
         .replace(/-----END CERTIFICATE-----/g, '')
@@ -71,14 +76,15 @@ const signXml = (xmlString) => {
   };
 
   // Calcular la firma
-  logger.info('Calculando la firma...');
+  logger.info('--------- [signature.helper] [signXml] - Step: Calculando la firma ---------');
   sig.computeSignature(xmlString, { location: { reference: '/*', action: 'append' } });
-  logger.info('Firma calculada correctamente.');
+
+  logger.info('--------- [signature.helper] [signXml] - Step: Firma calculada correctamente ---------');
 
   // Obtener el XML firmado
   const signedXml = sig.getSignedXml();
 
-  logger.info('===== Fin del proceso de firma del XML =====');
+  logger.info('--------- [signature.helper] [signXml] - END ---------');
   return signedXml;
 };
 

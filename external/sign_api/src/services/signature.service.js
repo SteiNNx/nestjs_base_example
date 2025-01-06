@@ -23,19 +23,23 @@ const logger = new LoggerHelper('signature.service');
  */
 const signXMLService = async (body) => {
   try {
-    logger.info('Iniciando firma de XML a partir de JSON.');
+    logger.info('--------- [signature.service] [signXMLService] - INIT ---------');
 
     // Convertir JSON a XML
+    logger.info('--------- [signature.service] [signXMLService] - Step: Convertir Json a XML ---------');
     const xmlString = jsonToXml(body);
-    logger.debug('JSON convertido a XML correctamente.');
+    logger.info('--------- [signature.service] [signXMLService] - Step: Json convertido a XML ---------');
 
     // Firmar el XML
+    logger.info('--------- [signature.service] [signXMLService] - Step: Firmar XML ---------');
     const xmlSigned = signXml(xmlString);
-    logger.info('XML firmado correctamente.');
+    logger.info('--------- [signature.service] [signXMLService] - Step: XML Firmado ---------');
 
+    logger.info('--------- [signature.service] [signXMLService] - END ---------');
     return xmlSigned;
   } catch (error) {
-    logger.error('Error al firmar el XML.', error);
+    logger.error('--------- [signature.service] [signXMLService] - ERROR ---------', { error });
+
     throw error;
   }
 };
