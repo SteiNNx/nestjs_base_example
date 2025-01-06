@@ -8,6 +8,8 @@
 
 const signXMLService = require('../../services/signature.service');
 const LoggerHelper = require('../../helpers/logger.helper');
+const validateBodySchema = require('../../helpers/validate.helper');
+const signXmlSchema = require('../../schemas/request/signXml.schema');
 
 const logger = new LoggerHelper('signature.module');
 
@@ -22,6 +24,11 @@ const logger = new LoggerHelper('signature.module');
 const signXMLModule = async (req) => {
   try {
     logger.info('Iniciando signXMLModule...');
+
+    logger.info('signXMLModule iniciando validacion Schema.');
+    validateBodySchema(req.body, signXmlSchema, 'XXX.XXX.0001');
+    logger.info('signXMLModule Schema validado.');
+
     const response = await signXMLService(req.body);
     logger.info('signXMLModule completado con éxito.');
     return response;

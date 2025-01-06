@@ -9,9 +9,11 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const { config } = require('./config/config');
+const helmet = require('helmet');
+
 const routes = require('./routes/routes');
 const LoggerHelper = require('./helpers/logger.helper');
+const { config } = require('./config/config');
 
 const logger = new LoggerHelper('index');
 const { port } = config;
@@ -21,6 +23,8 @@ const app = express();
  * Middleware para parsear JSON del body.
  */
 app.use(bodyParser.json());
+app.use(helmet());
+app.disable('x-powered-by');
 
 /**
  * Registro de rutas principales.
@@ -34,3 +38,4 @@ app.listen(port, () => {
   logger.info(`Servidor escuchando en http://localhost:${port}`);
 });
 
+module.exports = { app };

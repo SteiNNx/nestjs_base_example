@@ -10,11 +10,13 @@
     "body-parser": "^1.20.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
+    "helmet": "^8.0.0",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
     "xml-crypto": "^6.0.0",
     "xmlbuilder": "^15.1.1",
     "xmldom": "^0.6.0",
-    "xpath": "^0.0.34"
+    "xpath": "^0.0.34",
+    "zod": "^3.24.1"
   }
 }
