@@ -50,6 +50,7 @@ Content-Type: application/json
 ### Firmar Datos de Pago
 POST http://localhost:3002/ms/v1/sign/sign_xml
 Content-Type: application/json
+X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
 
 {
   "transaction_id": "txn-2001-abcdesf123459",
