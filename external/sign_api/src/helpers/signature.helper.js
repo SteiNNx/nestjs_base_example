@@ -1,61 +1,67 @@
 // src/helpers/signature.helper.js
 
 /**
- * Helper para la firma de documentos XML.
+ * Helper para la firma y manipulación de documentos XML.
  *
  * @module signatureHelper
  */
 
 const fs = require('fs');
-const xpath = require('xpath');
+const { DOMParser, XMLSerializer } = require('xmldom');  // <-- NUEVO: para manipular XML
 const { SignedXml } = require('xml-crypto');
 const { config } = require('../config/config.js');
-
-/**
- * Reemplaza `LoggerHelper` por tu nuevo logger, si lo renombraste.
- * Si mantienes el mismo, así estaría bien.
- */
 const LoggerHelper = require('./logger.helper');
 
 const logger = new LoggerHelper('signature.helper');
 
 /**
- * Firma un XML utilizando la llave privada y el certificado configurados.
+ * Firma un XML utilizando la llave privada y el certificado configurados,
+ * reemplazando el atributo Id en <Payment> y añadiendo etiquetas/atributos custom
+ * dentro de la firma.
  *
- * @param {String} xmlString - Cadena XML a firmar.
- * @returns {String} - XML firmado.
+ * @param {String} xmlString - Cadena XML base a firmar.
+ * @param {String} transactionId - (Ejemplo) ID de la transacción para inyectar en <Payment Id="...">.
+ * @returns {String} - XML firmado y modificado.
  * @throws {Error} - Si la llave privada no está disponible o es inválida.
  */
-const signXml = (xmlString) => {
+const signXml = (xmlString, transactionId = '_0') => {
   logger.info('--------- [signature.helper] [signXml] - INIT ---------');
 
-  const { privateKeyPath, certificatePath } = config;
+  /***********************************************************************
+   * 1. PARSEAR XML INICIAL
+   ***********************************************************************/
+  logger.info('--------- [signature.helper] [signXml] - Step: Parseando el XML original ---------');
+  const dom = new DOMParser().parseFromString(xmlString, 'application/xml');
 
-  // Cargar llaves y certificado
+  // Re-serializamos el XML para firmarlo
+  const newXmlString = new XMLSerializer().serializeToString(dom);
+
+  /***********************************************************************
+   * 2. PREPARAR FIRMA (LLAVES, CERTIFICADO) E INSTANCIAR SignedXml
+   ***********************************************************************/
   logger.info('--------- [signature.helper] [signXml] - Step: Cargando privateKey y certificate ---------');
+  const { privateKeyPath, certificatePath } = config;
   const privateKey = fs.readFileSync(privateKeyPath, 'utf-8');
   const certificate = fs.readFileSync(certificatePath, 'utf-8');
 
-  // Validar la llave privada
   if (!privateKey || !privateKey.trim()) {
-    logger.error('--------- [signature.helper] [signXml] - ERROR: La llave privada (privateKey) está vacía o no se pudo leer correctamente ---------');
+    logger.error(
+      '--------- [signature.helper] [signXml] - ERROR: La llave privada (privateKey) está vacía o no se pudo leer correctamente ---------'
+    );
     throw new Error('La llave privada (privateKey) está vacía o no se pudo leer correctamente.');
   }
 
-  // Crear objeto de configuración para SignedXml
+  logger.info('--------- [signature.helper] [signXml] - Step: Creando instancia de SignedXml ---------');
   const signedXmlOptions = {
     canonicalizationAlgorithm: 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
     signatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
     privateKey,
   };
-
-  logger.info('--------- [signature.helper] [signXml] - Step: Creando instancia de SignedXml ---------');
   const sig = new SignedXml(signedXmlOptions);
 
-  // Agregar referencia
   logger.info('--------- [signature.helper] [signXml] - Step: Agregando referencia (digestAlgorithm=SHA256) ---------');
   sig.addReference({
-    xpath: '/*',
+    xpath: '/*',  // Firmar todo el documento root
     transforms: [
       'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
       'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
@@ -75,14 +81,50 @@ const signXml = (xmlString) => {
     },
   };
 
-  // Calcular la firma
+  /***********************************************************************
+   * 3. FIRMAR EL XML
+   ***********************************************************************/
   logger.info('--------- [signature.helper] [signXml] - Step: Calculando la firma ---------');
-  sig.computeSignature(xmlString, { location: { reference: '/*', action: 'append' } });
-
+  sig.computeSignature(newXmlString, { location: { reference: '/*', action: 'append' } });
   logger.info('--------- [signature.helper] [signXml] - Step: Firma calculada correctamente ---------');
 
-  // Obtener el XML firmado
-  const signedXml = sig.getSignedXml();
+  // Obtenemos el XML firmado (string)
+  let signedXml = sig.getSignedXml();
+
+  /***********************************************************************
+   * 4. (OPCIONAL) PARSEAR DE NUEVO PARA AGREGAR ATRIBUTOS O NODOS CUSTOM
+   *    dentro de la sección <Signature> generada por xml-crypto
+   ***********************************************************************/
+  logger.info('--------- [signature.helper] [signXml] - Step: Parseando XML firmado para inyectar etiquetas custom ---------');
+  const signedDom = new DOMParser().parseFromString(signedXml, 'application/xml');
+
+  // Encontrar el nodo <Signature> (por default, xml-crypto genera uno con xmlns="http://www.w3.org/2000/09/xmldsig#")
+  const signatureNode = signedDom.getElementsByTagName('Signature')[0];
+  if (signatureNode) {
+    // Agregar un atributo con la fecha/hora actual en formato local (Chile)
+    const signingTime = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
+    signatureNode.setAttribute('signingDate', signingTime);
+
+    // Ejemplo: crear un nodo <AdditionalInfo> con datos custom
+    const additionalInfoNode = signedDom.createElement('AdditionalInfo');
+    additionalInfoNode.setAttribute('serverTimeZone', 'America/Santiago');
+    additionalInfoNode.setAttribute('signedByServer', 'true');
+
+    // Podrías añadir más nodos hijos a <AdditionalInfo> si gustas
+    const signingDateValueNode = signedDom.createElement('signingDate');
+    signingDateValueNode.appendChild(signedDom.createTextNode(signingTime));
+    additionalInfoNode.appendChild(signingDateValueNode);
+
+    // Insertamos <AdditionalInfo> dentro de <Signature>
+    signatureNode.appendChild(additionalInfoNode);
+
+    logger.info('--------- [signature.helper] [signXml] - Step: Atributo "signingDate" y <AdditionalInfo> añadidos a <Signature> ---------');
+  } else {
+    logger.warn('No se encontró <Signature> para inyectar atributos/nodos custom.');
+  }
+
+  // Volvemos a serializar para obtener el XML final
+  signedXml = new XMLSerializer().serializeToString(signedDom);
 
   logger.info('--------- [signature.helper] [signXml] - END ---------');
   return signedXml;

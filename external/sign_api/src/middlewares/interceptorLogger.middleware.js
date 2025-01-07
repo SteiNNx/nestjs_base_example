@@ -16,7 +16,7 @@ const logger = new Logger('InterceptorLogger.middleware');
 const InterceptorLoggerMiddleware = (req, res, next) => {
   // Log de la petición entrante (REQUEST IN)
   logger.info(
-    '--------- [InterceptorLogger] [REQUEST IN] - Step: Detalles de la Request ---------',
+    '--------- [InterceptorLoggerMiddleware] [REQUEST_IN] - Step: Detalles de la Request ---------',
     {
       requestMethod: req.method,
       requestUrl: req.url,
@@ -31,7 +31,7 @@ const InterceptorLoggerMiddleware = (req, res, next) => {
   // Sobrescribimos res.send para registrar la respuesta antes de enviarla (RESPONSE OUT)
   res.send = function (body) {
     logger.info(
-      '--------- [InterceptorLogger] [RESPONSE OUT] - Step: Detalles de la Response ---------',
+      '--------- [InterceptorLoggerMiddleware] [RESPONSE_OUT] - Step: Detalles de la Response ---------',
       {
         responseStatusCode: res.statusCode,
         responseBody: body,
