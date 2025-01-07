@@ -29,52 +29,80 @@ class LoggerHelper {
    * @param {string} moduleName - Nombre del módulo o componente.
    */
   constructor(moduleName) {
+    /**
+     * @property {string} context - Contexto (nombre del módulo o componente) para los logs.
+     */
     this.context = moduleName;
   }
 
   /**
    * Método para logs de nivel info.
+   * 
+   * @example
+   * logger.info('Mensaje de info'); 
+   * logger.info('Mensaje con objeto', { foo: 'bar' });
+   * 
    * @param {string} message - Mensaje a loguear.
-   * @param  {...any} args - Argumentos adicionales.
+   * @param {object} [meta] - (Opcional) Objeto con propiedades adicionales a mostrar en el log.
    */
-  info(message, ...args) {
-    logger.info({ context: this.context }, message, ...args);
+  info(message, meta = {}) {
+    logger.info({ context: this.context, ...meta }, message);
   }
 
   /**
    * Método para logs de nivel error.
+   * 
+   * @example
+   * logger.error('Mensaje de error');
+   * logger.error('Mensaje de error con datos', { reason: 'Algo falló' });
+   *
    * @param {string} message - Mensaje a loguear.
-   * @param  {...any} args - Argumentos adicionales.
+   * @param {object} [meta] - (Opcional) Objeto con propiedades adicionales a mostrar en el log.
    */
-  error(message, ...args) {
-    logger.error({ context: this.context }, message, ...args);
+  error(message, meta = {}) {
+    logger.error({ context: this.context, ...meta }, message);
   }
 
   /**
    * Método para logs de nivel warn.
+   * 
+   * @example
+   * logger.warn('Mensaje de warn');
+   * logger.warn('Mensaje con información adicional', { critical: false });
+   * 
    * @param {string} message - Mensaje a loguear.
-   * @param  {...any} args - Argumentos adicionales.
+   * @param {object} [meta] - (Opcional) Objeto con propiedades adicionales a mostrar en el log.
    */
-  warn(message, ...args) {
-    logger.warn({ context: this.context }, message, ...args);
+  warn(message, meta = {}) {
+    logger.warn({ context: this.context, ...meta }, message);
   }
 
   /**
    * Método para logs de nivel debug.
+   *
+   * @example
+   * logger.debug('Mensaje de debug');
+   * logger.debug('Mensaje con datos', { debugData: 'algo' });
+   *
    * @param {string} message - Mensaje a loguear.
-   * @param  {...any} args - Argumentos adicionales.
+   * @param {object} [meta] - (Opcional) Objeto con propiedades adicionales a mostrar en el log.
    */
-  debug(message, ...args) {
-    logger.debug({ context: this.context }, message, ...args);
+  debug(message, meta = {}) {
+    logger.debug({ context: this.context, ...meta }, message);
   }
 
   /**
    * Método para logs de nivel trace.
+   *
+   * @example
+   * logger.trace('Mensaje de trace');
+   * logger.trace('Mensaje con datos', { traceId: 'abc123' });
+   *
    * @param {string} message - Mensaje a loguear.
-   * @param  {...any} args - Argumentos adicionales.
+   * @param {object} [meta] - (Opcional) Objeto con propiedades adicionales a mostrar en el log.
    */
-  trace(message, ...args) {
-    logger.trace({ context: this.context }, message, ...args);
+  trace(message, meta = {}) {
+    logger.trace({ context: this.context, ...meta }, message);
   }
 }
 

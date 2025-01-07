@@ -25,7 +25,7 @@ const signXMLModule = async (req) => {
 
     logger.info('--------- [signature.module] [signXMLModule] - Step: Llamando signXMLService ---------');
     const response = await signXMLService(req.body);
-    logger.info('--------- [signature.module] [signXMLModule] - Step: Respuesta de signXMLService ---------', { response });
+    logger.info('--------- [signature.module] [signXMLModule] - Step: Respuesta de signXMLService ---------', { xmlSigned: response });
     
     logger.info('--------- [signature.module] [signXMLModule] - END ---------');
     return response;

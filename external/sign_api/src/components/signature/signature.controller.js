@@ -35,7 +35,7 @@ const signXMLController = async (req, res, next) => {
 
     const response = await signXMLModule(req);
 
-    logger.info('--------- [signature.controller] [signXMLController] - Step: Respuesta de signXMLModule ---------', { response: response });
+    logger.info('--------- [signature.controller] [signXMLController] - Step: Respuesta de signXMLModule ---------', { signXMLModuleResponse: response });
     logger.info('--------- [signature.controller] [signXMLController] - END ---------');
 
     // Configuración de cabeceras de seguridad
