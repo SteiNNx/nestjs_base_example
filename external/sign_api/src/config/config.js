@@ -20,6 +20,5 @@ module.exports = {
 
     privateKeyPath: path.resolve(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH),
     certificatePath: path.resolve(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH),
-
   },
 };

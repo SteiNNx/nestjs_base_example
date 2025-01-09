@@ -1,11 +1,22 @@
 // src/helpers/signature.helper.js
 
-const AuthError = require('../exceptions/auth.exception');
-const BadRequestError = require('../exceptions/bad-request.exception');
-const BusinessError = require('../exceptions/bussiness.exception');
-const InternalServerError = require('../exceptions/internal-server.exception');
+const fs = require('fs');
+const AdapterError = require('../exceptions/adapter.exception');
 const TechnicalError = require('../exceptions/technical.exception');
-const ValidationError = require('../exceptions/validation.exception');
+
+const { DOMParser, XMLSerializer } = require('xmldom');
+const { SignedXml } = require('xml-crypto');
+const { config } = require('../config/config.js');
+const LoggerHelper = require('../helpers/logger.helper');
+
+const logger = new LoggerHelper('signature.helper');
+
+/**
+ * Helper para la firma y manipulación de documentos XML.
+ *
+ * @module signatureHelper
+ */
+
 /**
  * Firma un XML utilizando la llave privada y el certificado configurados,
  * reemplazando el atributo Id en <Payment> y añadiendo etiquetas/atributos custom
@@ -17,20 +28,6 @@ const ValidationError = require('../exceptions/validation.exception');
  * @throws {AdapterError} Si ocurre un error al leer las llaves o certificados.
  * @throws {TechnicalError} Si ocurre un error durante la conversión o firma del XML.
  *
- * @example
- * const xmlHelper = require('./src/helpers/signature.helper');
- * try {
- *   const signedXml = xmlHelper.signXml('<Payment><amount>100</amount></Payment>', 'TX12345');
- *   console.log(signedXml);
- * } catch (error) {
- *   if (error instanceof AdapterError) {
- *     console.error(`Error de adaptador: ${error.message} (Código: ${error.code})`);
- *   } else if (error instanceof TechnicalError) {
- *     console.error(`Error técnico: ${error.message} (Código: ${error.code})`);
- *   } else {
- *     console.error('Error inesperado:', error);
- *   }
- * }
  */
 const signXml = (xmlString, transactionId = '_0') => {
   logger.info('--------- [signature.helper] [signXml] - INIT ---------');
@@ -49,7 +46,7 @@ const signXml = (xmlString, transactionId = '_0') => {
       }
     } catch (error) {
       logger.error('--------- [signature.helper] [signXml] - ERROR: Fallo al parsear el XML ---------');
-      throw new TechnicalError('TECH.XML_PARSING', 'Error al parsear el XML proporcionado.', 500, error);
+      throw new TechnicalError('SIGN.XML_PARSING', 'Error al parsear el XML proporcionado.', 500, error);
     }
 
     // Re-serializamos el XML para firmarlo
@@ -66,14 +63,14 @@ const signXml = (xmlString, transactionId = '_0') => {
       certificate = fs.readFileSync(certificatePath, 'utf-8');
     } catch (error) {
       logger.error('--------- [signature.helper] [signXml] - ERROR: Fallo al leer las llaves o certificados ---------');
-      throw new AdapterError('ADAPTER.FILE_READ_ERROR', 'Error al leer las llaves privadas o certificados.', 502, error);
+      throw new AdapterError('SIGN.KEY_PEM_FILE_READ_ERROR', 'Error al leer las llaves privadas o certificados.', 502, error);
     }
 
     if (!privateKey || !privateKey.trim()) {
       logger.error(
         '--------- [signature.helper] [signXml] - ERROR: La llave privada (privateKey) está vacía o no se pudo leer correctamente ---------'
       );
-      throw new TechnicalError('TECH.INVALID_PRIVATE_KEY', 'La llave privada está vacía o no se pudo leer correctamente.', 500);
+      throw new TechnicalError('SIGN.INVALID_PRIVATE_KEY_PEM_FILE', 'La llave privada está vacía o no se pudo leer correctamente.', 500);
     }
 
     logger.info('--------- [signature.helper] [signXml] - Step: Creando instancia de SignedXml ---------');
@@ -115,7 +112,7 @@ const signXml = (xmlString, transactionId = '_0') => {
       logger.info('--------- [signature.helper] [signXml] - Step: Firma calculada correctamente ---------');
     } catch (error) {
       logger.error('--------- [signature.helper] [signXml] - ERROR: Fallo al calcular la firma ---------');
-      throw new TechnicalError('TECH.SIGNATURE_COMPUTE_ERROR', 'Error al calcular la firma del XML.', 500, error);
+      throw new TechnicalError('SIGN.SIGNATURE_COMPUTE_ERROR', 'Error al calcular la firma del XML.', 500, error);
     }
 
     // Obtenemos el XML firmado (string)
@@ -135,7 +132,7 @@ const signXml = (xmlString, transactionId = '_0') => {
       }
     } catch (error) {
       logger.error('--------- [signature.helper] [signXml] - ERROR: Fallo al parsear el XML firmado ---------');
-      throw new TechnicalError('TECH.XML_PARSING_SIGNED', 'Error al parsear el XML firmado.', 500, error);
+      throw new TechnicalError('SIGN.XML_PARSING_SIGNED', 'Error al parsear el XML firmado.', 500, error);
     }
 
     // Encontrar el nodo <Signature> (por default, xml-crypto genera uno con xmlns="http://www.w3.org/2000/09/xmldsig#")
@@ -161,7 +158,7 @@ const signXml = (xmlString, transactionId = '_0') => {
       logger.info('--------- [signature.helper] [signXml] - Step: Atributo "signingDate" y <AdditionalInfo> añadidos a <Signature> ---------');
     } else {
       logger.warn('No se encontró <Signature> para inyectar atributos/nodos custom.');
-      throw new TechnicalError('TECH.SIGNATURE_MISSING', 'No se encontró el nodo <Signature> en el XML firmado.', 500);
+      throw new TechnicalError('SIGN.SIGNATURE_MISSING', 'No se encontró el nodo <Signature> en el XML firmado.', 500);
     }
 
     // Volvemos a serializar para obtener el XML final

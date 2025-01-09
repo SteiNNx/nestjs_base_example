@@ -1,14 +1,15 @@
 // src/helpers/xml.helper.js
 
+const TechnicalError = require('../exceptions/technical.exception');
+
+const { DOMParser } = require('xmldom');
+const xmlbuilder = require('xmlbuilder');
+
 /**
  * Utilidades para convertir objetos JSON a XML y viceversa.
  *
  * @module xmlHelper
  */
-
-const xmlbuilder = require('xmlbuilder');
-const { DOMParser } = require('xmldom');
-const TechnicalError = require('../errors/TechnicalError'); // Asegúrate de ajustar la ruta según tu estructura de carpetas
 
 /**
  * Convierte un objeto JSON a XML.
