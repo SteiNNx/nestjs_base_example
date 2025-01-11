@@ -12,13 +12,19 @@ const pino = require('pino');
  * Configuración de pino con pino-pretty para logs legibles.
  */
 const logger = pino({
-  level: process.env.LOG_LEVEL || 'info', // Nivel de log, configurable via variables de entorno
+  level: process.env.LOG_LEVEL || 'info',
   transport: {
     target: 'pino-pretty',
     options: {
-      colorize: true,              // Colores en los logs
-      translateTime: 'SYS:standard', // Formato de tiempo
-      ignore: 'pid,hostname',      // Campos a ignorar
+      colorize: true,
+      translateTime: 'SYS:standard',
+      ignore: 'pid,hostname',
+      levelFirst: false,     // el nivel se imprime después de la hora
+      singleLine: false,     // cada objeto en múltiples líneas (por defecto)
+      hideObject: false,     // si es true, no se imprimiría el objeto
+      messageFormat: false,  // sin plantilla personalizada
+      errorLikeObjectKeys: ['err', 'error'],
+      errorProps: 'stack,message', // imprime stack y message cuando sea error
     },
   },
 });

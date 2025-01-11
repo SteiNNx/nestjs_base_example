@@ -19,21 +19,20 @@ const logger = new LoggerHelper('index');
 const { port } = config;
 const app = express();
 
-/**
- * Middleware para parsear JSON del body.
- */
-app.use(bodyParser.json());
-/**
- * NOTA IMPORTANTE para la validación XML:
- * Vamos a necesitar parsear el body como texto cuando se use `Content-Type: application/xml`.
- * Con bodyParser, podemos hacer algo como:
- */
 app.use(
-  bodyParser.text({
-    type: ['application/xml', 'text/xml'],
-    limit: '10mb', // Ajusta el límite según tu necesidad
+  bodyParser.json({
+    type: ['application/json'], // Solo parsea JSON si el Content-Type es "application/json"
+    limit: '10mb',
   })
 );
+
+app.use(
+  bodyParser.text({
+    type: ['application/xml', 'text/xml'], // Solo parsea XML como texto
+    limit: '10mb',
+  })
+);
+
 
 app.use(helmet());
 app.disable('x-powered-by');

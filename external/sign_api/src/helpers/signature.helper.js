@@ -106,18 +106,7 @@ function signXml(xmlString, transactionId = 'xml-data') {
     digestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256',
   });
 
-  // 7) Incluir el certificado en <KeyInfo>
-  sig.keyInfoProvider = {
-    getKeyInfo: () => {
-      const cleanCert = certificate
-        .replace(/-----BEGIN CERTIFICATE-----/g, '')
-        .replace(/-----END CERTIFICATE-----/g, '')
-        .replace(/\r?\n|\r/g, '');
-      return `<X509Data><X509Certificate>${cleanCert}</X509Certificate></X509Data>`;
-    },
-  };
-
-  // 8) Firmar
+  // 7) Firmar
   logger.info('Computando la firma ...');
   try {
     sig.computeSignature(xmlToSign, {
@@ -138,7 +127,7 @@ function signXml(xmlString, transactionId = 'xml-data') {
 
   let signedXml = sig.getSignedXml();
 
-  // 9) (Opcional) Inyectar nodos custom en <Signature>
+  // 8) (Opcional) Inyectar nodos custom en <Signature>
   let signedDom;
   try {
     signedDom = new DOMParser().parseFromString(signedXml, 'application/xml');
@@ -156,7 +145,7 @@ function signXml(xmlString, transactionId = 'xml-data') {
     );
   }
 
-  // 10) Agregar info extra en <Signature>
+  // 9) Agregar info extra en <Signature>
   const signatureNode = signedDom.getElementsByTagName('Signature')[0];
   if (!signatureNode) {
     throw new TechnicalError(

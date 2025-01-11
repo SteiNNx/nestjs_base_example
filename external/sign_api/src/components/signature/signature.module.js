@@ -4,8 +4,6 @@ const { signXMLService, validateSignXMLService } = require('../../services/signa
 const validateBodySchema = require('../../helpers/validate.helper');
 const LoggerHelper = require('../../helpers/logger.helper');
 const signXmlSchema = require('../../schemas/request/signXml.schema');
-// const validateSignXmlSchema = require('../../schemas/request/validateSignXml.schema');
-// ^ Ya NO usaremos validateSignXmlSchema, pues ahora recibimos XML directamente.
  
 const logger = new LoggerHelper('signature.module');
 

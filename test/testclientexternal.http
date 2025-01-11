@@ -100,6 +100,7 @@ Accept: application/xml
 Content-Type: application/xml; charset=utf-8
 X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
 
+<?xml version="1.0"?>
 <Payment Id="xml-data">
   <transaction_id>txn-2001-abcdesf123459</transaction_id>
   <card_number>411111******1234</card_number>
@@ -135,7 +136,7 @@ X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
     <cashback_amount>0</cashback_amount>
   </additional_data>
   <Signature 
-    xmlns="http://www.w3.org/2000/09/xmldsig#" signingDate="11-01-2025, 4:32:17 p. m.">
+    xmlns="http://www.w3.org/2000/09/xmldsig#" signingDate="11-01-2025, 4:42:58 p. m.">
     <SignedInfo>
       <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
       <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
@@ -155,7 +156,7 @@ X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
       </X509Data>
     </KeyInfo>
     <AdditionalInfo serverTimeZone="America/Santiago" signedByServer="true">
-      <signingDate>11-01-2025, 4:32:17 p. m.</signingDate>
+      <signingDate>11-01-2025, 4:42:58 p. m.</signingDate>
     </AdditionalInfo>
   </Signature>
 </Payment>
