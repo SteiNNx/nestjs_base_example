@@ -49,7 +49,7 @@ Content-Type: application/json
 ### Sign
 ### Firmar Datos de Pago
 POST http://localhost:3002/ms/v1/sign/sign_xml
-Content-Type: application/json
+Content-Type: application/json; charset=utf-8
 X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
 
 {
@@ -93,3 +93,69 @@ X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
     "cashback_amount": 0.00
   }
 }
+
+### ValidateSignXML
+POST http://localhost:3002/ms/v1/sign/validate_sign_xml
+Accept: application/xml
+Content-Type: application/xml; charset=utf-8
+X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
+
+<Payment Id="xml-data">
+  <transaction_id>txn-2001-abcdesf123459</transaction_id>
+  <card_number>411111******1234</card_number>
+  <amount>150.25</amount>
+  <currency>CLP</currency>
+  <timestamp>2024-06-01T10:15:00Z</timestamp>
+  <merchant>
+    <merchant_id>m-3001</merchant_id>
+    <name>Restaurante Don Pepe</name>
+    <category>Restaurante</category>
+    <location address="Calle Larga 123" city="Santiago" country="Chile" latitude="-33.4489" longitude="-70.6693"/>
+  </merchant>
+  <transaction_type>Pago</transaction_type>
+  <auth_code>AUTH123456</auth_code>
+  <response_code>00</response_code>
+  <terminal_id>term-4001</terminal_id>
+  <issuer>
+    <bank_id>bank-5001</bank_id>
+    <name>Banco Estado</name>
+    <country>Chile</country>
+  </issuer>
+  <cardholder_verification_method>Firma</cardholder_verification_method>
+  <emv_data>
+    <application_id>A0000000031010</application_id>
+    <application_label>VISA CREDITO</application_label>
+    <transaction_counter>5</transaction_counter>
+    <unpredictable_number>1A2B3C4D</unpredictable_number>
+    <issuer_application_data>01020304</issuer_application_data>
+  </emv_data>
+  <additional_data>
+    <installments>1</installments>
+    <tip_amount>0</tip_amount>
+    <cashback_amount>0</cashback_amount>
+  </additional_data>
+  <Signature 
+    xmlns="http://www.w3.org/2000/09/xmldsig#" signingDate="11-01-2025, 4:32:17 p. m.">
+    <SignedInfo>
+      <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+      <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+      <Reference URI="#xml-data">
+        <Transforms>
+          <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+          <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
+        </Transforms>
+        <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+        <DigestValue>1Pe6RGhITmAUCdFqwth+layyhut3ifmRniqyOmaAMu4=</DigestValue>
+      </Reference>
+    </SignedInfo>
+    <SignatureValue>iHGvqiQdkRwj9Lk4zfN/RivmHpCoJIo/SYrkCc966OZDsyfzExSxc9cTM3P7YB5yCCeapBizDYTCxivo4zqbcnYv885I0EE5uPi70kHCszCfwJpH7LxGIqT4vatF3iWUgrxy4PBVLGq0X6n1CoDKEMigW+HEKpVPZWt9IgMELIhfKGauILZ/syhI65LUQg73qTEzhi1ipKHF3ZOOQ9KW/YLkQlLh3seped7tFCtAT4cUQuv0KKxBjyGqSv2Mj/vXzf8ejLV1RC2JeG8XrYaY8g8XobhIMtbDmkNu0Izutz7keJ7DZLF53X/Uxmc6dWnZR+EiH2/qU+gyYS+1VSL2Xg==</SignatureValue>
+    <KeyInfo>
+      <X509Data>
+        <X509Certificate>MIIDjTCCAnWgAwIBAgIUJkKo+K1RgVPKvdH+agV1KSD6EhQwDQYJKoZIhvcNAQELBQAwVjELMAkGA1UEBhMCQ0wxETAPBgNVBAgMCFNhbnRpYWdvMREwDwYDVQQHDAhTYW50aWFnbzEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMB4XDTI0MTIyNDE3MTQxM1oXDTI1MTIyNDE3MTQxM1owVjELMAkGA1UEBhMCQ0wxETAPBgNVBAgMCFNhbnRpYWdvMREwDwYDVQQHDAhTYW50aWFnbzEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuKjpgpK+h/S72yQKk6oazLtbYvtBg921QKqnJD5wGy7dKrFxpBkpgqs0otIDQazjIijmVqhBNPLWrat4lG7N6E7JV5qtb8Jap2lfQEuPzdSqAcKFT98+bH0K/eJhZCVYq0/g9w0iS4ALWC6bZnWmYGuFuLynBSyPyfc3O0EJw8B7tAyEa9TlRfUosZsgJqT7QjgT44yJqxKVoAt4YZx255OHGdxWoItRM4Ea+flokv+VJomduPpNp/DLH4nkUVO5n+HJ/zAHpZMiKVyMEIpZ9I9nd1lABjTtauGiGxQbCrQ2Qy7DLaTM6b0KOsrWGZAklvDzwIk0bSlSYs/88xXkfwIDAQABo1MwUTAdBgNVHQ4EFgQUWBNB//s0XRAclncG5kjPwMdUvjwwHwYDVR0jBBgwFoAUWBNB//s0XRAclncG5kjPwMdUvjwwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAanqPmR+ErGh3lJ4MkejwQJT9rC1NqGW+t142AT7/IcbToPmID0Ntikjy1kv0ZC4K0MXefdRIEcz+MH3mVGkTYJg0XndLB3PfooInhGSRmSTPG7CK1a9eEcc6LZlEMbiUozKMkhsE1DEfetd5PjU+81mXEzmVtoESeJpP+mbCgyxBBKqzdtQqodHeoHP7iCTiCPjbfgTYwaO0/SwI6ao0Ktfguu7pMc0died0NNgLvwQsyuSR30zWUlI050SkAElBbPr83EEaLqoPosVj2avy7cLHnbvBgZSvH+YG2Npt3rkcvsi+doyd25hIfHIZq2MN1R1Q5DvhucgHss0L5YRQHQ==</X509Certificate>
+      </X509Data>
+    </KeyInfo>
+    <AdditionalInfo serverTimeZone="America/Santiago" signedByServer="true">
+      <signingDate>11-01-2025, 4:32:17 p. m.</signingDate>
+    </AdditionalInfo>
+  </Signature>
+</Payment>
