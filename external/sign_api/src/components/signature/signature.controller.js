@@ -1,6 +1,6 @@
 // src/components/signature/signature.controller.js
 
-const { signXMLModule } = require('./signature.module');
+const { signXMLModule, validateSignXMLModule } = require('./signature.module');
 const AuthError = require('../../exceptions/auth.exception');
 const BadRequestError = require('../../exceptions/bad-request.exception');
 const BusinessError = require('../../exceptions/bussiness.exception');
@@ -35,17 +35,16 @@ const signXMLController = async (req, res, next) => {
 
     const response = await signXMLModule(req);
 
-    logger.info('--------- [signature.controller] [signXMLController] - Step: Respuesta de signXMLModule ---------', { signXMLModuleResponse: response });
+    logger.info('--------- [signature.controller] [signXMLController] - Step: Respuesta de signXMLModule ---------', {
+      signXMLModuleResponse: response,
+    });
     logger.info('--------- [signature.controller] [signXMLController] - END ---------');
 
     // Configuración de cabeceras de seguridad
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     res.setHeader('Content-Security-Policy', "script-src 'self'");
 
-    return res.status(200)
-      .type('application/xml')
-      .send(response);
-
+    return res.status(200).type('application/xml').send(response);
   } catch (error) {
     logger.error('--------- [signature.controller] [signXMLController] - ERROR ---------', { error: error.message });
 
@@ -62,19 +61,62 @@ const signXMLController = async (req, res, next) => {
     }
 
     // Manejo de errores desconocidos
-    return next(
-      new TechnicalError(
-        'SIGN.SIGNED.0005',
-        'Error Desconocido.',
-        500,
-        error
-      )
-    );
+    return next(new TechnicalError('SIGN.SIGNED.0005', 'Error Desconocido.', 500, error));
   }
+};
 
+/**
+ * Operación para validar la firma de un XML.
+ * 
+ * AHORA:
+ * - Se recibe el XML directamente en req.body (texto crudo).
+ * - No se parsea como JSON.
+ */
+const validateSignXMLController = async (req, res, next) => {
+  logger.info('--------- [signature.controller] [validateSignXMLController] - INIT ---------');
 
+  try {
+    logger.info('--------- [signature.controller] [validateSignXMLController] - Step: Llamando validateSignXMLModule ---------');
+
+    const validationResult = await validateSignXMLModule(req);
+    const response = {
+      success: true,
+      validSignature: validationResult.isValid,
+      details: validationResult.details,
+    };
+
+    logger.info('--------- [signature.controller] [validateSignXMLController] - Step: Respuesta de validateSignXMLModule ---------', {
+      validationResult,
+    });
+    logger.info('--------- [signature.controller] [validateSignXMLController] - END ---------');
+
+    // Configuración de cabeceras de seguridad, si aplican
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    res.setHeader('Content-Security-Policy', "script-src 'self'");
+
+    // Retornamos un JSON con el resultado de la validación
+    return res.status(200).json(response);
+  } catch (error) {
+    logger.error('--------- [signature.controller] [validateSignXMLController] - ERROR ---------', { error: error.message });
+
+    // Manejo de errores específicos
+    if (
+      error instanceof AuthError ||
+      error instanceof BadRequestError ||
+      error instanceof BusinessError ||
+      error instanceof InternalServerError ||
+      error instanceof TechnicalError ||
+      error instanceof ValidationError
+    ) {
+      return next(error);
+    }
+
+    // Manejo de errores desconocidos
+    return next(new TechnicalError('SIGN.VALIDATE.0005', 'Error desconocido al validar la firma.', 500, error));
+  }
 };
 
 module.exports = {
   signXMLController,
+  validateSignXMLController,
 };

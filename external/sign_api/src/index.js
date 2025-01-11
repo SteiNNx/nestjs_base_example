@@ -23,6 +23,18 @@ const app = express();
  * Middleware para parsear JSON del body.
  */
 app.use(bodyParser.json());
+/**
+ * NOTA IMPORTANTE para la validación XML:
+ * Vamos a necesitar parsear el body como texto cuando se use `Content-Type: application/xml`.
+ * Con bodyParser, podemos hacer algo como:
+ */
+app.use(
+  bodyParser.text({
+    type: ['application/xml', 'text/xml'],
+    limit: '10mb', // Ajusta el límite según tu necesidad
+  })
+);
+
 app.use(helmet());
 app.disable('x-powered-by');
 
