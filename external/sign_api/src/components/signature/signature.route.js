@@ -6,6 +6,7 @@
  * @module signatureRoutes
  */
 const LoggerHelper = require('../../helpers/logger.helper');
+const validateAuthTokenMiddleware = require('../../middlewares/validate-auth-token.middleware');
 const { signXMLController, validateSignXMLController } = require('./signature.controller');
 
 const logger = new LoggerHelper('signature.route');
@@ -18,20 +19,22 @@ const logger = new LoggerHelper('signature.route');
  * @param {string} pathPrefixApi - Prefijo para las rutas de la API.
  */
 const signatureRoutes = (app, pathPrefixApi) => {
+  // Ruta para firmar XML
   const signRoute = `${pathPrefixApi}/sign_xml`;
-
   logger.info(`[signatureRoutes] Registrando ruta: [POST] ${signRoute}`);
   app.post(
     signRoute,
+    validateAuthTokenMiddleware,
     signXMLController
   );
 
+  // Ruta para validar la firma del XML
   const validateRoute = `${pathPrefixApi}/validate_sign_xml`;
-
   logger.info(`[signatureRoutes] Registrando ruta: [POST] ${validateRoute}`);
   app.post(
     validateRoute,
-    validateSignXMLController
+    validateAuthTokenMiddleware,
+    validateSignXMLController,
   );
 };
 

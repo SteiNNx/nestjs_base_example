@@ -1,3 +1,4 @@
+// src/exceptions/validation.exception.js
 const BaseError = require('./base.exception');
 
 /**

@@ -1,3 +1,4 @@
+// src/exceptions/bad-request.exception.js
 const BaseError = require('./base.exception');
 
 /**

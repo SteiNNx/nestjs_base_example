@@ -1,3 +1,4 @@
+// src/exceptions/adapter.exception.js
 const BaseError = require('./base.exception');
 
 /**

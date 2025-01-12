@@ -21,7 +21,7 @@ const generateToken = (payload, options = {}) => {
         logger.info('Generando token JWT.');
         const { privateKey, tokenExpiresIn, jwtAlgorithm } = getAuthConfig();
         const signOptions = {
-            expiresIn: tokenExpiresIn,
+            // expiresIn: tokenExpiresIn,
             algorithm: jwtAlgorithm,
             ...options
         };

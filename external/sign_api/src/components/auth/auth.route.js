@@ -5,23 +5,32 @@
  *
  * @module authRoutes
  */
-
 const LoggerHelper = require('../../helpers/logger.helper');
-const authController = require('./auth.controller');
+const { authLoginController, validateTokenController } = require('./auth.controller');
 
 const logger = new LoggerHelper('auth.route');
 
 /**
- * Configura la ruta de autenticación en la aplicación.
+ * Configura las rutas de autenticación en la aplicación.
  *
  * @function authRoutes
  * @param {import('express').Application} app - Instancia de la aplicación Express.
  * @param {string} prefixApi - Prefijo para las rutas de la API.
  */
 const authRoutes = (app, prefixApi) => {
-    const route = `${prefixApi}/auth`;
-    logger.info(`[auth.route] Registrando ruta: [POST] ${route}`);
-    app.post(route, authController);
+    // =======================================================================
+    // Ruta para login de autenticación
+    // =======================================================================
+    const loginRoute = `${prefixApi}/auth/login`;
+    logger.info(`[auth.route] Registrando ruta: [POST] ${loginRoute}`);
+    app.post(loginRoute, authLoginController);
+
+    // =======================================================================
+    // Ruta para validación de token JWT
+    // =======================================================================
+    const validateRoute = `${prefixApi}/auth/validate`;
+    logger.info(`[auth.route] Registrando ruta: [POST] ${validateRoute}`);
+    app.post(validateRoute, validateTokenController);
 };
 
 module.exports = authRoutes;

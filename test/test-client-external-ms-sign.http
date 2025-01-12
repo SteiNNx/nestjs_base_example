@@ -2,8 +2,9 @@
 GET http://localhost:3002/ms/v1/healthcheck
 Accept: application/json
 
+
 ### Auth: Autenticación usando credenciales (POST)
-POST http://localhost:3002/ms/v1/auth
+POST http://localhost:3002/ms/v1/auth/login
 Content-Type: application/json; charset=utf-8
 
 {
@@ -11,10 +12,21 @@ Content-Type: application/json; charset=utf-8
   "password": "test"
 }
 
+### Auth: Validacion token (POST)
+POST http://localhost:3002/ms/v1/auth/validate
+Content-Type: application/json; charset=utf-8
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNjcxODE5MiwiZXhwIjoxNzM2NzIxNzkyfQ.deNOhbaFxoXvoLyuNmIjoQZifDmKJkWyHk9DiREHmH0Dz2kYOJFZlq-bkcKZHEefiRCjipP34e4SZ3SfYf0vvKHv44FPSwnnUOC6g0e5tP4jtistid5V0S2EfG-ffI0mC-ybU8GL6Or5uIDsXTzBpQpspciB16U_BOmZ2pddEIPD2WsGAX_OxdFATSQdQ5RS-T2Rl3WBqcwI4b25i6gV6K0o-E_IFebCsQSTAeot1QALqcb-JpiVlH1iUSwxg18sFMsxuaVPggJNA9p8oAJTRL-N8M6AVvLyt79mPLzvUeHHHbKxYZSXJYXmcBNpCzun3oMlxEohLLEntz7mxVS_tQ
+
+{
+  "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNjcxODE5MiwiZXhwIjoxNzM2NzIxNzkyfQ.deNOhbaFxoXvoLyuNmIjoQZifDmKJkWyHk9DiREHmH0Dz2kYOJFZlq-bkcKZHEefiRCjipP34e4SZ3SfYf0vvKHv44FPSwnnUOC6g0e5tP4jtistid5V0S2EfG-ffI0mC-ybU8GL6Or5uIDsXTzBpQpspciB16U_BOmZ2pddEIPD2WsGAX_OxdFATSQdQ5RS-T2Rl3WBqcwI4b25i6gV6K0o-E_IFebCsQSTAeot1QALqcb-JpiVlH1iUSwxg18sFMsxuaVPggJNA9p8oAJTRL-N8M6AVvLyt79mPLzvUeHHHbKxYZSXJYXmcBNpCzun3oMlxEohLLEntz7mxVS_tQ",
+}
+
+
 ### Sign: Firmar Datos de Pago (POST)
 POST http://localhost:3002/ms/v1/sign_xml
 Content-Type: application/json; charset=utf-8
 X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNjcxODE5MiwiZXhwIjoxNzM2NzIxNzkyfQ.deNOhbaFxoXvoLyuNmIjoQZifDmKJkWyHk9DiREHmH0Dz2kYOJFZlq-bkcKZHEefiRCjipP34e4SZ3SfYf0vvKHv44FPSwnnUOC6g0e5tP4jtistid5V0S2EfG-ffI0mC-ybU8GL6Or5uIDsXTzBpQpspciB16U_BOmZ2pddEIPD2WsGAX_OxdFATSQdQ5RS-T2Rl3WBqcwI4b25i6gV6K0o-E_IFebCsQSTAeot1QALqcb-JpiVlH1iUSwxg18sFMsxuaVPggJNA9p8oAJTRL-N8M6AVvLyt79mPLzvUeHHHbKxYZSXJYXmcBNpCzun3oMlxEohLLEntz7mxVS_tQ
 
 {
   "transaction_id": "txn-2001-abcdesf123459",
@@ -58,11 +70,13 @@ X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
   }
 }
 
+
 ### ValidateSignXML: Validar la firma del XML (POST)
 POST http://localhost:3002/ms/v1/validate_sign_xml
 Accept: application/xml
 Content-Type: application/xml; charset=utf-8
 X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNjcxODE5MiwiZXhwIjoxNzM2NzIxNzkyfQ.deNOhbaFxoXvoLyuNmIjoQZifDmKJkWyHk9DiREHmH0Dz2kYOJFZlq-bkcKZHEefiRCjipP34e4SZ3SfYf0vvKHv44FPSwnnUOC6g0e5tP4jtistid5V0S2EfG-ffI0mC-ybU8GL6Or5uIDsXTzBpQpspciB16U_BOmZ2pddEIPD2WsGAX_OxdFATSQdQ5RS-T2Rl3WBqcwI4b25i6gV6K0o-E_IFebCsQSTAeot1QALqcb-JpiVlH1iUSwxg18sFMsxuaVPggJNA9p8oAJTRL-N8M6AVvLyt79mPLzvUeHHHbKxYZSXJYXmcBNpCzun3oMlxEohLLEntz7mxVS_tQ
 
 <?xml version="1.0"?>
 <Payment Id="xml-data">

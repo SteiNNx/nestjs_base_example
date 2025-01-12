@@ -1,3 +1,4 @@
+// src/exceptions/technical.exception.js
 const BaseError = require('./base.exception');
 
 /**

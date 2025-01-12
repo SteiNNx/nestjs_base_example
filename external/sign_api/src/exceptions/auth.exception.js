@@ -1,3 +1,4 @@
+// src/exceptions/auth.exception.js
 const BaseError = require('./base.exception');
 
 /**

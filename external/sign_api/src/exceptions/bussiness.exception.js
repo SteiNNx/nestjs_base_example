@@ -1,3 +1,4 @@
+// src/exceptions/bussiness.exception.js
 const BaseError = require('./base.exception');
 
 /**

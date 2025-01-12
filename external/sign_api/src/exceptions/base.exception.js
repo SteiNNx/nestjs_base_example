@@ -1,3 +1,4 @@
+// src/exceptions/base.exception.js
 /**
  * Clase base para implementar errores personalizados.
  * Extiende la clase nativa `Error` de JavaScript y permite añadir propiedades
