@@ -1,11 +1,10 @@
 // src/services/sign-xml.service.js
 
 /**
- * Servicio principal para la firma de XML a partir de un JSON.
+ * Servicio principal para la firma de un XML a partir de un objeto JSON.
  *
- * @module signatureService
+ * @module signXMLService
  */
-
 const { signXml } = require('../helpers/signature.helper');
 const { jsonToXml } = require('../helpers/xml.helper');
 const LoggerHelper = require('../helpers/logger.helper');
@@ -13,35 +12,33 @@ const LoggerHelper = require('../helpers/logger.helper');
 const logger = new LoggerHelper('sign-xml.service');
 
 /**
- * Convierte un body JSON a XML y lo firma con la configuración definida.
+ * Convierte un objeto JSON a XML y procede a firmarlo.
  *
  * @async
  * @function signXMLService
  * @param {Object} body - Objeto JSON que se convertirá a XML.
- * @returns {Promise<String>} - Cadena XML firmada.
+ * @returns {Promise<String>} Cadena XML firmada.
  */
 const signXMLService = async (body) => {
+  logger.info('[signXMLService] Inicio');
+
   try {
-    logger.info('--------- [signature.service] [signXMLService] - INIT ---------');
-
-    // 1. Convertir JSON a XML
-    logger.info('--------- [signature.service] [signXMLService] - Step: Convertir Json a XML ---------');
+    logger.info('[signXMLService] Convirtiendo JSON a XML');
     const xmlString = jsonToXml(body);
-    logger.info('--------- [signature.service] [signXMLService] - Step: Json convertido a XML ---------');
+    logger.info('[signXMLService] Conversión completada', { xmlString });
 
-    // 2. Firmar el XML
-    logger.info('--------- [signature.service] [signXMLService] - Step: Firmar XML ---------');
+    logger.info('[signXMLService] Firmando XML');
     const xmlSigned = signXml(xmlString);
-    logger.info('--------- [signature.service] [signXMLService] - Step: XML Firmado ---------');
+    logger.info('[signXMLService] Firma de XML completada', { xmlSigned });
 
-    logger.info('--------- [signature.service] [signXMLService] - END ---------');
+    logger.info('[signXMLService] Finalización exitosa');
+
     return xmlSigned;
   } catch (error) {
-    logger.error('--------- [signature.service] [signXMLService] - ERROR ---------', { error });
+    logger.error('[signXMLService] Error al firmar el XML', { error });
     throw error;
   }
 };
-
 
 module.exports = {
   signXMLService,
