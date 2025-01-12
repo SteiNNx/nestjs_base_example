@@ -3,30 +3,29 @@
 const { DOMParser, XMLSerializer } = require('xmldom');
 const { SignedXml } = require('xml-crypto');
 const { loadCredentials, getSignConfig } = require('../providers/credentials.provider.js');
-
 const TechnicalError = require('../exceptions/technical.exception');
-
-const { sanitizaXml, parseElementToObjectMinimal } = require('./xml.helper.js');
+const { parseElementToObjectMinimal } = require('./xml.helper.js');
 const LoggerHelper = require('./logger.helper');
 
 const logger = new LoggerHelper('signature.helper');
 
-
 /**
  * Firma un XML utilizando la llave privada y el certificado configurados.
- * @param {String} xmlString - Cadena XML base (tal cual se recibió) que se firmará.
- * @param {String} [transactionId='xml-data'] - ID para inyectar en el nodo raíz (opcional).
- * @returns {String} - XML firmado y modificado (con <Signature> y <AdditionalInfo>).
+ *
+ * @function signXml
+ * @param {String} xmlString - Cadena XML base que se firmará.
+ * @param {String} [tagNameAssignedAfterSignedXmlElementParent='xml-data'] - ID que se inyectará en el nodo raíz (opcional).
+ * @returns {String} XML firmado y modificado, incluyendo el nodo <Signature> y <AdditionalInfo>.
+ * @throws {TechnicalError} Cuando ocurre un error en el parseo o al computar la firma.
  */
-function signXml(xmlString, transactionId = 'xml-data') {
-  logger.info('--------- [signXml] - INIT ---------');
+function signXml(xmlString, tagNameAssignedAfterSignedXmlElementParent = 'xml-data') {
+  logger.info('[signXml] - INIT');
   const startTime = Date.now();
-  logger.info(`Longitud de xmlString original: ${xmlString?.length || 0}`);
+  logger.info(`[signXml] Longitud del xmlString original: ${xmlString?.length || 0}`);
 
-  // Sanitizar el XML antes de parsearlo
-  xmlString = sanitizaXml(xmlString);
-
-  // 1) Parsear el XML
+  // ============================================================================
+  // 2) Parseo del XML
+  // ============================================================================
   let dom;
   try {
     dom = new DOMParser().parseFromString(xmlString, 'application/xml');
@@ -34,32 +33,31 @@ function signXml(xmlString, transactionId = 'xml-data') {
     if (parseError.length > 0) {
       throw new Error(parseError[0].textContent);
     }
+    logger.info('[signXml] XML parseado exitosamente');
   } catch (error) {
-    logger.error('Error al parsear el XML: ' + error.message);
-    throw new TechnicalError(
-      'SIGN.XML_PARSING',
-      'Error al parsear el XML proporcionado.',
-      500,
-      error
-    );
+    logger.error('[signXml] Error al parsear el XML:', { error: error.message });
+    throw new TechnicalError('SIGN.XML_PARSING', 'Error al parsear el XML proporcionado.', 500, error);
   }
 
-  // 2) Inyectar atributo Id al nodo raíz
+  // ============================================================================
+  // 3) Inyección del atributo Id en el nodo raíz
+  // ============================================================================
   const rootNode = dom.documentElement;
   if (rootNode) {
-    rootNode.setAttribute('Id', transactionId);
-    logger.info(`Id="${transactionId}" asignado al nodo raíz <${rootNode.tagName}>.`);
+    rootNode.setAttribute('Id', tagNameAssignedAfterSignedXmlElementParent);
+    logger.info(`[signXml] Atributo Id="${tagNameAssignedAfterSignedXmlElementParent}" asignado al nodo raíz <${rootNode.tagName}>.`);
   }
 
-  // 3) Serializar para firmar
+  // ============================================================================
+  // 4) Serialización del XML para la firma
+  // ============================================================================
   const xmlToSign = new XMLSerializer().serializeToString(dom);
-  logger.info(`Longitud del XML tras setear Id: ${xmlToSign.length}`);
+  logger.info(`[signXml] Longitud del XML tras asignar Id: ${xmlToSign.length}`);
 
-  // 4) Cargar llaves/certificado
-  const {
-    privateKey,
-    certificate,
-  } = loadCredentials();
+  // ============================================================================
+  // 5) Carga de credenciales y configuración de firma
+  // ============================================================================
+  const { privateKey, certificate } = loadCredentials();
   const {
     canonicalizationAlgorithm,
     signatureAlgorithm,
@@ -67,8 +65,10 @@ function signXml(xmlString, transactionId = 'xml-data') {
     referenceDigestAlgorithm
   } = getSignConfig();
 
-  // 5) Instanciar SignedXml
-  logger.info('Creando instancia de SignedXml (para firmar) ...');
+  // ============================================================================
+  // 6) Instanciación de SignedXml y configuración
+  // ============================================================================
+  logger.info('[signXml] Creando instancia de SignedXml (para firmar)...');
   const sig = new SignedXml({
     canonicalizationAlgorithm: canonicalizationAlgorithm,
     signatureAlgorithm: signatureAlgorithm,
@@ -76,9 +76,11 @@ function signXml(xmlString, transactionId = 'xml-data') {
     publicCert: certificate,
   });
 
-  // 6) Agregar referencia
+  // ============================================================================
+  // 7) Agregar referencia para la firma
+  // ============================================================================
   sig.addReference({
-    xpath: `//*[@Id='${transactionId}']`,
+    xpath: `//*[@Id='${tagNameAssignedAfterSignedXmlElementParent}']`,
     transforms: [
       referenceTransformsFirst,
       canonicalizationAlgorithm,
@@ -86,28 +88,27 @@ function signXml(xmlString, transactionId = 'xml-data') {
     digestAlgorithm: referenceDigestAlgorithm,
   });
 
-  // 7) Firmar
-  logger.info('Computando la firma ...');
+  // ============================================================================
+  // 8) Computación de la firma
+  // ============================================================================
+  logger.info('[signXml] Computando la firma...');
   try {
     sig.computeSignature(xmlToSign, {
       location: {
-        reference: `//*[@Id='${transactionId}']`,
+        reference: `//*[@Id='${tagNameAssignedAfterSignedXmlElementParent}']`,
         action: 'append',
       },
     });
   } catch (error) {
-    logger.error('Error al computar la firma: ' + error.message);
-    throw new TechnicalError(
-      'SIGN.SIGNATURE_COMPUTE_ERROR',
-      'Error al calcular la firma del XML.',
-      500,
-      error
-    );
+    logger.error('[signXml] Error al computar la firma:', { error: error.message });
+    throw new TechnicalError('SIGN.SIGNATURE_COMPUTE_ERROR', 'Error al calcular la firma del XML.', 500, error);
   }
 
   let signedXml = sig.getSignedXml();
 
-  // 8) (Opcional) Inyectar nodos custom en <Signature>
+  // ============================================================================
+  // 9) Parseo del XML firmado para inyectar información adicional
+  // ============================================================================
   let signedDom;
   try {
     signedDom = new DOMParser().parseFromString(signedXml, 'application/xml');
@@ -115,28 +116,23 @@ function signXml(xmlString, transactionId = 'xml-data') {
     if (parseError.length > 0) {
       throw new Error(parseError[0].textContent);
     }
+    logger.info('[signXml] XML firmado parseado exitosamente');
   } catch (error) {
-    logger.error('Error al parsear el XML firmado: ' + error.message);
-    throw new TechnicalError(
-      'SIGN.XML_PARSING_SIGNED',
-      'Error al parsear el XML firmado.',
-      500,
-      error
-    );
+    logger.error('[signXml] Error al parsear el XML firmado:', { error: error.message });
+    throw new TechnicalError('SIGN.XML_PARSING_SIGNED', 'Error al parsear el XML firmado.', 500, error);
   }
 
-  // 9) Agregar info extra en <Signature>
+  // ============================================================================
+  // 10) Inyección de información adicional en el nodo <Signature>
+  // ============================================================================
   const signatureNode = signedDom.getElementsByTagName('Signature')[0];
   if (!signatureNode) {
-    throw new TechnicalError(
-      'SIGN.SIGNATURE_MISSING',
-      'No se encontró el nodo <Signature> en el XML firmado.',
-      500
-    );
+    throw new TechnicalError('SIGN.SIGNATURE_MISSING', 'No se encontró el nodo <Signature> en el XML firmado.', 500);
   }
 
   const signingTime = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });
   signatureNode.setAttribute('signingDate', signingTime);
+  logger.info(`[signXml] Atributo signingDate agregado con valor: ${signingTime}`);
 
   const additionalInfoNode = signedDom.createElement('AdditionalInfo');
   additionalInfoNode.setAttribute('serverTimeZone', 'America/Santiago');
@@ -145,33 +141,34 @@ function signXml(xmlString, transactionId = 'xml-data') {
   const signingDateValueNode = signedDom.createElement('signingDate');
   signingDateValueNode.appendChild(signedDom.createTextNode(signingTime));
   additionalInfoNode.appendChild(signingDateValueNode);
-
   signatureNode.appendChild(additionalInfoNode);
+  logger.info('[signXml] Nodo <AdditionalInfo> inyectado en <Signature>');
 
+  // ============================================================================
+  // 11) Serialización final del XML firmado
+  // ============================================================================
   signedXml = new XMLSerializer().serializeToString(signedDom);
-
   const endTime = Date.now() - startTime;
   logger.info(`[signXml] - END (duración=${endTime}ms)`);
   return signedXml;
 }
 
 /**
- * Valida la firma de un documento XML firmado.
- * Además de indicar si la firma es válida, se extraen detalles importantes de la
- * estructura de la firma (como SignedInfo, SignatureValue, KeyInfo y AdditionalInfo) en un objeto minimalista.
- * 
- * @param {String} signedXmlString - Cadena XML que ya contiene la firma digital.
- * @returns {Object} - Objeto con { isValid: boolean, details: Object }.
+ * Valida la firma de un documento XML firmado, extrayendo detalles minimalistas.
+ *
+ * @function validateXmlSignature
+ * @param {String} signedXmlString - Cadena XML que contiene la firma digital.
+ * @returns {Object} Objeto con la validación de la firma: { isValid: boolean, details: Object | String }.
+ * @throws {TechnicalError} Cuando ocurre un error en el parseo o la validación.
  */
 function validateXmlSignature(signedXmlString) {
-  logger.info('--------- [validateXmlSignature] - INIT ---------');
+  logger.info('[validateXmlSignature] - INIT');
   const startTime = Date.now();
-  logger.info(`Recibido XML de longitud: ${signedXmlString?.length || 0} caracteres.`);
+  logger.info(`[validateXmlSignature] Recibido XML de longitud: ${signedXmlString?.length || 0} caracteres.`);
 
-  // Sanitizar el XML antes de parsear
-  signedXmlString = sanitizaXml(signedXmlString);
-
-  // 1) Parsear el XML firmado
+  // ============================================================================
+  // 2) Parseo del XML firmado
+  // ============================================================================
   let signedDom;
   try {
     signedDom = new DOMParser().parseFromString(signedXmlString, 'application/xml');
@@ -179,64 +176,59 @@ function validateXmlSignature(signedXmlString) {
     if (parseError.length > 0) {
       throw new Error(parseError[0].textContent);
     }
+    logger.info('[validateXmlSignature] XML firmado parseado exitosamente');
   } catch (error) {
-    logger.error('Error al parsear el XML firmado: ' + error.message);
-    throw new TechnicalError(
-      'SIGN.VALIDATE_XML_PARSING',
-      'Error al parsear el XML firmado.',
-      500,
-      error
-    );
+    logger.error('[validateXmlSignature] Error al parsear el XML firmado:', { error: error.message });
+    throw new TechnicalError('SIGN.VALIDATE_XML_PARSING', 'Error al parsear el XML firmado.', 500, error);
   }
 
-  // 2) Cargar solo el certificado (público) para verificar
+  // ============================================================================
+  // 3) Carga de certificado y configuración para la verificación
+  // ============================================================================
   const { certificate } = loadCredentials();
-  const {
-    canonicalizationAlgorithm,
-    signatureAlgorithm,
-  } = getSignConfig();
+  const { canonicalizationAlgorithm, signatureAlgorithm } = getSignConfig();
 
-  // 3) Crear instancia de SignedXml para verificación
-  logger.info('Instanciando SignedXml (para verificar) ...');
+  // ============================================================================
+  // 4) Instanciación de SignedXml para verificación
+  // ============================================================================
+  logger.info('[validateXmlSignature] Instanciando SignedXml para verificación...');
   const sig = new SignedXml({
     canonicalizationAlgorithm: canonicalizationAlgorithm,
     signatureAlgorithm: signatureAlgorithm,
     publicCert: certificate,
   });
 
-  // 4) Obtener <Signature> y cargarlo en sig
+  // ============================================================================
+  // 5) Carga del nodo <Signature> en la instancia de SignedXml
+  // ============================================================================
   const signatureNode = signedDom.getElementsByTagName('Signature')[0];
   if (!signatureNode) {
-    logger.error('No se encontró <Signature> en el DOM parseado.');
-    throw new TechnicalError(
-      'SIGN.VALIDATE_SIGNATURE_MISSING',
-      'No se encontró el nodo <Signature> en el XML firmado.',
-      500
-    );
+    logger.error('[validateXmlSignature] No se encontró <Signature> en el DOM parseado.');
+    throw new TechnicalError('SIGN.VALIDATE_SIGNATURE_MISSING', 'No se encontró el nodo <Signature> en el XML firmado.', 500);
   }
-
   const signatureString = new XMLSerializer().serializeToString(signatureNode);
   sig.loadSignature(signatureString);
 
-  // 5) Establecer keyInfoProvider para que devuelva la clave pública (o el X.509)
+  // ============================================================================
+  // 6) Configuración del keyInfoProvider para la verificación
+  // ============================================================================
   sig.keyInfoProvider = {
-    getKeyInfo: () => {
-      return '<X509Data></X509Data>';
-    },
-    getKey: () => {
-      return certificate;
-    },
+    getKeyInfo: () => '<X509Data></X509Data>',
+    getKey: () => certificate,
   };
 
-  // 6) Verificar la firma
+  // ============================================================================
+  // 7) Verificación de la firma
+  // ============================================================================
   const docAsString = new XMLSerializer().serializeToString(signedDom);
   const isValid = sig.checkSignature(docAsString);
+  logger.info(`[validateXmlSignature] Resultado de verificación: ${isValid}`);
 
   if (!isValid) {
     const validationErrors = Array.isArray(sig.validationErrors) ? sig.validationErrors : [];
-    logger.error(`La firma es inválida. Errores: ${validationErrors.join(', ')}`);
+    logger.error('[validateXmlSignature] Firma inválida.', { errors: validationErrors.join(', ') });
     const totalTime = Date.now() - startTime;
-    logger.info(`Tiempo total de validación (ms): ${totalTime}`);
+    logger.info(`[validateXmlSignature] Tiempo total de validación (ms): ${totalTime}`);
     return {
       isValid: false,
       details: validationErrors.length
@@ -245,16 +237,17 @@ function validateXmlSignature(signedXmlString) {
     };
   }
 
-  // Firma válida: se extraen los detalles del nodo <Signature> en un objeto minimalista.
+  // ============================================================================
+  // 8) Extracción de detalles minimalistas del nodo <Signature>
+  // ============================================================================
   const signatureDetails = parseElementToObjectMinimal(signatureNode);
-
   const totalTime = Date.now() - startTime;
-  logger.info(`Tiempo total de validación (ms): ${totalTime}`);
+  logger.info(`[validateXmlSignature] Tiempo total de validación (ms): ${totalTime}`);
 
   return {
     isValid: true,
     details: {
-      message: 'Firma válida y XML Fidedigno.',
+      message: 'Firma válida y XML fidedigno.',
       signature: signatureDetails.AdditionalInfo,
     },
   };

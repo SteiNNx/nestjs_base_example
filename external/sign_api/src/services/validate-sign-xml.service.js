@@ -6,6 +6,7 @@
  * @module validateSignXMLService
  */
 const { validateXmlSignature } = require('../helpers/signature.helper');
+const { sanitizaXml } = require('../helpers/xml.helper');
 const LoggerHelper = require('../helpers/logger.helper');
 
 const logger = new LoggerHelper('validate-sign-xml.service');
@@ -22,8 +23,13 @@ const validateSignXMLService = async (rawXml) => {
   logger.info('[validateSignXMLService] Inicio');
 
   try {
+
+    logger.info('[validateSignXMLService] Sanitizando XML');
+    const xmlStringSanitized = sanitizaXml(rawXml);
+    logger.info('[validateSignXMLService] Sanitización de XML completada', { xmlStringSanitized });
+
     logger.info('[validateSignXMLService] Validando XML firmado');
-    const result = validateXmlSignature(rawXml);
+    const result = validateXmlSignature(xmlStringSanitized);
     logger.info('[validateSignXMLService] Validación completada', { result });
 
     return result;
