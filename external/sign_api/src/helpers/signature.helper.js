@@ -1,130 +1,16 @@
-const fs = require('fs');
+// src/helpers/signature.helper.js
+
 const { DOMParser, XMLSerializer } = require('xmldom');
 const { SignedXml } = require('xml-crypto');
-const { config } = require('../config/config.js');
+const { loadCredentials } = require('../providers/credentials.provider.js');
 
-const AdapterError = require('../exceptions/adapter.exception');
 const TechnicalError = require('../exceptions/technical.exception');
+
+const { sanitizaXml, parseElementToObjectMinimal } = require('./xml.helper.js');
 const LoggerHelper = require('./logger.helper');
 
-const logger = new LoggerHelper('signature.helper.refactored');
+const logger = new LoggerHelper('signature.helper');
 
-/**
- * Elimina saltos de línea, tabulaciones y espacios innecesarios entre etiquetas de un XML en forma de string.
- * Esta función deja el XML en una sola línea, concatenando las etiquetas.
- * 
- * ⚠️ Nota: Si existen espacios significativos en el contenido de texto de los nodos, estos se verán afectados.
- * Evalúa si este comportamiento es aceptable para tu caso.
- * 
- * @param {String} xmlString - Cadena que contiene el XML.
- * @returns {String} - Cadena sanitizada sin saltos de línea, tabulaciones ni espacios extra entre etiquetas.
- */
-function sanitizaXml(xmlString) {
-  if (!xmlString) {
-    logger.info('[sanitizaXml] Recibió cadena nula o vacía, se retorna igual.');
-    return xmlString;
-  }
-
-  // Log de la entrada (solo una parte si es muy grande)
-  logger.info(`[sanitizaXml] Entrada (longitud=${xmlString.length}): ${xmlString.slice(0, 200)}...`);
-
-  // 1. Elimina saltos de línea (\n, \r) y tabulaciones (\t)
-  let sanitized = xmlString.replace(/[\n\r\t]+/g, '');
-  // 2. Elimina espacios entre el cierre y apertura de etiquetas ( >   < )
-  sanitized = sanitized.replace(/>\s+</g, '><');
-
-  // Log de la salida
-  logger.info(`[sanitizaXml] Salida (longitud=${sanitized.length}): ${sanitized.slice(0, 200)}...`);
-
-  return sanitized;
-}
-
-/**
- * Función recursiva minimalista que convierte un elemento XML a un objeto JS.
- * - Si el elemento tiene atributos, se agregan como propiedades directas.
- * - Si el elemento tiene un único nodo de texto y no tiene atributos, se retorna el string.
- * - En caso de múltiples nodos hijos, se generan propiedades con los nombres de las etiquetas.
- * 
- * @param {Element} element - Elemento del DOM XML.
- * @returns {Object|String} - Representación en objeto del nodo o el contenido de texto.
- */
-function parseElementToObjectMinimal(element) {
-  let obj = {};
-
-  // Agrega los atributos directamente (si existen)
-  if (element.attributes && element.attributes.length > 0) {
-    for (let i = 0; i < element.attributes.length; i++) {
-      const attr = element.attributes[i];
-      obj[attr.name] = attr.value;
-    }
-  }
-
-  // Si el elemento tiene hijos
-  if (element.childNodes && element.childNodes.length > 0) {
-    // Si existe un solo nodo y es de tipo texto
-    if (element.childNodes.length === 1 && element.childNodes[0].nodeType === 3) {
-      const text = element.childNodes[0].nodeValue.trim();
-      // Si no se agregaron atributos, retornamos directamente el string
-      if (Object.keys(obj).length === 0) {
-        return text;
-      }
-      // Si hay atributos, agregamos el valor en la propiedad "value"
-      obj.value = text;
-    } else {
-      // Procesa cada nodo hijo que sea un elemento
-      for (let i = 0; i < element.childNodes.length; i++) {
-        const child = element.childNodes[i];
-        if (child.nodeType === 1) { // ELEMENT_NODE
-          const tagName = child.tagName;
-          const childValue = parseElementToObjectMinimal(child);
-          if (obj[tagName]) {
-            // Si ya existe la propiedad, asegúrate de que sea un array
-            if (!Array.isArray(obj[tagName])) {
-              obj[tagName] = [obj[tagName]];
-            }
-            obj[tagName].push(childValue);
-          } else {
-            obj[tagName] = childValue;
-          }
-        }
-      }
-    }
-  }
-  return obj;
-}
-
-/**
- * Carga las credenciales (privateKey, certificate) desde paths en config.
- * @returns {Object} { privateKey, certificate }
- * @throws {AdapterError}
- */
-function loadCredentials() {
-  const { privateKeyPath, certificatePath } = config;
-  let privateKey = null;
-  let certificate = null;
-  try {
-    privateKey = fs.readFileSync(privateKeyPath, 'utf-8');
-    certificate = fs.readFileSync(certificatePath, 'utf-8');
-  } catch (error) {
-    logger.error('[loadCredentials] Error al leer llaves/certificados: ' + error.message);
-    throw new AdapterError(
-      'SIGN.KEY_PEM_FILE_READ_ERROR',
-      'Error al leer las llaves privadas o certificados.',
-      502,
-      error
-    );
-  }
-
-  if (!privateKey || !privateKey.trim()) {
-    logger.error('[loadCredentials] La llave privada está vacía o ilegible.');
-    throw new TechnicalError(
-      'SIGN.INVALID_PRIVATE_KEY_PEM_FILE',
-      'La llave privada está vacía o no se pudo leer correctamente.',
-      500
-    );
-  }
-  return { privateKey, certificate };
-}
 
 /**
  * Firma un XML utilizando la llave privada y el certificado configurados.
@@ -295,22 +181,7 @@ function validateXmlSignature(signedXmlString) {
   }
 
   // 2) Cargar solo el certificado (público) para verificar
-  let certificate;
-  try {
-    const { certificatePath } = config;
-    certificate = fs.readFileSync(certificatePath, 'utf-8');
-    if (!certificate.trim()) {
-      throw new Error('Certificado vacío');
-    }
-  } catch (error) {
-    logger.error('Error al leer el certificado: ' + error.message);
-    throw new AdapterError(
-      'SIGN.CERT_PEM_FILE_READ_ERROR',
-      'Error al leer el certificado público.',
-      502,
-      error
-    );
-  }
+  const { certificate } = loadCredentials();
 
   // 3) Crear instancia de SignedXml para verificación
   logger.info('Instanciando SignedXml (para verificar) ...');
