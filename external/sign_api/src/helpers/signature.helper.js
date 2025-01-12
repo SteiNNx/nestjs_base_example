@@ -2,7 +2,7 @@
 
 const { DOMParser, XMLSerializer } = require('xmldom');
 const { SignedXml } = require('xml-crypto');
-const { loadCredentials } = require('../providers/credentials.provider.js');
+const { loadCredentials, getSignConfig } = require('../providers/credentials.provider.js');
 
 const TechnicalError = require('../exceptions/technical.exception');
 
@@ -56,13 +56,22 @@ function signXml(xmlString, transactionId = 'xml-data') {
   logger.info(`Longitud del XML tras setear Id: ${xmlToSign.length}`);
 
   // 4) Cargar llaves/certificado
-  const { privateKey, certificate } = loadCredentials();
+  const {
+    privateKey,
+    certificate,
+  } = loadCredentials();
+  const {
+    canonicalizationAlgorithm,
+    signatureAlgorithm,
+    referenceTransformsFirst,
+    referenceDigestAlgorithm
+  } = getSignConfig();
 
   // 5) Instanciar SignedXml
   logger.info('Creando instancia de SignedXml (para firmar) ...');
   const sig = new SignedXml({
-    canonicalizationAlgorithm: 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
-    signatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+    canonicalizationAlgorithm: canonicalizationAlgorithm,
+    signatureAlgorithm: signatureAlgorithm,
     privateKey,
     publicCert: certificate,
   });
@@ -71,10 +80,10 @@ function signXml(xmlString, transactionId = 'xml-data') {
   sig.addReference({
     xpath: `//*[@Id='${transactionId}']`,
     transforms: [
-      'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
-      'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
+      referenceTransformsFirst,
+      canonicalizationAlgorithm,
     ],
-    digestAlgorithm: 'http://www.w3.org/2001/04/xmlenc#sha256',
+    digestAlgorithm: referenceDigestAlgorithm,
   });
 
   // 7) Firmar
@@ -182,12 +191,16 @@ function validateXmlSignature(signedXmlString) {
 
   // 2) Cargar solo el certificado (público) para verificar
   const { certificate } = loadCredentials();
+  const {
+    canonicalizationAlgorithm,
+    signatureAlgorithm,
+  } = getSignConfig();
 
   // 3) Crear instancia de SignedXml para verificación
   logger.info('Instanciando SignedXml (para verificar) ...');
   const sig = new SignedXml({
-    canonicalizationAlgorithm: 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
-    signatureAlgorithm: 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+    canonicalizationAlgorithm: canonicalizationAlgorithm,
+    signatureAlgorithm: signatureAlgorithm,
     publicCert: certificate,
   });
 

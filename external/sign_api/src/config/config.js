@@ -18,7 +18,15 @@ module.exports = {
     headerSecurityKey: process.env.EXTERNAL_API_HEADER_SECURITY_KEY,
     headerSecurityIv: process.env.EXTERNAL_API_HEADER_SECURITY_IV,
 
-    privateKeyPath: path.resolve(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH),
-    certificatePath: path.resolve(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH),
+    sign: {
+      privateKeyPath: path.resolve(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH),
+      certificatePath: path.resolve(process.env.EXTERNAL_API_SIGN_CERTIFICATE_PATH),
+
+      canonicalizationAlgorithm: process.env.EXTERNAL_API_SIGN_CONFIG_CANONICALIZATION_ALGORITHM || 'http://www.w3.org/TR/2001/REC-xml-c14n-20010315',
+      signatureAlgorithm: process.env.EXTERNAL_API_SIGN_CONFIG_SIGNATURE_ALGORITHM || 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+
+      referenceTransformsFirst: process.env.EXTERNAL_API_SIGN_REFERENCES_TRANSFORMS_XML_DSIG || 'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
+      referenceDigestAlgorithm: process.env.EXTERNAL_API_SIGN_REFERENCES_DIGEST_ALGORITHM || 'http://www.w3.org/2001/04/xmlenc#sha256',
+    }
   },
 };

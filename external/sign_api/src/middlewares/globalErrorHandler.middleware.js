@@ -1,7 +1,6 @@
 
 const ValidationError = require('../exceptions/validation.exception');
 
-const config = require('../config/config');
 const OutputMessageError = require('../schemas/response/outputmessageerror.schema');
 const LoggerHelper = require('../helpers/logger.helper');
 
