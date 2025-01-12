@@ -6,7 +6,7 @@
  * @module signatureModule
  */
 const { signXMLService } = require('../../services/sign-xml.service');
-const { validateSignXMLService } = require('../../services/validate-sign-xml.service');
+const { validateSignXMLService } = require('../../services/sign-xml-validate.service');
 
 const validateBodySchema = require('../../helpers/validate.helper');
 const LoggerHelper = require('../../helpers/logger.helper');

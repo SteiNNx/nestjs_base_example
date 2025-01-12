@@ -15,8 +15,15 @@ module.exports = {
     prefixApi: process.env.EXTERNAL_API_SIGN_PREFIX_ENDPOINTS || 'ms/v1/sign',
     port: process.env.EXTERNAL_API_SIGN_PORT || 3002,
 
-    headerSecurityKey: process.env.EXTERNAL_API_HEADER_SECURITY_KEY,
-    headerSecurityIv: process.env.EXTERNAL_API_HEADER_SECURITY_IV,
+    auth: {
+      privateKeyPath: path.resolve(process.env.EXTERNAL_API_AUTH_PRIVATE_KEY_PATH),
+      publicKeyPath: path.resolve(process.env.EXTERNAL_API_AUTH_PUBLIC_KEY_PATH),
+
+      headerSecurityKey: process.env.EXTERNAL_API_HEADER_SECURITY_KEY,
+
+      tokenExpiresIn: process.env.EXTERNAL_API_AUTH_TOKEN_EXPIRES_IN || '1h',
+      jwtAlgorithm: process.env.EXTERNAL_API_AUTH_JWT_ALGORITHM || 'RS256',
+    },
 
     sign: {
       privateKeyPath: path.resolve(process.env.EXTERNAL_API_SIGN_PRIVATE_KEY_PATH),

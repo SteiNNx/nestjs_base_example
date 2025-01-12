@@ -1,4 +1,4 @@
-// src/services/validate-sign-xml.service.js
+// src/services/sign-xml-validate.service.js
 
 /**
  * Servicio principal para la validación de la firma de un XML.

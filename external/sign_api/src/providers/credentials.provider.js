@@ -94,7 +94,58 @@ const getSignConfig = () => {
     };
 };
 
+/**
+ * Carga las credenciales de autenticación (privateKey y publicKey) y la configuración asociada.
+ *
+ * @function getAuthConfig
+ * @returns {Object} Objeto con las propiedades:
+ *  - privateKey {String}: Clave privada de autenticación.
+ *  - publicKey {String}: Clave pública de autenticación.
+ *  - tokenExpiresIn {String}: Tiempo de expiración del token.
+ *  - jwtAlgorithm {String}: Algoritmo de firma del token.
+ * @throws {AdapterError} Si ocurre un error al leer alguno de los archivos.
+ * @throws {TechnicalError} Si alguna de las llaves está vacía o ilegible.
+ */
+const getAuthConfig = () => {
+    const { privateKeyPath, publicKeyPath, tokenExpiresIn, jwtAlgorithm } = config.auth;
+    let privateKey = null;
+    let publicKey = null;
+
+    try {
+        privateKey = fs.readFileSync(privateKeyPath, 'utf-8');
+        publicKey = fs.readFileSync(publicKeyPath, 'utf-8');
+    } catch (error) {
+        logger.error('[getAuthConfig] Error al leer llaves de autenticación: ' + error.message);
+        throw new AdapterError(
+            'AUTH.KEY_PEM_FILE_READ_ERROR',
+            'Error al leer las llaves de autenticación.',
+            502,
+            error
+        );
+    }
+
+    if (!privateKey || !privateKey.trim()) {
+        logger.error('[getAuthConfig] La llave privada de autenticación está vacía o ilegible.');
+        throw new TechnicalError(
+            'AUTH.INVALID_PRIVATE_KEY_PEM_FILE',
+            'La llave privada de autenticación está vacía o no se pudo leer correctamente.',
+            500
+        );
+    }
+    if (!publicKey || !publicKey.trim()) {
+        logger.error('[getAuthConfig] La llave pública de autenticación está vacía o ilegible.');
+        throw new TechnicalError(
+            'AUTH.INVALID_PUBLIC_KEY_PEM_FILE',
+            'La llave pública de autenticación está vacía o no se pudo leer correctamente.',
+            500
+        );
+    }
+
+    return { privateKey, publicKey, tokenExpiresIn, jwtAlgorithm };
+};
+
 module.exports = {
     loadCredentials,
     getSignConfig,
+    getAuthConfig,
 };

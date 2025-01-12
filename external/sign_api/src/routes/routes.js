@@ -7,6 +7,7 @@
  */
 const healthCheckRoutes = require('../components/healthcheck/healthcheck.route');
 const signatureRoutes = require('../components/signature/signature.route');
+const authRoutes = require('../components/auth/auth.route');
 const globalErrorHandlerMiddleware = require('../middlewares/global-error-handler.middleware');
 const InterceptorLoggerMiddleware = require('../middlewares/interceptor-logger.middleware');
 const { config } = require('../config/config');
@@ -38,6 +39,7 @@ const routes = (app) => {
   // ============================================================================
   healthCheckRoutes(app, prefixApi);
   signatureRoutes(app, prefixApi);
+  authRoutes(app, prefixApi);
 
   // ============================================================================
   // 4) Registrar middleware global de manejo de errores
