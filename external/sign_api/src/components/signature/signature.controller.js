@@ -1,12 +1,15 @@
 // src/components/signature/signature.controller.js
 
 const { signXMLModule, validateSignXMLModule } = require('./signature.module');
+
 const AuthError = require('../../exceptions/auth.exception');
 const BadRequestError = require('../../exceptions/bad-request.exception');
 const BusinessError = require('../../exceptions/bussiness.exception');
 const InternalServerError = require('../../exceptions/internal-server.exception');
 const TechnicalError = require('../../exceptions/technical.exception');
 const ValidationError = require('../../exceptions/validation.exception');
+
+const OutputMessageSuccess = require('../../schemas/response/outputmessagesuccess.schema');
 const LoggerHelper = require('../../helpers/logger.helper');
 
 const logger = new LoggerHelper('signature.controller');
@@ -66,11 +69,14 @@ const signXMLController = async (req, res, next) => {
 };
 
 /**
- * Operación para validar la firma de un XML.
- * 
- * AHORA:
- * - Se recibe el XML directamente en req.body (texto crudo).
- * - No se parsea como JSON.
+ * Operación para firmar un XML.
+ *
+ * @async
+ * @function validateSignXMLController
+ * @param {Request} req - Objeto de solicitud HTTP de Express.
+ * @param {Response} res - Objeto de respuesta HTTP de Express.
+ * @param {NextFunction} next - Función para pasar el control al siguiente middleware.
+ * @returns {Promise<Response>} Respuesta con el estado.
  */
 const validateSignXMLController = async (req, res, next) => {
   logger.info('--------- [signature.controller] [validateSignXMLController] - INIT ---------');
@@ -95,7 +101,8 @@ const validateSignXMLController = async (req, res, next) => {
     res.setHeader('Content-Security-Policy', "script-src 'self'");
 
     // Retornamos un JSON con el resultado de la validación
-    return res.status(200).json(response);
+    const outPutResponse = new OutputMessageSuccess(200, '0000', 'OK', response);
+    return res.status(200).json(outPutResponse);
   } catch (error) {
     logger.error('--------- [signature.controller] [validateSignXMLController] - ERROR ---------', { error: error.message });
 

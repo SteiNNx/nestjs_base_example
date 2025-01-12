@@ -1,6 +1,8 @@
 // src/components/signature/signature.module.js
 
-const { signXMLService, validateSignXMLService } = require('../../services/signature.service');
+const { signXMLService } = require('../../services/sign-xml.service');
+const { validateSignXMLService } = require('../../services/validate-sign-xml.service');
+
 const validateBodySchema = require('../../helpers/validate.helper');
 const LoggerHelper = require('../../helpers/logger.helper');
 const signXmlSchema = require('../../schemas/request/signXml.schema');
