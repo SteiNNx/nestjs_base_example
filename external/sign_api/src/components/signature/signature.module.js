@@ -10,7 +10,7 @@ const { validateSignXMLService } = require('../../services/validate-sign-xml.ser
 
 const validateBodySchema = require('../../helpers/validate.helper');
 const LoggerHelper = require('../../helpers/logger.helper');
-const signXmlSchema = require('../../schemas/request/signXml.schema');
+const signXmlSchema = require('../../schemas/request/sign-xml.schema');
 
 const logger = new LoggerHelper('signature.module');
 

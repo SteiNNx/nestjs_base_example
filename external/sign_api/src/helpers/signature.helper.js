@@ -24,7 +24,7 @@ function signXml(xmlString, tagNameAssignedAfterSignedXmlElementParent = 'xml-da
   logger.info(`[signXml] Longitud del xmlString original: ${xmlString?.length || 0}`);
 
   // ============================================================================
-  // 2) Parseo del XML
+  // 1) Parseo del XML
   // ============================================================================
   let dom;
   try {
@@ -40,7 +40,7 @@ function signXml(xmlString, tagNameAssignedAfterSignedXmlElementParent = 'xml-da
   }
 
   // ============================================================================
-  // 3) Inyección del atributo Id en el nodo raíz
+  // 2) Inyección del atributo Id en el nodo raíz
   // ============================================================================
   const rootNode = dom.documentElement;
   if (rootNode) {
@@ -49,13 +49,13 @@ function signXml(xmlString, tagNameAssignedAfterSignedXmlElementParent = 'xml-da
   }
 
   // ============================================================================
-  // 4) Serialización del XML para la firma
+  // 3) Serialización del XML para la firma
   // ============================================================================
   const xmlToSign = new XMLSerializer().serializeToString(dom);
   logger.info(`[signXml] Longitud del XML tras asignar Id: ${xmlToSign.length}`);
 
   // ============================================================================
-  // 5) Carga de credenciales y configuración de firma
+  // 4) Carga de credenciales y configuración de firma
   // ============================================================================
   const { privateKey, certificate } = loadCredentials();
   const {
@@ -66,7 +66,7 @@ function signXml(xmlString, tagNameAssignedAfterSignedXmlElementParent = 'xml-da
   } = getSignConfig();
 
   // ============================================================================
-  // 6) Instanciación de SignedXml y configuración
+  // 5) Instanciación de SignedXml y configuración
   // ============================================================================
   logger.info('[signXml] Creando instancia de SignedXml (para firmar)...');
   const sig = new SignedXml({
@@ -77,7 +77,7 @@ function signXml(xmlString, tagNameAssignedAfterSignedXmlElementParent = 'xml-da
   });
 
   // ============================================================================
-  // 7) Agregar referencia para la firma
+  // 6) Agregar referencia para la firma
   // ============================================================================
   sig.addReference({
     xpath: `//*[@Id='${tagNameAssignedAfterSignedXmlElementParent}']`,
@@ -89,7 +89,7 @@ function signXml(xmlString, tagNameAssignedAfterSignedXmlElementParent = 'xml-da
   });
 
   // ============================================================================
-  // 8) Computación de la firma
+  // 7) Computación de la firma
   // ============================================================================
   logger.info('[signXml] Computando la firma...');
   try {
@@ -107,7 +107,7 @@ function signXml(xmlString, tagNameAssignedAfterSignedXmlElementParent = 'xml-da
   let signedXml = sig.getSignedXml();
 
   // ============================================================================
-  // 9) Parseo del XML firmado para inyectar información adicional
+  // 8) Parseo del XML firmado para inyectar información adicional
   // ============================================================================
   let signedDom;
   try {
@@ -123,7 +123,7 @@ function signXml(xmlString, tagNameAssignedAfterSignedXmlElementParent = 'xml-da
   }
 
   // ============================================================================
-  // 10) Inyección de información adicional en el nodo <Signature>
+  // 9) Inyección de información adicional en el nodo <Signature>
   // ============================================================================
   const signatureNode = signedDom.getElementsByTagName('Signature')[0];
   if (!signatureNode) {
@@ -145,7 +145,7 @@ function signXml(xmlString, tagNameAssignedAfterSignedXmlElementParent = 'xml-da
   logger.info('[signXml] Nodo <AdditionalInfo> inyectado en <Signature>');
 
   // ============================================================================
-  // 11) Serialización final del XML firmado
+  // 10) Serialización final del XML firmado
   // ============================================================================
   signedXml = new XMLSerializer().serializeToString(signedDom);
   const endTime = Date.now() - startTime;
@@ -167,7 +167,7 @@ function validateXmlSignature(signedXmlString) {
   logger.info(`[validateXmlSignature] Recibido XML de longitud: ${signedXmlString?.length || 0} caracteres.`);
 
   // ============================================================================
-  // 2) Parseo del XML firmado
+  // 1) Parseo del XML firmado
   // ============================================================================
   let signedDom;
   try {
@@ -183,13 +183,13 @@ function validateXmlSignature(signedXmlString) {
   }
 
   // ============================================================================
-  // 3) Carga de certificado y configuración para la verificación
+  // 2) Carga de certificado y configuración para la verificación
   // ============================================================================
   const { certificate } = loadCredentials();
   const { canonicalizationAlgorithm, signatureAlgorithm } = getSignConfig();
 
   // ============================================================================
-  // 4) Instanciación de SignedXml para verificación
+  // 3) Instanciación de SignedXml para verificación
   // ============================================================================
   logger.info('[validateXmlSignature] Instanciando SignedXml para verificación...');
   const sig = new SignedXml({
@@ -199,7 +199,7 @@ function validateXmlSignature(signedXmlString) {
   });
 
   // ============================================================================
-  // 5) Carga del nodo <Signature> en la instancia de SignedXml
+  // 4) Carga del nodo <Signature> en la instancia de SignedXml
   // ============================================================================
   const signatureNode = signedDom.getElementsByTagName('Signature')[0];
   if (!signatureNode) {
@@ -210,7 +210,7 @@ function validateXmlSignature(signedXmlString) {
   sig.loadSignature(signatureString);
 
   // ============================================================================
-  // 6) Configuración del keyInfoProvider para la verificación
+  // 5) Configuración del keyInfoProvider para la verificación
   // ============================================================================
   sig.keyInfoProvider = {
     getKeyInfo: () => '<X509Data></X509Data>',
@@ -218,7 +218,7 @@ function validateXmlSignature(signedXmlString) {
   };
 
   // ============================================================================
-  // 7) Verificación de la firma
+  // 6) Verificación de la firma
   // ============================================================================
   const docAsString = new XMLSerializer().serializeToString(signedDom);
   const isValid = sig.checkSignature(docAsString);
@@ -238,7 +238,7 @@ function validateXmlSignature(signedXmlString) {
   }
 
   // ============================================================================
-  // 8) Extracción de detalles minimalistas del nodo <Signature>
+  // 7) Extracción de detalles minimalistas del nodo <Signature>
   // ============================================================================
   const signatureDetails = parseElementToObjectMinimal(signatureNode);
   const totalTime = Date.now() - startTime;

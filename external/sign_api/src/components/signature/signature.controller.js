@@ -14,7 +14,7 @@ const InternalServerError = require('../../exceptions/internal-server.exception'
 const TechnicalError = require('../../exceptions/technical.exception');
 const ValidationError = require('../../exceptions/validation.exception');
 
-const OutputMessageSuccess = require('../../schemas/response/outputmessagesuccess.schema');
+const OutputMessageSuccess = require('../../schemas/response/output-message-success.schema');
 const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('signature.controller');
 
