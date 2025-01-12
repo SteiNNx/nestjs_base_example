@@ -136,7 +136,7 @@ X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
     <cashback_amount>0</cashback_amount>
   </additional_data>
   <Signature 
-    xmlns="http://www.w3.org/2000/09/xmldsig#" signingDate="11-01-2025, 4:42:58 p. m.">
+    xmlns="http://www.w3.org/2000/09/xmldsig#" signingDate="11-01-2025, 5:30:06 p. m.">
     <SignedInfo>
       <CanonicalizationMethod Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
       <SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
@@ -146,17 +146,17 @@ X-Security-Header: U2FtcGxlRW5jcnlwdGVkVmFsdWU=
           <Transform Algorithm="http://www.w3.org/TR/2001/REC-xml-c14n-20010315"/>
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
-        <DigestValue>1Pe6RGhITmAUCdFqwth+layyhut3ifmRniqyOmaAMu4=</DigestValue>
+        <DigestValue>/QJ5vvN13VrQdvv7Lp6eXyR+Jn3/OuXujiZW2yyd+cA=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>iHGvqiQdkRwj9Lk4zfN/RivmHpCoJIo/SYrkCc966OZDsyfzExSxc9cTM3P7YB5yCCeapBizDYTCxivo4zqbcnYv885I0EE5uPi70kHCszCfwJpH7LxGIqT4vatF3iWUgrxy4PBVLGq0X6n1CoDKEMigW+HEKpVPZWt9IgMELIhfKGauILZ/syhI65LUQg73qTEzhi1ipKHF3ZOOQ9KW/YLkQlLh3seped7tFCtAT4cUQuv0KKxBjyGqSv2Mj/vXzf8ejLV1RC2JeG8XrYaY8g8XobhIMtbDmkNu0Izutz7keJ7DZLF53X/Uxmc6dWnZR+EiH2/qU+gyYS+1VSL2Xg==</SignatureValue>
+    <SignatureValue>ifuoEFCbtbU1zwBU/5YkWmJxfhL6WynRFvpzQLJPztR+3wmbvK40zR4gjFyCFi0gIRN5Rl/cixZDpirJ7+4/ZZ5alrYvIb1cRkd4pNDDwYFGaNfS47Yg/hj5HymRQu+gxTCYEKRdC5+dtBuGyjEnTkVmQFMAOq4uxIXCVaE6o/MsILsv9qys+YWIhfRK02qRQz8bgC4w82WZigFO4yn5BtI4vxk6rLEmtqjO1/609PI90/8jLA4UM7jpzv/KYxyOJFktilt7TsnTO3FL2DiDg9dcGBGK6lv6hW+avYqW3YJCI4YndwiDHMenvjAi0YgUWtvcFPA3RWN7YMFhCOlJng==</SignatureValue>
     <KeyInfo>
       <X509Data>
         <X509Certificate>MIIDjTCCAnWgAwIBAgIUJkKo+K1RgVPKvdH+agV1KSD6EhQwDQYJKoZIhvcNAQELBQAwVjELMAkGA1UEBhMCQ0wxETAPBgNVBAgMCFNhbnRpYWdvMREwDwYDVQQHDAhTYW50aWFnbzEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMB4XDTI0MTIyNDE3MTQxM1oXDTI1MTIyNDE3MTQxM1owVjELMAkGA1UEBhMCQ0wxETAPBgNVBAgMCFNhbnRpYWdvMREwDwYDVQQHDAhTYW50aWFnbzEhMB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAuKjpgpK+h/S72yQKk6oazLtbYvtBg921QKqnJD5wGy7dKrFxpBkpgqs0otIDQazjIijmVqhBNPLWrat4lG7N6E7JV5qtb8Jap2lfQEuPzdSqAcKFT98+bH0K/eJhZCVYq0/g9w0iS4ALWC6bZnWmYGuFuLynBSyPyfc3O0EJw8B7tAyEa9TlRfUosZsgJqT7QjgT44yJqxKVoAt4YZx255OHGdxWoItRM4Ea+flokv+VJomduPpNp/DLH4nkUVO5n+HJ/zAHpZMiKVyMEIpZ9I9nd1lABjTtauGiGxQbCrQ2Qy7DLaTM6b0KOsrWGZAklvDzwIk0bSlSYs/88xXkfwIDAQABo1MwUTAdBgNVHQ4EFgQUWBNB//s0XRAclncG5kjPwMdUvjwwHwYDVR0jBBgwFoAUWBNB//s0XRAclncG5kjPwMdUvjwwDwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAanqPmR+ErGh3lJ4MkejwQJT9rC1NqGW+t142AT7/IcbToPmID0Ntikjy1kv0ZC4K0MXefdRIEcz+MH3mVGkTYJg0XndLB3PfooInhGSRmSTPG7CK1a9eEcc6LZlEMbiUozKMkhsE1DEfetd5PjU+81mXEzmVtoESeJpP+mbCgyxBBKqzdtQqodHeoHP7iCTiCPjbfgTYwaO0/SwI6ao0Ktfguu7pMc0died0NNgLvwQsyuSR30zWUlI050SkAElBbPr83EEaLqoPosVj2avy7cLHnbvBgZSvH+YG2Npt3rkcvsi+doyd25hIfHIZq2MN1R1Q5DvhucgHss0L5YRQHQ==</X509Certificate>
       </X509Data>
     </KeyInfo>
     <AdditionalInfo serverTimeZone="America/Santiago" signedByServer="true">
-      <signingDate>11-01-2025, 4:42:58 p. m.</signingDate>
+      <signingDate>11-01-2025, 5:30:06 p. m.</signingDate>
     </AdditionalInfo>
   </Signature>
 </Payment>

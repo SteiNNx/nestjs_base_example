@@ -1,5 +1,3 @@
-// signature.helper.refactored.js
-
 const fs = require('fs');
 const { DOMParser, XMLSerializer } = require('xmldom');
 const { SignedXml } = require('xml-crypto');
@@ -10,6 +8,90 @@ const TechnicalError = require('../exceptions/technical.exception');
 const LoggerHelper = require('./logger.helper');
 
 const logger = new LoggerHelper('signature.helper.refactored');
+
+/**
+ * Elimina saltos de línea, tabulaciones y espacios innecesarios entre etiquetas de un XML en forma de string.
+ * Esta función deja el XML en una sola línea, concatenando las etiquetas.
+ * 
+ * ⚠️ Nota: Si existen espacios significativos en el contenido de texto de los nodos, estos se verán afectados.
+ * Evalúa si este comportamiento es aceptable para tu caso.
+ * 
+ * @param {String} xmlString - Cadena que contiene el XML.
+ * @returns {String} - Cadena sanitizada sin saltos de línea, tabulaciones ni espacios extra entre etiquetas.
+ */
+function sanitizaXml(xmlString) {
+  if (!xmlString) {
+    logger.info('[sanitizaXml] Recibió cadena nula o vacía, se retorna igual.');
+    return xmlString;
+  }
+
+  // Log de la entrada (solo una parte si es muy grande)
+  logger.info(`[sanitizaXml] Entrada (longitud=${xmlString.length}): ${xmlString.slice(0, 200)}...`);
+
+  // 1. Elimina saltos de línea (\n, \r) y tabulaciones (\t)
+  let sanitized = xmlString.replace(/[\n\r\t]+/g, '');
+  // 2. Elimina espacios entre el cierre y apertura de etiquetas ( >   < )
+  sanitized = sanitized.replace(/>\s+</g, '><');
+
+  // Log de la salida
+  logger.info(`[sanitizaXml] Salida (longitud=${sanitized.length}): ${sanitized.slice(0, 200)}...`);
+
+  return sanitized;
+}
+
+/**
+ * Función recursiva minimalista que convierte un elemento XML a un objeto JS.
+ * - Si el elemento tiene atributos, se agregan como propiedades directas.
+ * - Si el elemento tiene un único nodo de texto y no tiene atributos, se retorna el string.
+ * - En caso de múltiples nodos hijos, se generan propiedades con los nombres de las etiquetas.
+ * 
+ * @param {Element} element - Elemento del DOM XML.
+ * @returns {Object|String} - Representación en objeto del nodo o el contenido de texto.
+ */
+function parseElementToObjectMinimal(element) {
+  let obj = {};
+
+  // Agrega los atributos directamente (si existen)
+  if (element.attributes && element.attributes.length > 0) {
+    for (let i = 0; i < element.attributes.length; i++) {
+      const attr = element.attributes[i];
+      obj[attr.name] = attr.value;
+    }
+  }
+
+  // Si el elemento tiene hijos
+  if (element.childNodes && element.childNodes.length > 0) {
+    // Si existe un solo nodo y es de tipo texto
+    if (element.childNodes.length === 1 && element.childNodes[0].nodeType === 3) {
+      const text = element.childNodes[0].nodeValue.trim();
+      // Si no se agregaron atributos, retornamos directamente el string
+      if (Object.keys(obj).length === 0) {
+        return text;
+      }
+      // Si hay atributos, agregamos el valor en la propiedad "value"
+      obj.value = text;
+    } else {
+      // Procesa cada nodo hijo que sea un elemento
+      for (let i = 0; i < element.childNodes.length; i++) {
+        const child = element.childNodes[i];
+        if (child.nodeType === 1) { // ELEMENT_NODE
+          const tagName = child.tagName;
+          const childValue = parseElementToObjectMinimal(child);
+          if (obj[tagName]) {
+            // Si ya existe la propiedad, asegúrate de que sea un array
+            if (!Array.isArray(obj[tagName])) {
+              obj[tagName] = [obj[tagName]];
+            }
+            obj[tagName].push(childValue);
+          } else {
+            obj[tagName] = childValue;
+          }
+        }
+      }
+    }
+  }
+  return obj;
+}
 
 /**
  * Carga las credenciales (privateKey, certificate) desde paths en config.
@@ -54,6 +136,9 @@ function signXml(xmlString, transactionId = 'xml-data') {
   logger.info('--------- [signXml] - INIT ---------');
   const startTime = Date.now();
   logger.info(`Longitud de xmlString original: ${xmlString?.length || 0}`);
+
+  // Sanitizar el XML antes de parsearlo
+  xmlString = sanitizaXml(xmlString);
 
   // 1) Parsear el XML
   let dom;
@@ -177,13 +262,19 @@ function signXml(xmlString, transactionId = 'xml-data') {
 
 /**
  * Valida la firma de un documento XML firmado.
+ * Además de indicar si la firma es válida, se extraen detalles importantes de la
+ * estructura de la firma (como SignedInfo, SignatureValue, KeyInfo y AdditionalInfo) en un objeto minimalista.
+ * 
  * @param {String} signedXmlString - Cadena XML que ya contiene la firma digital.
- * @returns {Object} { isValid: boolean, details: string }
+ * @returns {Object} - Objeto con { isValid: boolean, details: Object }.
  */
 function validateXmlSignature(signedXmlString) {
   logger.info('--------- [validateXmlSignature] - INIT ---------');
   const startTime = Date.now();
   logger.info(`Recibido XML de longitud: ${signedXmlString?.length || 0} caracteres.`);
+
+  // Sanitizar el XML antes de parsear
+  signedXmlString = sanitizaXml(signedXmlString);
 
   // 1) Parsear el XML firmado
   let signedDom;
@@ -246,12 +337,9 @@ function validateXmlSignature(signedXmlString) {
   // 5) Establecer keyInfoProvider para que devuelva la clave pública (o el X.509)
   sig.keyInfoProvider = {
     getKeyInfo: () => {
-      // Podrías retornar vacío, ya que la firma ya contiene <KeyInfo>.
-      // O si quieres sobreescribir, devuelves <X509Data> con tu cert.
       return '<X509Data></X509Data>';
     },
     getKey: () => {
-      // Retornamos el contenido de la parte pública (certificado).
       return certificate;
     },
   };
@@ -273,14 +361,18 @@ function validateXmlSignature(signedXmlString) {
     };
   }
 
-  // Firma válida
-  logger.info('La firma del XML es válida.');
+  // Firma válida: se extraen los detalles del nodo <Signature> en un objeto minimalista.
+  const signatureDetails = parseElementToObjectMinimal(signatureNode);
+
   const totalTime = Date.now() - startTime;
   logger.info(`Tiempo total de validación (ms): ${totalTime}`);
 
   return {
     isValid: true,
-    details: 'Firma válida y XML íntegro.',
+    details: {
+      message: 'Firma válida y XML Fidedigno.',
+      signature: signatureDetails.AdditionalInfo,
+    },
   };
 }
 
