@@ -1,0 +1,52 @@
+{
+    "amex_mdr": [
+        {
+            "PutRequest": {
+                "Item": {
+                    "merchant_id": {
+                        "S": "m-2004"
+                    },
+                    "mcc": {
+                        "S": "5943"
+                    },
+                    "card_type": {
+                        "S": "credito"
+                    },
+                    "scope": {
+                        "S": "nacional"
+                    },
+                    "mdr_rate": {
+                        "N": "2.3"
+                    },
+                    "md_fixed_uf": {
+                        "N": "0.01"
+                    }
+                }
+            }
+        },
+        {
+            "PutRequest": {
+                "Item": {
+                    "merchant_id": {
+                        "S": "m-2005"
+                    },
+                    "mcc": {
+                        "S": "7832"
+                    },
+                    "card_type": {
+                        "S": "credito"
+                    },
+                    "scope": {
+                        "S": "internacional"
+                    },
+                    "mdr_rate": {
+                        "N": "3.5"
+                    },
+                    "md_fixed_uf": {
+                        "N": "0.02"
+                    }
+                }
+            }
+        }
+    ]
+}
