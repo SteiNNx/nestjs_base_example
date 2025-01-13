@@ -5,11 +5,11 @@
  *
  * @module loggerHelper
  */
-
 const pino = require('pino');
 
 /**
  * Configuración de pino con pino-pretty para logs legibles.
+ * Se configura para mostrar la fecha, el nivel, el mensaje y los metadatos (por ejemplo, file).
  */
 const logger = pino({
   level: process.env.LOG_LEVEL || 'info',
@@ -17,18 +17,23 @@ const logger = pino({
     target: 'pino-pretty',
     options: {
       colorize: true,
-      translateTime: 'SYS:standard',
+      translateTime: 'SYS:standard',  // Ejemplo: [2025-01-12 18:56:28.807 -0300]
       ignore: 'pid,hostname',
-      levelFirst: false,     // el nivel se imprime después de la hora
-      singleLine: false,     // cada objeto en múltiples líneas (por defecto)
-      hideObject: false,     // si es true, no se imprimiría el objeto
-      messageFormat: false,  // sin plantilla personalizada
+      levelFirst: false,     // el nivel se imprime después de la hora si se prefiere
+      singleLine: false,     // cada objeto en múltiples líneas
+      hideObject: false,
+      messageFormat: false,
       errorLikeObjectKeys: ['err', 'error'],
-      errorProps: 'stack,message', // imprime stack y message cuando sea error
+      errorProps: 'stack,message',
     },
   },
 });
 
+/**
+ * Clase para generar logs con un contexto específico.
+ * Los métodos formatean el mensaje para que aparezca con el contexto entre corchetes,
+ * por ejemplo: "[jsonwebtoken.helper] Validando token JWT."
+ */
 class LoggerHelper {
   /**
    * Crea una instancia del logger con un contexto específico.
@@ -43,73 +48,53 @@ class LoggerHelper {
 
   /**
    * Método para logs de nivel info.
-   * 
-   * @example
-   * logger.info('Mensaje de info'); 
-   * logger.info('Mensaje con objeto', { foo: 'bar' });
-   * 
    * @param {string} message - Mensaje a loguear.
-   * @param {object} [meta] - (Opcional) Objeto con propiedades adicionales a mostrar en el log.
+   * @param {object} [meta={}] - Objeto con propiedades adicionales a mostrar en el log.
    */
-  info(message, meta = {}) {
-    logger.info({ context: this.context, ...meta }, message);
-  }
+  info = (message, meta = {}) => {
+    const formattedMessage = `[${this.context}] ${message}`;
+    logger.info({ file: this.context, ...meta }, formattedMessage);
+  };
 
   /**
    * Método para logs de nivel error.
-   * 
-   * @example
-   * logger.error('Mensaje de error');
-   * logger.error('Mensaje de error con datos', { reason: 'Algo falló' });
-   *
    * @param {string} message - Mensaje a loguear.
-   * @param {object} [meta] - (Opcional) Objeto con propiedades adicionales a mostrar en el log.
+   * @param {object} [meta={}] - Objeto con propiedades adicionales a mostrar en el log.
    */
-  error(message, meta = {}) {
-    logger.error({ context: this.context, ...meta }, message);
-  }
+  error = (message, meta = {}) => {
+    const formattedMessage = `[${this.context}] ${message}`;
+    logger.error({ file: this.context, ...meta }, formattedMessage);
+  };
 
   /**
    * Método para logs de nivel warn.
-   * 
-   * @example
-   * logger.warn('Mensaje de warn');
-   * logger.warn('Mensaje con información adicional', { critical: false });
-   * 
    * @param {string} message - Mensaje a loguear.
-   * @param {object} [meta] - (Opcional) Objeto con propiedades adicionales a mostrar en el log.
+   * @param {object} [meta={}] - Objeto con propiedades adicionales a mostrar en el log.
    */
-  warn(message, meta = {}) {
-    logger.warn({ context: this.context, ...meta }, message);
-  }
+  warn = (message, meta = {}) => {
+    const formattedMessage = `[${this.context}] ${message}`;
+    logger.warn({ file: this.context, ...meta }, formattedMessage);
+  };
 
   /**
    * Método para logs de nivel debug.
-   *
-   * @example
-   * logger.debug('Mensaje de debug');
-   * logger.debug('Mensaje con datos', { debugData: 'algo' });
-   *
    * @param {string} message - Mensaje a loguear.
-   * @param {object} [meta] - (Opcional) Objeto con propiedades adicionales a mostrar en el log.
+   * @param {object} [meta={}] - Objeto con propiedades adicionales a mostrar en el log.
    */
-  debug(message, meta = {}) {
-    logger.debug({ context: this.context, ...meta }, message);
-  }
+  debug = (message, meta = {}) => {
+    const formattedMessage = `[${this.context}] ${message}`;
+    logger.debug({ file: this.context, ...meta }, formattedMessage);
+  };
 
   /**
    * Método para logs de nivel trace.
-   *
-   * @example
-   * logger.trace('Mensaje de trace');
-   * logger.trace('Mensaje con datos', { traceId: 'abc123' });
-   *
    * @param {string} message - Mensaje a loguear.
-   * @param {object} [meta] - (Opcional) Objeto con propiedades adicionales a mostrar en el log.
+   * @param {object} [meta={}] - Objeto con propiedades adicionales a mostrar en el log.
    */
-  trace(message, meta = {}) {
-    logger.trace({ context: this.context, ...meta }, message);
-  }
+  trace = (message, meta = {}) => {
+    const formattedMessage = `[${this.context}] ${message}`;
+    logger.trace({ file: this.context, ...meta }, formattedMessage);
+  };
 }
 
 module.exports = LoggerHelper;

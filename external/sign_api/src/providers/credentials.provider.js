@@ -49,11 +49,6 @@ const loadCredentials = () => {
 
 /**
  * Retorna la configuración de firma a partir de los valores definidos en la configuración.
- * Extrae los siguientes parámetros:
- *  - canonicalizationAlgorithm
- *  - signatureAlgorithm
- *  - referenceTransformsFirst
- *  - referenceDigestAlgorithm
  *
  * @function getSignConfig
  * @returns {Object} Un objeto con la configuración de firma:
@@ -144,8 +139,29 @@ const getAuthConfig = () => {
     return { privateKey, publicKey, tokenExpiresIn, jwtAlgorithm };
 };
 
+/**
+ * Retorna la clave de seguridad para el header de seguridad.
+ *
+ * @function getSecurityKey
+ * @returns {String} La clave de seguridad definida en config.auth.headerSecurityKey.
+ * @throws {TechnicalError} Si la clave de seguridad no se encuentra o es vacía.
+ */
+const getSecurityKey = () => {
+    const securityKey = config.auth.headerSecurityKey;
+    if (!securityKey || !securityKey.trim()) {
+        logger.error('[getSecurityKey] La clave de seguridad está vacía o no se encontró.');
+        throw new TechnicalError(
+            'AUTH.INVALID_SECURITY_KEY',
+            'La clave de seguridad de autenticación está vacía o no se encontró.',
+            500
+        );
+    }
+    return securityKey;
+};
+
 module.exports = {
     loadCredentials,
     getSignConfig,
     getAuthConfig,
+    getSecurityKey
 };

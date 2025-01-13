@@ -5,8 +5,11 @@
  *
  * @module healthCheckController
  */
+
+const { handleNextError } = require('../../providers/error-handler.provider');
+
 const LoggerHelper = require('../../helpers/logger.helper');
-const logger = new LoggerHelper('healthcheck.controller');
+const logger = new LoggerHelper('healthcheck.controller.js');
 
 /**
  * @typedef {import('express').Request} Request
@@ -19,21 +22,28 @@ const logger = new LoggerHelper('healthcheck.controller');
  *
  * @async
  * @function healthCheckController
- * @param {Request} req - Objeto de solicitud HTTP de Express.
- * @param {Response} res - Objeto de respuesta HTTP de Express.
- * @returns {Response} Respuesta HTTP con estado 200 y mensaje "Service OK".
+ * @param {import('express').Request} req - Objeto de solicitud HTTP.
+ * @param {import('express').Response} res - Objeto de respuesta HTTP.
+ * @param {import('express').NextFunction} next - Función para pasar el control al siguiente middleware.
+ * @returns {Promise<import('express').Response>} Respuesta HTTP con estado 200 y mensaje "Service OK".
  */
-const healthCheckController = async (req, res) => {
-  logger.info('[healthCheckController] Inicio del chequeo de salud');
+const healthCheckController = async (req, res, next) => {
+  logger.info('Inicio del chequeo de salud');
 
-  // Configuración de cabeceras de seguridad
-  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-  res.setHeader('Content-Security-Policy', "script-src 'self'");
+  try {
+    // Configuración de cabeceras de seguridad
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    res.setHeader('Content-Security-Policy', "script-src 'self'");
 
-  const response = { status: '00', message: 'Service OK' };
-  logger.info('[healthCheckController] Respuesta generada', { response });
+    const response = { status: '00', message: 'Service OK' };
+    logger.info('Respuesta generada', { response });
 
-  return res.status(200).send(response);
+    return res.status(200).send(response);
+  } catch (error) {
+    logger.error('Error en chequeo de salud (healthcheck)', { error: error.message });
+
+    return handleNextError(error, next, 'HEALTH.CHECK.0001', 'Error desconocido en chequeo de salud.');
+  }
 };
 
 module.exports = healthCheckController;

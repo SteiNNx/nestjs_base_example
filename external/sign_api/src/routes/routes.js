@@ -5,15 +5,19 @@
  *
  * @module routes
  */
+
 const healthCheckRoutes = require('../components/healthcheck/healthcheck.route');
 const signatureRoutes = require('../components/signature/signature.route');
 const authRoutes = require('../components/auth/auth.route');
+
 const globalErrorHandlerMiddleware = require('../middlewares/global-error-handler.middleware');
 const InterceptorLoggerMiddleware = require('../middlewares/interceptor-logger.middleware');
+const validateHeaderSecurityMiddleware = require('../middlewares/validate-header-security.middleware');
+
 const { config } = require('../config/config');
 
 const LoggerHelper = require('../helpers/logger.helper');
-const logger = new LoggerHelper('routes');
+const logger = new LoggerHelper('routes.js');
 
 /**
  * Función para registrar todas las rutas y middlewares de la aplicación.
@@ -33,6 +37,7 @@ const routes = (app) => {
   // 2) Registrar middleware interceptor para logging de Request/Response
   // ============================================================================
   app.use(InterceptorLoggerMiddleware);
+  app.use(validateHeaderSecurityMiddleware);
 
   // ============================================================================
   // 3) Configurar rutas específicas de componentes

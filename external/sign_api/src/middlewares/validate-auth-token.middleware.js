@@ -1,10 +1,10 @@
 // src/middlewares/validate-auth-token-middleware.js
 
 const { authValidateTokenService } = require('../services/auth-validate-token.service');
-const LoggerHelper = require('../helpers/logger.helper');
 const AuthError = require('../exceptions/auth.exception'); // Se usan errores de autenticación
 
-const logger = new LoggerHelper('validateAuthToken.middleware');
+const LoggerHelper = require('../helpers/logger.helper');
+const logger = new LoggerHelper('validate-auth-token.middleware.js');
 
 /**
  * Middleware para validar un token JWT.
@@ -21,6 +21,7 @@ const logger = new LoggerHelper('validateAuthToken.middleware');
 const validateAuthTokenMiddleware = async (req, res, next) => {
     try {
         // Extraer el token de la cabecera "Authorization"
+        logger.info('Extrayendo el token de la cabecera "Authorization"');
         const authHeader = req.headers.authorization;
         if (!authHeader) {
             // Lanzar error de autenticación si el header no existe
@@ -28,24 +29,25 @@ const validateAuthTokenMiddleware = async (req, res, next) => {
         }
 
         // Se asume que el header viene en el formato "Bearer <token>"
+        logger.info('Se asume que el header viene en el formato "Bearer <token>" y se extrae "authHeader.split" ');
         const token = authHeader.split(' ')[1];
         if (!token) {
             // Lanzar error si no se encuentra el token en el header
             throw new AuthError('AUTH.TOKEN.MISSING', 'Token no encontrado en el header Authorization.', 401);
         }
 
-        logger.info('[validateAuthToken.middleware] Validando token JWT');
+        logger.info('Validando token JWT');
 
         // Validar el token utilizando el servicio
         const decoded = await authValidateTokenService(token);
 
         // Agregar la información decodificada a req (por ejemplo, req.user)
         req.user = decoded;
-        logger.info('[validateAuthToken.middleware] Token validado correctamente');
+        logger.info('Token validado correctamente');
 
         next();
     } catch (error) {
-        logger.error(`[validateAuthToken.middleware] Error al validar token: ${error.message}`);
+        logger.error(`Error al validar token: ${error.message}`);
         next(error);
     }
 };

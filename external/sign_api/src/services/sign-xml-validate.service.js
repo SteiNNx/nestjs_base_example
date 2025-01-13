@@ -1,15 +1,11 @@
-// src/services/sign-xml-validate.service.js
+// src/services/validate-sign-xml.service.js
 
-/**
- * Servicio principal para la validación de la firma de un XML.
- *
- * @module validateSignXMLService
- */
 const { validateXmlSignature } = require('../helpers/signature.helper');
 const { sanitizaXml } = require('../helpers/xml.helper');
-const LoggerHelper = require('../helpers/logger.helper');
+const { handleThrownError } = require('../providers/error-handler.provider');
 
-const logger = new LoggerHelper('validate-sign-xml.service');
+const LoggerHelper = require('../helpers/logger.helper');
+const logger = new LoggerHelper('validate-sign-xml.service.js');
 
 /**
  * Valida la firma de un XML a partir de una cadena en crudo.
@@ -20,22 +16,22 @@ const logger = new LoggerHelper('validate-sign-xml.service');
  * @returns {Promise<{isValid: boolean, details: string}>} Objeto con el resultado de la validación.
  */
 const validateSignXMLService = async (rawXml) => {
-  logger.info('[validateSignXMLService] Inicio');
+  logger.info('Inicio');
 
   try {
-
-    logger.info('[validateSignXMLService] Sanitizando XML');
+    logger.info('Sanitizando XML');
     const xmlStringSanitized = sanitizaXml(rawXml);
-    logger.info('[validateSignXMLService] Sanitización de XML completada', { xmlStringSanitized });
+    logger.info('Sanitización de XML completada', { xmlStringSanitized });
 
-    logger.info('[validateSignXMLService] Validando XML firmado');
+    logger.info('Validando XML firmado');
     const result = validateXmlSignature(xmlStringSanitized);
-    logger.info('[validateSignXMLService] Validación completada', { result });
+    logger.info('Validación completada', { result });
 
     return result;
   } catch (error) {
-    logger.error('[validateSignXMLService] Error al validar el XML', { error });
-    throw error;
+    logger.error('Error al validar el XML', { error });
+    // Lanza el error usando el método handleThrownError
+    handleThrownError(error, 'SIGN.VALIDATE.0001', 'Error al validar la firma del XML.');
   }
 };
 

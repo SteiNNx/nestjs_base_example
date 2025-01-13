@@ -1,15 +1,11 @@
 // src/services/sign-xml.service.js
 
-/**
- * Servicio principal para la firma de un XML a partir de un objeto JSON.
- *
- * @module signXMLService
- */
 const { signXml } = require('../helpers/signature.helper');
 const { jsonToXml, sanitizaXml } = require('../helpers/xml.helper');
-const LoggerHelper = require('../helpers/logger.helper');
+const { handleThrownError } = require('../providers/error-handler.provider');
 
-const logger = new LoggerHelper('sign-xml.service');
+const LoggerHelper = require('../helpers/logger.helper');
+const logger = new LoggerHelper('sign-xml.service.js');
 
 /**
  * Convierte un objeto JSON a XML y procede a firmarlo.
@@ -20,27 +16,28 @@ const logger = new LoggerHelper('sign-xml.service');
  * @returns {Promise<String>} Cadena XML firmada.
  */
 const signXMLService = async (body) => {
-  logger.info('[signXMLService] Inicio');
+  logger.info('Inicio');
 
   try {
-    logger.info('[signXMLService] Convirtiendo JSON a XML');
+    logger.info('Convirtiendo JSON a XML');
     const xmlString = jsonToXml(body);
-    logger.info('[signXMLService] Conversión completada', { xmlString });
+    logger.info('Conversión completada', { xmlString });
 
-    logger.info('[signXMLService] Sanitizando XML');
+    logger.info('Sanitizando XML');
     const xmlStringSanitized = sanitizaXml(xmlString);
-    logger.info('[signXMLService] Sanitización de XML completada', { xmlStringSanitized });
+    logger.info('Sanitización de XML completada', { xmlStringSanitized });
 
-    logger.info('[signXMLService] Firmando XML');
+    logger.info('Firmando XML');
     const xmlSigned = signXml(xmlStringSanitized);
-    logger.info('[signXMLService] Firma de XML completada', { xmlSigned });
+    logger.info('Firma de XML completada', { xmlSigned });
 
-    logger.info('[signXMLService] Finalización exitosa');
+    logger.info('Finalización exitosa');
 
     return xmlSigned;
   } catch (error) {
-    logger.error('[signXMLService] Error al firmar el XML', { error });
-    throw error;
+    logger.error('Error al firmar el XML', { error });
+    // Lanza el error utilizando handleThrownError con un código y mensaje por defecto
+    handleThrownError(error, 'SIGN.SIGN.0001', 'Error al firmar el XML.');
   }
 };
 

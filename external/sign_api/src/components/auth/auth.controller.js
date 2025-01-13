@@ -11,15 +11,10 @@
 
 const { authLoginModule, authValidateTokenModule } = require('./auth.module');
 
-const AuthError = require('../../exceptions/auth.exception');
-const BadRequestError = require('../../exceptions/bad-request.exception');
-const BusinessError = require('../../exceptions/bussiness.exception');
-const InternalServerError = require('../../exceptions/internal-server.exception');
-const TechnicalError = require('../../exceptions/technical.exception');
-const ValidationError = require('../../exceptions/validation.exception');
+const { handleNextError } = require('../../providers/error-handler.provider');
 
 const LoggerHelper = require('../../helpers/logger.helper');
-const logger = new LoggerHelper('auth.controller');
+const logger = new LoggerHelper('auth.controller.js');
 
 /**
  * Controlador para el login de autenticación.
@@ -33,7 +28,7 @@ const logger = new LoggerHelper('auth.controller');
  * @returns {Promise<import('express').Response>} Respuesta HTTP con el token JWT.
  */
 const authLoginController = async (req, res, next) => {
-    logger.info('[auth.controller] Inicio de autenticación (login)');
+    logger.info('Inicio de autenticación (login)');
 
     try {
         // =======================================================================
@@ -47,21 +42,12 @@ const authLoginController = async (req, res, next) => {
         res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         res.setHeader('Content-Security-Policy', "script-src 'self'");
 
-        logger.info('[auth.controller] Autenticación exitosa, retornando token');
+        logger.info('Autenticación exitosa, retornando token');
         return res.status(200).json({ token });
     } catch (error) {
-        logger.error('[auth.controller] Error en autenticación (login)', { error: error.message });
-        if (
-            error instanceof AuthError ||
-            error instanceof BadRequestError ||
-            error instanceof BusinessError ||
-            error instanceof InternalServerError ||
-            error instanceof TechnicalError ||
-            error instanceof ValidationError
-        ) {
-            return next(error);
-        }
-        return next(new TechnicalError('AUTH.LOGIN.0005', 'Error desconocido en login.', 500, error));
+        logger.error('Error en autenticación (login)', { error: error.message });
+
+        return handleNextError(error, next, 'AUTH.LOGIN.0005', 'Error desconocido en login.');
     }
 };
 
@@ -77,7 +63,7 @@ const authLoginController = async (req, res, next) => {
  * @returns {Promise<import('express').Response>} Respuesta HTTP con el payload decodificado.
  */
 const validateTokenController = async (req, res, next) => {
-    logger.info('[auth.controller] Inicio de validación de token');
+    logger.info('Inicio de validación de token');
 
     try {
         // =======================================================================
@@ -91,21 +77,12 @@ const validateTokenController = async (req, res, next) => {
         res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         res.setHeader('Content-Security-Policy', "script-src 'self'");
 
-        logger.info('[auth.controller] Validación de token exitosa, retornando payload');
+        logger.info('Validación de token exitosa, retornando payload');
         return res.status(200).json({ payload: decoded });
     } catch (error) {
-        logger.error('[auth.controller] Error en validación de token', { error: error.message });
-        if (
-            error instanceof AuthError ||
-            error instanceof BadRequestError ||
-            error instanceof BusinessError ||
-            error instanceof InternalServerError ||
-            error instanceof TechnicalError ||
-            error instanceof ValidationError
-        ) {
-            return next(error);
-        }
-        return next(new TechnicalError('AUTH.VALIDATE.0005', 'Error desconocido en validación de token.', 500, error));
+        logger.error('Error en validación de token', { error: error.message });
+
+        return handleNextError(error, next, 'AUTH.VALIDATE.0005', 'Error desconocido en validación de token.');
     }
 };
 

@@ -12,7 +12,7 @@ const validateBodySchema = require('../../helpers/validate.helper');
 const LoggerHelper = require('../../helpers/logger.helper');
 const signXmlSchema = require('../../schemas/request/sign-xml.schema');
 
-const logger = new LoggerHelper('signature.module');
+const logger = new LoggerHelper('signature.module.js');
 
 /**
  * Firma un XML a partir de los datos recibidos en la solicitud.
@@ -23,24 +23,17 @@ const logger = new LoggerHelper('signature.module');
  * @returns {Promise<String>} XML firmado.
  */
 const signXMLModule = async (req) => {
-  logger.info('[signXMLModule] Inicio');
+  logger.info('Validando el esquema del cuerpo de la solicitud');
+  validateBodySchema(req.body, signXmlSchema, 'XXX.XXX.0001');
+  logger.info('Esquema validado correctamente');
 
-  try {
-    logger.info('[signXMLModule] Validando el esquema del cuerpo de la solicitud');
-    validateBodySchema(req.body, signXmlSchema, 'XXX.XXX.0001');
-    logger.info('[signXMLModule] Esquema validado correctamente');
+  logger.info('Llamando a signXMLService');
+  const signedXML = await signXMLService(req.body);
+  logger.info('XML firmado recibido de signXMLService', { signedXML });
 
-    logger.info('[signXMLModule] Llamando a signXMLService');
-    const signedXML = await signXMLService(req.body);
-    logger.info('[signXMLModule] XML firmado recibido de signXMLService', { signedXML });
+  logger.info('Finalización exitosa');
 
-    logger.info('[signXMLModule] Finalización exitosa');
-
-    return signedXML;
-  } catch (error) {
-    logger.error('[signXMLModule] Error durante la firma del XML', { error });
-    throw error;
-  }
+  return signedXML;
 };
 
 /**
@@ -52,22 +45,16 @@ const signXMLModule = async (req) => {
  * @returns {Promise<Object>} Objeto con los resultados de la validación (isValid y details).
  */
 const validateSignXMLModule = async (req) => {
-  logger.info('[validateSignXMLModule] Inicio');
 
-  try {
-    logger.info('[validateSignXMLModule] Llamando a validateSignXMLService');
-    // Se asume que req.body contiene el XML en crudo
-    const rawXml = req.body;
-    const validationResult = await validateSignXMLService(rawXml);
-    logger.info('[validateSignXMLModule] Resultado recibido de validateSignXMLService', { validationResult });
+  logger.info('Llamando a validateSignXMLService');
+  // Se asume que req.body contiene el XML en crudo
+  const rawXml = req.body;
+  const validationResult = await validateSignXMLService(rawXml);
+  logger.info('Resultado recibido de validateSignXMLService', { validationResult });
 
-    logger.info('[validateSignXMLModule] Finalización exitosa');
+  logger.info('Finalización exitosa');
 
-    return validationResult;
-  } catch (error) {
-    logger.error('[validateSignXMLModule] Error durante la validación del XML', { error });
-    throw error;
-  }
+  return validationResult;
 };
 
 module.exports = {

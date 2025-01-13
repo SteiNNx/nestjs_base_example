@@ -10,8 +10,10 @@
 const { loginToken } = require('../../services/auth-login-token.service');
 const { authValidateTokenService } = require('../../services/auth-validate-token.service');
 
+const AuthError = require('../../exceptions/auth.exception');
+
 const LoggerHelper = require('../../helpers/logger.helper');
-const logger = new LoggerHelper('auth.module');
+const logger = new LoggerHelper('auth.module.js');
 
 /**
  * Realiza la autenticación extrayendo las credenciales del body de la solicitud.
@@ -23,7 +25,7 @@ const logger = new LoggerHelper('auth.module');
  * @throws {Error} Si las credenciales son inválidas.
  */
 const authLoginModule = async (req) => {
-  logger.info('[auth.module] Inicio de autenticación (login)');
+  logger.info('Inicio de autenticación (login)');
 
   // =======================================================================
   // Extraer las credenciales del cuerpo de la solicitud
@@ -35,7 +37,7 @@ const authLoginModule = async (req) => {
   // =======================================================================
   const token = await loginToken(credentials);
 
-  logger.info('[auth.module] Autenticación exitosa (login)');
+  logger.info('Autenticación exitosa (login)');
   return token;
 };
 
@@ -50,18 +52,18 @@ const authLoginModule = async (req) => {
  * @throws {Error} Si el token es inválido o no se provee.
  */
 const authValidateTokenModule = async (req) => {
-  logger.info('[auth.module] Inicio de validación de token');
+  logger.info('Inicio de validación de token');
 
   // =======================================================================
-  // Se asume que el token se recibe en req.body.token o en req.headers.authorization
+  // Se asume que el token se recibe en req.body.token
   // =======================================================================
-  const token = req.body.token || req.headers.authorization;
+  const token = req.body.token;
   if (!token) {
-    throw new Error('Token no provisto');
+    throw new AuthError('AUTH.TOKEN.BODY_TOKEN_MISSING', 'Token no provisto.', 401);
   }
 
   const decoded = await authValidateTokenService(token);
-  logger.info('[auth.module] Validación de token exitosa');
+  logger.info('Validación de token exitosa');
   return decoded;
 };
 

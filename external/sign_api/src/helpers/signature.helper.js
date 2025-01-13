@@ -7,7 +7,7 @@ const TechnicalError = require('../exceptions/technical.exception');
 const { parseElementToObjectMinimal } = require('./xml.helper.js');
 const LoggerHelper = require('./logger.helper');
 
-const logger = new LoggerHelper('signature.helper');
+const logger = new LoggerHelper('signature.helper.js');
 
 /**
  * Firma un XML utilizando la llave privada y el certificado configurados.

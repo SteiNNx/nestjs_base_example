@@ -8,7 +8,7 @@
 const LoggerHelper = require('../../helpers/logger.helper');
 const { authLoginController, validateTokenController } = require('./auth.controller');
 
-const logger = new LoggerHelper('auth.route');
+const logger = new LoggerHelper('auth.route.js');
 
 /**
  * Configura las rutas de autenticación en la aplicación.
@@ -22,14 +22,14 @@ const authRoutes = (app, prefixApi) => {
     // Ruta para login de autenticación
     // =======================================================================
     const loginRoute = `${prefixApi}/auth/login`;
-    logger.info(`[auth.route] Registrando ruta: [POST] ${loginRoute}`);
+    logger.info(`Registrando ruta: [POST] ${loginRoute}`);
     app.post(loginRoute, authLoginController);
 
     // =======================================================================
     // Ruta para validación de token JWT
     // =======================================================================
     const validateRoute = `${prefixApi}/auth/validate`;
-    logger.info(`[auth.route] Registrando ruta: [POST] ${validateRoute}`);
+    logger.info(`Registrando ruta: [POST] ${validateRoute}`);
     app.post(validateRoute, validateTokenController);
 };
 

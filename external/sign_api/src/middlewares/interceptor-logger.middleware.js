@@ -1,7 +1,7 @@
 // src/middlewares/interceptor-logger.middleware.js
 
 const Logger = require('../helpers/logger.helper');
-const logger = new Logger('interceptor-logger.middleware');
+const logger = new Logger('interceptor-logger.middleware.js');
 
 /**
  * Middleware que intercepta la petición de entrada (headers, body)
@@ -18,7 +18,7 @@ const InterceptorLoggerMiddleware = (req, res, next) => {
   // 1) Registro de detalles de la request entrante
   // ============================================================================
   logger.info(
-    '[InterceptorLoggerMiddleware] [REQUEST_IN] - Detalles de la Request',
+    '[REQUEST_IN] - Detalles de la Request',
     {
       requestMethod: req.method,
       requestUrl: req.url,
@@ -36,7 +36,7 @@ const InterceptorLoggerMiddleware = (req, res, next) => {
   // Sobrescribimos res.send para registrar la respuesta antes de enviarla
   res.send = function (body) {
     logger.info(
-      '[InterceptorLoggerMiddleware] [RESPONSE_OUT] - Detalles de la Response',
+      '[RESPONSE_OUT] - Detalles de la Response',
       {
         responseStatusCode: res.statusCode,
         responseBody: body,
