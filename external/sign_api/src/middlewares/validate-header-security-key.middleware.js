@@ -20,9 +20,9 @@ const logger = new LoggerHelper('validate-header-security.middleware.js');
  * @param {import('express').Response} res - Objeto de la respuesta de Express.
  * @param {import('express').NextFunction} next - Siguiente middleware.
  */
-const validateHeaderSecurityMiddleware = (req, res, next) => {
+const validateHeaderSecurityKeyMiddleware = (req, res, next) => {
   try {
-    const headerName = 'x-security-header';
+    const headerName = 'x-security-header-key';
     const headerValue = req.headers[headerName];
 
     if (!headerValue) {
@@ -65,4 +65,4 @@ const validateHeaderSecurityMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = validateHeaderSecurityMiddleware;
+module.exports = validateHeaderSecurityKeyMiddleware;

@@ -12,7 +12,7 @@ const authRoutes = require('../components/auth/auth.route');
 
 const globalErrorHandlerMiddleware = require('../middlewares/global-error-handler.middleware');
 const InterceptorLoggerMiddleware = require('../middlewares/interceptor-logger.middleware');
-const validateHeaderSecurityMiddleware = require('../middlewares/validate-header-security.middleware');
+const validateHeaderSecurityKeyMiddleware = require('../middlewares/validate-header-security-key.middleware');
 
 const { config } = require('../config/config');
 
@@ -37,7 +37,7 @@ const routes = (app) => {
   // 2) Registrar middleware interceptor para logging de Request/Response
   // ============================================================================
   app.use(InterceptorLoggerMiddleware);
-  app.use(validateHeaderSecurityMiddleware);
+  app.use(validateHeaderSecurityKeyMiddleware);
 
   // ============================================================================
   // 3) Configurar rutas específicas de componentes
