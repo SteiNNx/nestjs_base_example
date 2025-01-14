@@ -1,164 +1,427 @@
 {
-    "visa_mdr": [
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "debito" },
-            "scope":        { "S": "nacional" },
-            "canal":        { "S": "presencial_smartpos" },
-            "mdr_rate":     { "N": "1.60" },
-            "md_fixed_uf":  { "N": "0.01" }
-          }
-        }
-      },
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "debito" },
-            "scope":        { "S": "nacional" },
-            "canal":        { "S": "integrado_presencial" },
-            "mdr_rate":     { "N": "1.70" },
-            "md_fixed_uf":  { "N": "0.02" }
-          }
-        }
-      },
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "debito" },
-            "scope":        { "S": "nacional" },
-            "canal":        { "S": "ecommerce_online" },
-            "mdr_rate":     { "N": "1.80" },
-            "md_fixed_uf":  { "N": "0.03" }
-          }
-        }
-      },
-  
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "debito" },
-            "scope":        { "S": "internacional" },
-            "canal":        { "S": "presencial_smartpos" },
-            "mdr_rate":     { "N": "2.70" },
-            "md_fixed_uf":  { "N": "0.01" }
-          }
-        }
-      },
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "debito" },
-            "scope":        { "S": "internacional" },
-            "canal":        { "S": "integrado_presencial" },
-            "mdr_rate":     { "N": "2.80" },
-            "md_fixed_uf":  { "N": "0.02" }
-          }
-        }
-      },
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "debito" },
-            "scope":        { "S": "internacional" },
-            "canal":        { "S": "ecommerce_online" },
-            "mdr_rate":     { "N": "2.90" },
-            "md_fixed_uf":  { "N": "0.03" }
-          }
-        }
-      },
-  
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "credito" },
-            "scope":        { "S": "nacional" },
-            "canal":        { "S": "presencial_smartpos" },
-            "mdr_rate":     { "N": "2.00" },
-            "md_fixed_uf":  { "N": "0.01" }
-          }
-        }
-      },
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "credito" },
-            "scope":        { "S": "nacional" },
-            "canal":        { "S": "integrado_presencial" },
-            "mdr_rate":     { "N": "2.10" },
-            "md_fixed_uf":  { "N": "0.02" }
-          }
-        }
-      },
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "credito" },
-            "scope":        { "S": "nacional" },
-            "canal":        { "S": "ecommerce_online" },
-            "mdr_rate":     { "N": "2.20" },
-            "md_fixed_uf":  { "N": "0.03" }
-          }
-        }
-      },
-  
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "credito" },
-            "scope":        { "S": "internacional" },
-            "canal":        { "S": "presencial_smartpos" },
-            "mdr_rate":     { "N": "3.10" },
-            "md_fixed_uf":  { "N": "0.01" }
-          }
-        }
-      },
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "credito" },
-            "scope":        { "S": "internacional" },
-            "canal":        { "S": "integrado_presencial" },
-            "mdr_rate":     { "N": "3.20" },
-            "md_fixed_uf":  { "N": "0.02" }
-          }
-        }
-      },
-      {
-        "PutRequest": {
-          "Item": {
-            "merchant_id":  { "S": "m-2003" },
-            "category_mcc": { "S": "5411" },
-            "card_type":    { "S": "credito" },
-            "scope":        { "S": "internacional" },
-            "canal":        { "S": "ecommerce_online" },
-            "mdr_rate":     { "N": "3.30" },
-            "md_fixed_uf":  { "N": "0.03" }
-          }
+  "mdr_visa": [
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "5411" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
         }
       }
-    ]
-  }
-  
+    },
+
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "5942" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    },
+
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "7832" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    },
+
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "7538" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "5912" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "5541" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "5812" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "5813" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "5921" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "5462" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "7299" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "mcc": { "S": "5732" },
+
+          "debito_nacional_presencial_smartpos_rate": { "N": "1.50" },
+          "debito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_nacional_integrado_presencial_rate": { "N": "1.60" },
+          "debito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_nacional_ecommerce_online_rate": { "N": "1.70" },
+          "debito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "debito_internacional_presencial_smartpos_rate": { "N": "2.80" },
+          "debito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "debito_internacional_integrado_presencial_rate": { "N": "2.90" },
+          "debito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "debito_internacional_ecommerce_online_rate": { "N": "3.00" },
+          "debito_internacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_nacional_presencial_smartpos_rate": { "N": "2.20" },
+          "credito_nacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_nacional_integrado_presencial_rate": { "N": "2.30" },
+          "credito_nacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_nacional_ecommerce_online_rate": { "N": "2.40" },
+          "credito_nacional_ecommerce_online_uf":   { "N": "0.03" },
+
+          "credito_internacional_presencial_smartpos_rate": { "N": "3.20" },
+          "credito_internacional_presencial_smartpos_uf":   { "N": "0.01" },
+          "credito_internacional_integrado_presencial_rate": { "N": "3.30" },
+          "credito_internacional_integrado_presencial_uf":   { "N": "0.02" },
+          "credito_internacional_ecommerce_online_rate": { "N": "3.40" },
+          "credito_internacional_ecommerce_online_uf":   { "N": "0.03" }
+        }
+      }
+    }
+  ]
+}

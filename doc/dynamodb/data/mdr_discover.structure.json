@@ -1,69 +1,20 @@
 {
-    "TableName": "discover_mdr",
+    "TableName": "mdr_discover",
     "KeySchema": [
-        {
-            "AttributeName": "merchant_id",
-            "KeyType": "HASH"
-        }
+      {
+        "AttributeName": "mcc",
+        "KeyType": "HASH"
+      }
     ],
     "AttributeDefinitions": [
-        {
-            "AttributeName": "merchant_id",
-            "AttributeType": "S"
-        },
-        {
-            "AttributeName": "card_type",
-            "AttributeType": "S"
-        },
-        {
-            "AttributeName": "scope",
-            "AttributeType": "S"
-        }
+      {
+        "AttributeName": "mcc",
+        "AttributeType": "S"
+      }
     ],
     "ProvisionedThroughput": {
-        "ReadCapacityUnits": 5,
-        "WriteCapacityUnits": 5
-    },
-    "GlobalSecondaryIndexes": [
-        {
-            "IndexName": "CardTypeIndex",
-            "KeySchema": [
-                {
-                    "AttributeName": "card_type",
-                    "KeyType": "HASH"
-                },
-                {
-                    "AttributeName": "merchant_id",
-                    "KeyType": "RANGE"
-                }
-            ],
-            "Projection": {
-                "ProjectionType": "ALL"
-            },
-            "ProvisionedThroughput": {
-                "ReadCapacityUnits": 5,
-                "WriteCapacityUnits": 5
-            }
-        },
-        {
-            "IndexName": "ScopeIndex",
-            "KeySchema": [
-                {
-                    "AttributeName": "scope",
-                    "KeyType": "HASH"
-                },
-                {
-                    "AttributeName": "merchant_id",
-                    "KeyType": "RANGE"
-                }
-            ],
-            "Projection": {
-                "ProjectionType": "ALL"
-            },
-            "ProvisionedThroughput": {
-                "ReadCapacityUnits": 5,
-                "WriteCapacityUnits": 5
-            }
-        }
-    ]
-}
+      "ReadCapacityUnits": 5,
+      "WriteCapacityUnits": 5
+    }
+  }
+  
