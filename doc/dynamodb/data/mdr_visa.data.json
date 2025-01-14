@@ -1,0 +1,164 @@
+{
+    "visa_mdr": [
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "debito" },
+            "scope":        { "S": "nacional" },
+            "canal":        { "S": "presencial_smartpos" },
+            "mdr_rate":     { "N": "1.60" },
+            "md_fixed_uf":  { "N": "0.01" }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "debito" },
+            "scope":        { "S": "nacional" },
+            "canal":        { "S": "integrado_presencial" },
+            "mdr_rate":     { "N": "1.70" },
+            "md_fixed_uf":  { "N": "0.02" }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "debito" },
+            "scope":        { "S": "nacional" },
+            "canal":        { "S": "ecommerce_online" },
+            "mdr_rate":     { "N": "1.80" },
+            "md_fixed_uf":  { "N": "0.03" }
+          }
+        }
+      },
+  
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "debito" },
+            "scope":        { "S": "internacional" },
+            "canal":        { "S": "presencial_smartpos" },
+            "mdr_rate":     { "N": "2.70" },
+            "md_fixed_uf":  { "N": "0.01" }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "debito" },
+            "scope":        { "S": "internacional" },
+            "canal":        { "S": "integrado_presencial" },
+            "mdr_rate":     { "N": "2.80" },
+            "md_fixed_uf":  { "N": "0.02" }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "debito" },
+            "scope":        { "S": "internacional" },
+            "canal":        { "S": "ecommerce_online" },
+            "mdr_rate":     { "N": "2.90" },
+            "md_fixed_uf":  { "N": "0.03" }
+          }
+        }
+      },
+  
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "credito" },
+            "scope":        { "S": "nacional" },
+            "canal":        { "S": "presencial_smartpos" },
+            "mdr_rate":     { "N": "2.00" },
+            "md_fixed_uf":  { "N": "0.01" }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "credito" },
+            "scope":        { "S": "nacional" },
+            "canal":        { "S": "integrado_presencial" },
+            "mdr_rate":     { "N": "2.10" },
+            "md_fixed_uf":  { "N": "0.02" }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "credito" },
+            "scope":        { "S": "nacional" },
+            "canal":        { "S": "ecommerce_online" },
+            "mdr_rate":     { "N": "2.20" },
+            "md_fixed_uf":  { "N": "0.03" }
+          }
+        }
+      },
+  
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "credito" },
+            "scope":        { "S": "internacional" },
+            "canal":        { "S": "presencial_smartpos" },
+            "mdr_rate":     { "N": "3.10" },
+            "md_fixed_uf":  { "N": "0.01" }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "credito" },
+            "scope":        { "S": "internacional" },
+            "canal":        { "S": "integrado_presencial" },
+            "mdr_rate":     { "N": "3.20" },
+            "md_fixed_uf":  { "N": "0.02" }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id":  { "S": "m-2003" },
+            "category_mcc": { "S": "5411" },
+            "card_type":    { "S": "credito" },
+            "scope":        { "S": "internacional" },
+            "canal":        { "S": "ecommerce_online" },
+            "mdr_rate":     { "N": "3.30" },
+            "md_fixed_uf":  { "N": "0.03" }
+          }
+        }
+      }
+    ]
+  }
+  

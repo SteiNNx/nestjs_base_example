@@ -1,174 +1,234 @@
 {
     "merchants": [
-        {
-            "PutRequest": {
-                "Item": {
-                    "merchant_id": {
-                        "S": "m-2003"
-                    },
-                    "name": {
-                        "S": "Supermercado La Esperanza"
-                    },
-                    "category": {
-                        "S": "Supermercado"
-                    },
-                    "location": {
-                        "M": {
-                            "address": {
-                                "S": "Av. Providencia 456"
-                            },
-                            "city": {
-                                "S": "Santiago"
-                            },
-                            "country": {
-                                "S": "Chile"
-                            },
-                            "latitude": {
-                                "N": "-33.4500"
-                            },
-                            "longitude": {
-                                "N": "-70.6667"
-                            }
-                        }
-                    }
-                }
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2003" },
+            "name":        { "S": "Supermercado La Esperanza" },
+            "category":    { "S": "Supermercado" },
+            "category_mcc": { "S": "5411" },
+            "location": {
+              "M": {
+                "address":   { "S": "Av. Providencia 456" },
+                "city":      { "S": "Santiago" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-33.4500" },
+                "longitude": { "N": "-70.6667" }
+              }
             }
-        },
-        {
-            "PutRequest": {
-                "Item": {
-                    "merchant_id": {
-                        "S": "m-2004"
-                    },
-                    "name": {
-                        "S": "Librería El Saber"
-                    },
-                    "category": {
-                        "S": "Librería"
-                    },
-                    "location": {
-                        "M": {
-                            "address": {
-                                "S": "Calle Los Leones 789"
-                            },
-                            "city": {
-                                "S": "Santiago"
-                            },
-                            "country": {
-                                "S": "Chile"
-                            },
-                            "latitude": {
-                                "N": "-33.4520"
-                            },
-                            "longitude": {
-                                "N": "-70.6640"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "PutRequest": {
-                "Item": {
-                    "merchant_id": {
-                        "S": "m-2005"
-                    },
-                    "name": {
-                        "S": "Cine Plaza"
-                    },
-                    "category": {
-                        "S": "Cine"
-                    },
-                    "location": {
-                        "M": {
-                            "address": {
-                                "S": "Av. Apoquindo 1234"
-                            },
-                            "city": {
-                                "S": "Santiago"
-                            },
-                            "country": {
-                                "S": "Chile"
-                            },
-                            "latitude": {
-                                "N": "-33.4505"
-                            },
-                            "longitude": {
-                                "N": "-70.6670"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "PutRequest": {
-                "Item": {
-                    "merchant_id": {
-                        "S": "m-2006"
-                    },
-                    "name": {
-                        "S": "Taller Mecánico Express"
-                    },
-                    "category": {
-                        "S": "Automotriz"
-                    },
-                    "location": {
-                        "M": {
-                            "address": {
-                                "S": "Ruta 5 Sur Km 45"
-                            },
-                            "city": {
-                                "S": "Valparaíso"
-                            },
-                            "country": {
-                                "S": "Chile"
-                            },
-                            "latitude": {
-                                "N": "-33.0472"
-                            },
-                            "longitude": {
-                                "N": "-71.6127"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        {
-            "PutRequest": {
-                "Item": {
-                    "merchant_id": {
-                        "S": "m-2007"
-                    },
-                    "name": {
-                        "S": "Farmacia Salud"
-                    },
-                    "category": {
-                        "S": "Farmacia"
-                    },
-                    "location": {
-                        "M": {
-                            "address": {
-                                "S": "Calle San Martín 321"
-                            },
-                            "city": {
-                                "S": "Concepción"
-                            },
-                            "country": {
-                                "S": "Chile"
-                            },
-                            "latitude": {
-                                "N": "-36.8201"
-                            },
-                            "longitude": {
-                                "N": "-73.0444"
-                            }
-                        }
-                    }
-                }
-            }
+          }
         }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2004" },
+            "name":        { "S": "Librería El Saber" },
+            "category":    { "S": "Librería" },
+            "category_mcc": { "S": "5942" },
+            "location": {
+              "M": {
+                "address":   { "S": "Calle Los Leones 789" },
+                "city":      { "S": "Santiago" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-33.4520" },
+                "longitude": { "N": "-70.6640" }
+              }
+            }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2005" },
+            "name":        { "S": "Cine Plaza" },
+            "category":    { "S": "Cine" },
+            "category_mcc": { "S": "7832" },
+            "location": {
+              "M": {
+                "address":   { "S": "Av. Apoquindo 1234" },
+                "city":      { "S": "Santiago" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-33.4505" },
+                "longitude": { "N": "-70.6670" }
+              }
+            }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2006" },
+            "name":        { "S": "Taller Mecánico Express" },
+            "category":    { "S": "Automotriz" },
+            "category_mcc": { "S": "7538" },
+            "location": {
+              "M": {
+                "address":   { "S": "Ruta 5 Sur Km 45" },
+                "city":      { "S": "Valparaíso" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-33.0472" },
+                "longitude": { "N": "-71.6127" }
+              }
+            }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2007" },
+            "name":        { "S": "Farmacia Salud" },
+            "category":    { "S": "Farmacia" },
+            "category_mcc": { "S": "5912" },
+            "location": {
+              "M": {
+                "address":   { "S": "Calle San Martín 321" },
+                "city":      { "S": "Concepción" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-36.8201" },
+                "longitude": { "N": "-73.0444" }
+              }
+            }
+          }
+        }
+      },
+  
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2008" },
+            "name":        { "S": "Gasolinera Alto Octanaje" },
+            "category":    { "S": "Gasolinera" },
+            "category_mcc": { "S": "5541" },
+            "location": {
+              "M": {
+                "address":   { "S": "Av. Principal 1001" },
+                "city":      { "S": "Santiago" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-33.4489" },
+                "longitude": { "N": "-70.6693" }
+              }
+            }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2009" },
+            "name":        { "S": "Restaurant Buen Sabor" },
+            "category":    { "S": "Restaurante" },
+            "category_mcc": { "S": "5812" },
+            "location": {
+              "M": {
+                "address":   { "S": "Av. Italia 555" },
+                "city":      { "S": "Santiago" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-33.4555" },
+                "longitude": { "N": "-70.6600" }
+              }
+            }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2010" },
+            "name":        { "S": "Bar La Noche" },
+            "category":    { "S": "Bar" },
+            "category_mcc": { "S": "5813" },
+            "location": {
+              "M": {
+                "address":   { "S": "Calle Bellavista 123" },
+                "city":      { "S": "Valparaíso" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-33.0393" },
+                "longitude": { "N": "-71.6130" }
+              }
+            }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2011" },
+            "name":        { "S": "Licores Don Pedro" },
+            "category":    { "S": "Licorería" },
+            "category_mcc": { "S": "5921" },
+            "location": {
+              "M": {
+                "address":   { "S": "Av. Vicuña Mackenna 999" },
+                "city":      { "S": "Santiago" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-33.4567" },
+                "longitude": { "N": "-70.6489" }
+              }
+            }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2012" },
+            "name":        { "S": "Pastelería Dulce Arte" },
+            "category":    { "S": "Pastelería" },
+            "category_mcc": { "S": "5462" },
+            "location": {
+              "M": {
+                "address":   { "S": "Av. O'Higgins 400" },
+                "city":      { "S": "Concepción" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-36.8282" },
+                "longitude": { "N": "-73.0500" }
+              }
+            }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2013" },
+            "name":        { "S": "Salón de Belleza Estilo" },
+            "category":    { "S": "Belleza" },
+            "category_mcc": { "S": "7299" },
+            "location": {
+              "M": {
+                "address":   { "S": "Calle Providencia 300" },
+                "city":      { "S": "Santiago" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-33.4450" },
+                "longitude": { "N": "-70.6610" }
+              }
+            }
+          }
+        }
+      },
+      {
+        "PutRequest": {
+          "Item": {
+            "merchant_id": { "S": "m-2014" },
+            "name":        { "S": "Electrónicos TechNow" },
+            "category":    { "S": "Electrónica" },
+            "category_mcc": { "S": "5732" },
+            "location": {
+              "M": {
+                "address":   { "S": "Av. Colón 200" },
+                "city":      { "S": "Valparaíso" },
+                "country":   { "S": "Chile" },
+                "latitude":  { "N": "-33.0465" },
+                "longitude": { "N": "-71.6167" }
+              }
+            }
+          }
+        }
+      }
     ]
-}
+  }
+  

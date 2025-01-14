@@ -1,5 +1,5 @@
 {
-  "TableName": "merchants",
+  "TableName": "mastercard_mdr",
   "KeySchema": [
     {
       "AttributeName": "merchant_id",
@@ -12,28 +12,24 @@
       "AttributeType": "S"
     },
     {
-      "AttributeName": "name",
+      "AttributeName": "card_type",
       "AttributeType": "S"
     },
     {
-      "AttributeName": "category",
-      "AttributeType": "S"
-    },
-    {
-      "AttributeName": "city",
+      "AttributeName": "scope",
       "AttributeType": "S"
     }
   ],
   "ProvisionedThroughput": {
-    "ReadCapacityUnits": 10,
-    "WriteCapacityUnits": 10
+    "ReadCapacityUnits": 5,
+    "WriteCapacityUnits": 5
   },
   "GlobalSecondaryIndexes": [
     {
-      "IndexName": "MerchantNameIndex",
+      "IndexName": "CardTypeIndex",
       "KeySchema": [
         {
-          "AttributeName": "name",
+          "AttributeName": "card_type",
           "KeyType": "HASH"
         },
         {
@@ -50,30 +46,10 @@
       }
     },
     {
-      "IndexName": "MerchantCategoryIndex",
+      "IndexName": "ScopeIndex",
       "KeySchema": [
         {
-          "AttributeName": "category",
-          "KeyType": "HASH"
-        },
-        {
-          "AttributeName": "merchant_id",
-          "KeyType": "RANGE"
-        }
-      ],
-      "Projection": {
-        "ProjectionType": "ALL"
-      },
-      "ProvisionedThroughput": {
-        "ReadCapacityUnits": 5,
-        "WriteCapacityUnits": 5
-      }
-    },
-    {
-      "IndexName": "MerchantCityIndex",
-      "KeySchema": [
-        {
-          "AttributeName": "city",
+          "AttributeName": "scope",
           "KeyType": "HASH"
         },
         {
