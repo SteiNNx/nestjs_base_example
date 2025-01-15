@@ -29,6 +29,9 @@
                             "category": {
                                 "S": "Supermercado"
                             },
+                            "mcc": {
+                                "S": "5411"
+                            },
                             "location": {
                                 "M": {
                                     "address": {
@@ -141,6 +144,9 @@
                             },
                             "category": {
                                 "S": "Librería"
+                            },
+                            "mcc": {
+                                "S": "5942"
                             },
                             "location": {
                                 "M": {
@@ -255,6 +261,9 @@
                             "category": {
                                 "S": "Cine"
                             },
+                            "mcc": {
+                                "S": "7832"
+                            },
                             "location": {
                                 "M": {
                                     "address": {
@@ -368,6 +377,9 @@
                             "category": {
                                 "S": "Automotriz"
                             },
+                            "mcc": {
+                                "S": "7538"
+                            },
                             "location": {
                                 "M": {
                                     "address": {
@@ -480,6 +492,9 @@
                             },
                             "category": {
                                 "S": "Farmacia"
+                            },
+                            "mcc": {
+                                "S": "5912"
                             },
                             "location": {
                                 "M": {

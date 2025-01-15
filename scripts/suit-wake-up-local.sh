@@ -39,7 +39,7 @@ init_dynamodb_suite_containers() {
 # Se asume que tienes archivos .structure.json
 ######################################
 create_dynamodb_tables() {
-    declare -a tables=("payments" "users" "merchants" "mdr_amex" "mdr_discover" "mdr_mastercard" "mdr_visa")
+    declare -a tables=("payments" "users" "merchants" "mdr_amex" "mdr_discover" "mdr_mastercard" "mdr_visa" "mdr_payments_mdr_applied")
 
     for table in "${tables[@]}"; do
         local structure_file="doc/dynamodb/data/${table}.structure.json"
@@ -64,7 +64,7 @@ create_dynamodb_tables() {
 # Se asume que tienes archivos .data.json
 ######################################
 seed_dynamodb_datas() {
-    declare -a tables=("payments" "users" "merchants" "mdr_amex" "mdr_discover" "mdr_mastercard" "mdr_visa")
+    declare -a tables=("payments" "users" "merchants" "mdr_amex" "mdr_discover" "mdr_mastercard" "mdr_visa" "mdr_payments_mdr_applied")
 
     for table in "${tables[@]}"; do
         local data_file="doc/dynamodb/data/${table}.data.json"

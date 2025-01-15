@@ -1,0 +1,104 @@
+{
+  "mdr_payments_mdr_applied": [
+    {
+      "PutRequest": {
+        "Item": {
+          "transaction_id":       { "S": "txn-1003-abcdef123458" },
+          "card_number":          { "S": "411111******2222" },
+          "amount":               { "N": "200.50" },
+          "currency":             { "S": "CLP" },
+          "timestamp":            { "S": "2024-05-10T10:15:00Z" },
+          "merchant_id":          { "S": "m-2003" },
+          "merchant_name":        { "S": "Supermercado La Esperanza" },
+          "merchant_mcc":         { "S": "5411" },
+          "transaction_type":     { "S": "Pago" },
+          "response_code":        { "S": "00" },
+          "issuer_bank_id":       { "S": "bank-4003" },
+          "mdr_rate":             { "N": "1.50" },
+          "mdr_amount":           { "N": "3.01" },
+          "payment_net_amount":   { "N": "197.49" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "transaction_id":       { "S": "txn-1004-abcdef123459" },
+          "card_number":          { "S": "550000******3333" },
+          "amount":               { "N": "350.00" },
+          "currency":             { "S": "CLP" },
+          "timestamp":            { "S": "2024-05-11T12:30:00Z" },
+          "merchant_id":          { "S": "m-2004" },
+          "merchant_name":        { "S": "Librería El Saber" },
+          "merchant_mcc":         { "S": "5942" },
+          "transaction_type":     { "S": "Pago" },
+          "response_code":        { "S": "00" },
+          "issuer_bank_id":       { "S": "bank-4004" },
+          "mdr_rate":             { "N": "1.60" },
+          "mdr_amount":           { "N": "5.60" },
+          "payment_net_amount":   { "N": "344.40" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "transaction_id":       { "S": "txn-1005-abcdef123450" },
+          "card_number":          { "S": "411111******4444" },
+          "amount":               { "N": "500.00" },
+          "currency":             { "S": "CLP" },
+          "timestamp":            { "S": "2024-05-12T09:45:00Z" },
+          "merchant_id":          { "S": "m-2005" },
+          "merchant_name":        { "S": "Cine Plaza" },
+          "merchant_mcc":         { "S": "7832" },
+          "transaction_type":     { "S": "Anulado" },
+          "response_code":        { "S": "01" },
+          "issuer_bank_id":       { "S": "bank-4005" },
+          "mdr_rate":             { "N": "1.70" },
+          "mdr_amount":           { "N": "8.50" },
+          "payment_net_amount":   { "N": "491.50" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "transaction_id":       { "S": "txn-1006-abcdef123451" },
+          "card_number":          { "S": "550000******5555" },
+          "amount":               { "N": "750.00" },
+          "currency":             { "S": "CLP" },
+          "timestamp":            { "S": "2024-05-13T14:20:00Z" },
+          "merchant_id":          { "S": "m-2006" },
+          "merchant_name":        { "S": "Taller Mecánico Express" },
+          "merchant_mcc":         { "S": "7538" },
+          "transaction_type":     { "S": "Reversado" },
+          "response_code":        { "S": "00" },
+          "issuer_bank_id":       { "S": "bank-4006" },
+          "mdr_rate":             { "N": "2.00" },
+          "mdr_amount":           { "N": "15.00" },
+          "payment_net_amount":   { "N": "735.00" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "transaction_id":       { "S": "txn-1007-abcdef123452" },
+          "card_number":          { "S": "411111******6666" },
+          "amount":               { "N": "1200.00" },
+          "currency":             { "S": "CLP" },
+          "timestamp":            { "S": "2024-05-14T18:55:00Z" },
+          "merchant_id":          { "S": "m-2007" },
+          "merchant_name":        { "S": "Farmacia Salud" },
+          "merchant_mcc":         { "S": "5912" },
+          "transaction_type":     { "S": "Anulado_Reversa" },
+          "response_code":        { "S": "00" },
+          "issuer_bank_id":       { "S": "bank-4007" },
+          "mdr_rate":             { "N": "2.20" },
+          "mdr_amount":           { "N": "26.40" },
+          "payment_net_amount":   { "N": "1173.60" }
+        }
+      }
+    }
+  ]
+}
