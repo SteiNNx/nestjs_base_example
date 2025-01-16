@@ -1,3 +1,5 @@
+// src/helpers/mapping-attributes.helper.js
+
 /**
  * Mapeo de las claves abreviadas a los atributos completos de DynamoDB
  * y sus tipos.
