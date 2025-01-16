@@ -1,3 +1,5 @@
+// src/db/repositories/mdr_amex.repository.js
+
 /**
  * @file mdr_amex.repository.js
  * Repositorio para interactuar con la tabla 'mdr_amex' en DynamoDB.
