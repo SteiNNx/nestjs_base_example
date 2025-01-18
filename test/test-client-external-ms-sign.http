@@ -1,5 +1,5 @@
 ### Healthcheck: Verificar el estado del servidor (GET)
-GET http://localhost:3002/ms/v1/healthcheck
+GET http://localhost:3002/ms/sign/v1/healthcheck
 X-Security-Header-Key: 9df26cd8ed7a5265fb3b321f453b17d1
 X-Security-Signature: signature_TYPE=SHARSA;PAYLOADSIGNED=HASHEDPAYLOADBYPEMANDTYPE
 Accept: application/json
@@ -7,7 +7,7 @@ Accept: application/json
 
 ### Auth: Autenticación (Login) usando credenciales (POST)
 # Se envían las credenciales para obtener un token JWT.
-POST http://localhost:3002/ms/v1/auth/login
+POST http://localhost:3002/ms/sign/v1/auth/login
 Content-Type: application/json; charset=utf-8
 X-Security-Header-Key: 9df26cd8ed7a5265fb3b321f453b17d1
 
@@ -19,7 +19,7 @@ X-Security-Header-Key: 9df26cd8ed7a5265fb3b321f453b17d1
 
 ### Auth: Validación de Token (POST)
 # Se envía el token para validar su autenticidad.
-POST http://localhost:3002/ms/v1/auth/validate
+POST http://localhost:3002/ms/sign/v1/auth/validate
 Content-Type: application/json; charset=utf-8
 X-Security-Header-Key: 9df26cd8ed7a5265fb3b321f453b17d1
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNjcyOTIwM30.iHCpJ5qRDr3__DvijoXqrmRs9hURGmK0-tY2JFYfg_CnNHMvDkjXaiz949wR3IhHfevwUShpM6esyCGwGlZt2ljxc8IVwFg9qGg1rPyqwYD-0PfYLIUd1g2a8M1mGJmzXaG3dtRhnm7T48pKc2nDiOso8pK4qMesEgsCXizrEur4fzVL8ENzGfUAIReZaqKyrlmozsVu_pTfrth3_ORwgIqn6wc5-lTx6LTse2efYZFerALyeTNwlxK1FmspPgu6i0dLg0iulOxOeLbWR6d9Jr2dmAkOcpRA3CsM7DnryOT3rymLk0GE14nPknCaFipyEzjiEkGj_ZPwS2rtpPBXdQ
@@ -31,7 +31,7 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
 
 ### Sign: Firmar Datos de Pago (POST)
 # Se envía un objeto JSON con los datos de pago para ser firmado.
-POST http://localhost:3002/ms/v1/sign_xml
+POST http://localhost:3002/ms/sign/v1/sign_xml
 Content-Type: application/json; charset=utf-8
 X-Security-Header-Key: 9df26cd8ed7a5265fb3b321f453b17d1
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNjcyOTIwM30.iHCpJ5qRDr3__DvijoXqrmRs9hURGmK0-tY2JFYfg_CnNHMvDkjXaiz949wR3IhHfevwUShpM6esyCGwGlZt2ljxc8IVwFg9qGg1rPyqwYD-0PfYLIUd1g2a8M1mGJmzXaG3dtRhnm7T48pKc2nDiOso8pK4qMesEgsCXizrEur4fzVL8ENzGfUAIReZaqKyrlmozsVu_pTfrth3_ORwgIqn6wc5-lTx6LTse2efYZFerALyeTNwlxK1FmspPgu6i0dLg0iulOxOeLbWR6d9Jr2dmAkOcpRA3CsM7DnryOT3rymLk0GE14nPknCaFipyEzjiEkGj_ZPwS2rtpPBXdQ
@@ -81,7 +81,7 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
 
 ### ValidateSignXML: Validar la firma del XML (POST)
 # Se envía un XML en crudo para validar su firma.
-POST http://localhost:3002/ms/v1/validate_sign_xml
+POST http://localhost:3002/ms/sign/v1/validate_sign_xml
 Accept: application/xml
 Content-Type: application/xml; charset=utf-8
 X-Security-Header-Key: 9df26cd8ed7a5265fb3b321f453b17d1

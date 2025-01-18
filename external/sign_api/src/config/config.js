@@ -16,10 +16,10 @@ module.exports = {
     port: process.env.EXTERNAL_API_SIGN_PORT || 3002,
 
     auth: {
-      privateKeyPath: path.resolve(process.env.EXTERNAL_API_AUTH_PRIVATE_KEY_PATH),
-      publicKeyPath: path.resolve(process.env.EXTERNAL_API_AUTH_PUBLIC_KEY_PATH),
+      privateKeyPath: path.resolve(process.env.EXTERNAL_API_SIGN_AUTH_PRIVATE_KEY_PATH),
+      publicKeyPath: path.resolve(process.env.EXTERNAL_API_SIGN_AUTH_PUBLIC_KEY_PATH),
 
-      headerSecurityKey: process.env.EXTERNAL_API_HEADER_SECURITY_KEY,
+      headerSecurityKey: process.env.EXTERNAL_API_SIGN_HEADER_SECURITY_KEY,
 
       tokenExpiresIn: process.env.EXTERNAL_API_AUTH_TOKEN_EXPIRES_IN || '1h',
       jwtAlgorithm: process.env.EXTERNAL_API_AUTH_JWT_ALGORITHM || 'RS256',
