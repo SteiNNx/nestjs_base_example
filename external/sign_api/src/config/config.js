@@ -12,7 +12,7 @@ const path = require('path');
 module.exports = {
   config: {
     acronimoPieza: 'SIGN',
-    prefixApi: process.env.EXTERNAL_API_SIGN_PREFIX_ENDPOINTS || 'ms/v1/sign',
+    prefixApi: process.env.EXTERNAL_API_SIGN_PREFIX_ENDPOINTS || 'ms/sign/v1',
     port: process.env.EXTERNAL_API_SIGN_PORT || 3002,
 
     auth: {
