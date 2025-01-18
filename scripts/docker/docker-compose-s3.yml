@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  localstack:
+    # Opción A) Usar el Dockerfile que creaste
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # Opción B) Usar directamente la imagen sin Dockerfile
+    # image: localstack/localstack:latest
+
+    container_name: localstack_s3
+    ports:
+      - "4566:4566" # Puerto principal para interactuar con S3 y otros servicios
+    environment:
+      - SERVICES=s3  # Levantamos solo S3 (puedes agregar más: 's3,dynamodb,lambda,apigateway,...')
+      - DEBUG=1      # Modo debug
+      # Si tienes la versión PRO de LocalStack, colocarías tu clave:
+      # - LOCALSTACK_API_KEY=xxxxxx
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      # Volumen para persistir datos en la carpeta localstack-data
+      - "./localstack-data:/tmp/localstack"
+    # (Opcional) Si tu .env define variables, docker-compose las usará
+    # env_file:
+    #   - .env
