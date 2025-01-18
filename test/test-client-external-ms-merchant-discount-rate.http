@@ -1,15 +1,15 @@
 ### Healthcheck: Verificar el estado del servidor (GET)
-GET http://localhost:3003/ms/v1/healthcheck
-X-Security-Header-Key: 9df26cd8ed7a5265fb3b321f453b17d1
+GET http://localhost:3003/ms/mdr/v1/healthcheck
+X-Security-Header-Key: 7374b7ba0d5a8fa0c866097d401a96c5
 X-Security-Signature: signature_TYPE=SHARSA;PAYLOADSIGNED=HASHEDPAYLOADBYPEMANDTYPE
 Accept: application/json
 
 
 ### Auth: Autenticación (Login) usando credenciales (POST)
 # Se envían las credenciales para obtener un token JWT.
-POST http://localhost:3003/ms/v1/auth/login
+POST http://localhost:3003/ms/mdr/v1/auth/login
 Content-Type: application/json; charset=utf-8
-X-Security-Header-Key: 9df26cd8ed7a5265fb3b321f453b17d1
+X-Security-Header-Key: 7374b7ba0d5a8fa0c866097d401a96c5
 
 {
   "username": "test",
@@ -19,11 +19,11 @@ X-Security-Header-Key: 9df26cd8ed7a5265fb3b321f453b17d1
 
 ### Auth: Validación de Token (POST)
 # Se envía el token para validar su autenticidad.
-POST http://localhost:3003/ms/v1/auth/validate
+POST http://localhost:3003/ms/mdr/v1/auth/validate
 Content-Type: application/json; charset=utf-8
-X-Security-Header-Key: 9df26cd8ed7a5265fb3b321f453b17d1
-Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNjcyOTIwM30.iHCpJ5qRDr3__DvijoXqrmRs9hURGmK0-tY2JFYfg_CnNHMvDkjXaiz949wR3IhHfevwUShpM6esyCGwGlZt2ljxc8IVwFg9qGg1rPyqwYD-0PfYLIUd1g2a8M1mGJmzXaG3dtRhnm7T48pKc2nDiOso8pK4qMesEgsCXizrEur4fzVL8ENzGfUAIReZaqKyrlmozsVu_pTfrth3_ORwgIqn6wc5-lTx6LTse2efYZFerALyeTNwlxK1FmspPgu6i0dLg0iulOxOeLbWR6d9Jr2dmAkOcpRA3CsM7DnryOT3rymLk0GE14nPknCaFipyEzjiEkGj_ZPwS2rtpPBXdQ
+X-Security-Header-Key: 7374b7ba0d5a8fa0c866097d401a96c5
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNzI0MDk5OH0.cWqy-gkXo-vu1PNJXGkx9F9S18sj3QhllSrnaYYXfNsj5WoOaccDU5OuPKYZlfsQSpVWV1CxEfKzv0mELNf5KFvi0x4Eevf077mMXYyOpamNoCX4xUeehum-WqcDY6jHKJXGvn1K16A0bQ9wJH1WLhpq4D4lG-ord0AMZeDLAf3P_FqFzekYEshXx6bmQAQfRMvSR9lLfwXQ3FKDnUFJncZN3fA9eIbiLcM7eCytZfCKMe6SxST7q1dOFkWAsxpp1QPKxK-YYUz2M9Sk7U8yurLkPTz81rtpFZMOt-rSKYGEdk9nmM_sDIuA0tGgahN3ixAuDYjSmNYNKCLh7sxZZw
 
 {
-  "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNjcyOTIwM30.iHCpJ5qRDr3__DvijoXqrmRs9hURGmK0-tY2JFYfg_CnNHMvDkjXaiz949wR3IhHfevwUShpM6esyCGwGlZt2ljxc8IVwFg9qGg1rPyqwYD-0PfYLIUd1g2a8M1mGJmzXaG3dtRhnm7T48pKc2nDiOso8pK4qMesEgsCXizrEur4fzVL8ENzGfUAIReZaqKyrlmozsVu_pTfrth3_ORwgIqn6wc5-lTx6LTse2efYZFerALyeTNwlxK1FmspPgu6i0dLg0iulOxOeLbWR6d9Jr2dmAkOcpRA3CsM7DnryOT3rymLk0GE14nPknCaFipyEzjiEkGj_ZPwS2rtpPBXdQ"
+  "token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoidXNlciIsImlhdCI6MTczNzI0MDk5OH0.cWqy-gkXo-vu1PNJXGkx9F9S18sj3QhllSrnaYYXfNsj5WoOaccDU5OuPKYZlfsQSpVWV1CxEfKzv0mELNf5KFvi0x4Eevf077mMXYyOpamNoCX4xUeehum-WqcDY6jHKJXGvn1K16A0bQ9wJH1WLhpq4D4lG-ord0AMZeDLAf3P_FqFzekYEshXx6bmQAQfRMvSR9lLfwXQ3FKDnUFJncZN3fA9eIbiLcM7eCytZfCKMe6SxST7q1dOFkWAsxpp1QPKxK-YYUz2M9Sk7U8yurLkPTz81rtpFZMOt-rSKYGEdk9nmM_sDIuA0tGgahN3ixAuDYjSmNYNKCLh7sxZZw"
 }
