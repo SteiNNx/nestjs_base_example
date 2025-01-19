@@ -2,7 +2,7 @@
 
 /**
  * Módulo que orquesta la obtención de tasas de descuento para comerciantes (MDR).
- * Conecta el controlador con el servicio correspondiente.
+ * Conecta el controlador con el módulo correspondiente.
  *
  * @module cardBrandMdrController
  */
@@ -16,7 +16,7 @@ const logger = new LoggerHelper('card_brand_mdr.controller.js');
 /**
  * Controlador que orquesta la obtención de todas las tasas de descuento para comerciantes.
  *
- * Se encarga de invocar el servicio que realiza la lógica de negocio para la obtención
+ * Se encarga de invocar el módulo que realiza la lógica de negocio para la obtención
  * de los datos MDR y gestionar los posibles errores durante el proceso.
  *
  * @async
@@ -25,20 +25,17 @@ const logger = new LoggerHelper('card_brand_mdr.controller.js');
  * @param {import('express').Response} res - Objeto de respuesta HTTP de Express.
  * @param {import('express').NextFunction} next - Función para pasar el control al siguiente middleware.
  * @returns {Promise<Object>} Objeto que contiene la información resultante del proceso.
- * @throws {Error} Lanza un error para que sea manejado por el middleware de errores.
+ * @throws {Error} Lanza el error para que sea manejado por el middleware de errores.
  */
 const getAllMerchantsDiscountRateController = async (req, res, next) => {
   logger.info('Inicio del controlador getAllMerchantsDiscountRateController');
 
   try {
-    // Invoca el servicio que procesa la obtención de las tasas de descuento para comerciantes
     const result = await getAllMerchantsDiscountRateModule(req);
-
     logger.info('Finalización exitosa del controlador getAllMerchantsDiscountRateController');
     return result;
   } catch (error) {
     logger.error(`Error en getAllMerchantsDiscountRateController: ${error.message}`, error);
-    // Propaga el error usando el helper de manejo de errores con un código y mensaje descriptivo
     return handleNextError(
       error,
       next,
