@@ -10,86 +10,6 @@ const LoggerHelper = require('../helpers/logger.helper.js');
 const logger = new LoggerHelper('credentials.provider');
 
 /**
- * Carga las credenciales (privateKey, certificate) desde los paths definidos en la configuración.
- *
- * @function loadCredentials
- * @returns {Object} Un objeto con las propiedades:
- *  - privateKey {String}: Clave privada.
- *  - certificate {String}: Certificado.
- * @throws {AdapterError} Si ocurre un error al leer los archivos.
- * @throws {TechnicalError} Si la llave privada está vacía o ilegible.
- */
-const loadCredentials = () => {
-    const { privateKeyPath, certificatePath } = config.sign;
-    let privateKey = null;
-    let certificate = null;
-    try {
-        privateKey = fs.readFileSync(privateKeyPath, 'utf-8');
-        certificate = fs.readFileSync(certificatePath, 'utf-8');
-    } catch (error) {
-        logger.error('[loadCredentials] Error al leer llaves/certificados: ' + error.message);
-        throw new AdapterError(
-            'CREDENTIALS.KEY_PEM_FILE_READ_ERROR',
-            'Error al leer las llaves privadas o certificados.',
-            502,
-            error
-        );
-    }
-
-    if (!privateKey || !privateKey.trim()) {
-        logger.error('[loadCredentials] La llave privada está vacía o ilegible.');
-        throw new TechnicalError(
-            'CREDENTIALS.INVALID_PRIVATE_KEY_PEM_FILE',
-            'La llave privada está vacía o no se pudo leer correctamente.',
-            500
-        );
-    }
-    return { privateKey, certificate };
-};
-
-/**
- * Retorna la configuración de firma a partir de los valores definidos en la configuración.
- *
- * @function getSignConfig
- * @returns {Object} Un objeto con la configuración de firma:
- *  - canonicalizationAlgorithm {String}: Algoritmo de canonicalización.
- *  - signatureAlgorithm {String}: Algoritmo de firma.
- *  - referenceTransformsFirst {String}: Primer transform a aplicar en la referencia.
- *  - referenceDigestAlgorithm {String}: Algoritmo de digest.
- * @throws {TechnicalError} Cuando alguno de los valores de configuración falta o es inválido.
- */
-const getSignConfig = () => {
-    const {
-        canonicalizationAlgorithm,
-        signatureAlgorithm,
-        referenceTransformsFirst,
-        referenceDigestAlgorithm
-    } = config.sign;
-
-    // Validamos que todos los parámetros de configuración estén presentes
-    if (
-        !canonicalizationAlgorithm ||
-        !signatureAlgorithm ||
-        !referenceTransformsFirst ||
-        !referenceDigestAlgorithm
-    ) {
-        logger.error('[getSignConfig] Configuración de firma incompleta.');
-        throw new TechnicalError(
-            'SIGN.CONFIG_INCOMPLETE',
-            'La configuración de firma está incompleta o contiene valores inválidos.',
-            500
-        );
-    }
-
-    return {
-        canonicalizationAlgorithm,
-        signatureAlgorithm,
-        referenceTransformsFirst,
-        referenceDigestAlgorithm
-    };
-};
-
-/**
  * Carga las credenciales de autenticación (privateKey y publicKey) y la configuración asociada.
  *
  * @function getAuthConfig
@@ -159,9 +79,89 @@ const getSecurityKey = () => {
     return securityKey;
 };
 
+/**
+ * Carga y valida la configuración de DynamoDB desde la sección 'dynamoDb' de la configuración.
+ *
+ * @function getDynamoDbConfig
+ * @returns {Object} Un objeto con las siguientes propiedades:
+ *  - awsAccessKeyId {String}: Clave de acceso AWS.
+ *  - awsSecretAccessKey {String}: Clave secreta de AWS.
+ *  - awsRegion {String}: Región de AWS.
+ *  - dynamoDbEndpoint {String}: Endpoint de DynamoDB.
+ *  - dynamoDbPort {String}: Puerto utilizado para conectarse a DynamoDB.
+ * @throws {TechnicalError} Si alguna de las variables requeridas está vacía o no definida.
+ */
+const getDynamoDbConfig = () => {
+    const {
+        awsAccessKeyId,
+        awsSecretAccessKey,
+        awsRegion,
+        dynamoDbEndpoint,
+        dynamoDbPort,
+        dynamoDbMaxAttempts,
+    } = config.dynamoDb;
+
+    if (!awsAccessKeyId || !awsAccessKeyId.trim()) {
+        logger.error('[getDynamoDbConfig] awsAccessKeyId está vacía o no definida.');
+        throw new TechnicalError(
+            'DYNAMODB.INVALID_AWS_ACCESS_KEY_ID',
+            'awsAccessKeyId está vacía o no definida.',
+            500
+        );
+    }
+    if (!awsSecretAccessKey || !awsSecretAccessKey.trim()) {
+        logger.error('[getDynamoDbConfig] awsSecretAccessKey está vacía o no definida.');
+        throw new TechnicalError(
+            'DYNAMODB.INVALID_AWS_SECRET_ACCESS_KEY',
+            'awsSecretAccessKey está vacía o no definida.',
+            500
+        );
+    }
+    if (!awsRegion || !awsRegion.trim()) {
+        logger.error('[getDynamoDbConfig] awsRegion está vacía o no definida.');
+        throw new TechnicalError(
+            'DYNAMODB.INVALID_AWS_REGION',
+            'awsRegion está vacía o no definida.',
+            500
+        );
+    }
+    if (!dynamoDbEndpoint || !dynamoDbEndpoint.trim()) {
+        logger.error('[getDynamoDbConfig] dynamoDbEndpoint está vacía o no definida.');
+        throw new TechnicalError(
+            'DYNAMODB.INVALID_ENDPOINT',
+            'dynamoDbEndpoint está vacía o no definida.',
+            500
+        );
+    }
+    if (!dynamoDbPort || !dynamoDbPort.trim()) {
+        logger.error('[getDynamoDbConfig] dynamoDbPort está vacía o no definida.');
+        throw new TechnicalError(
+            'DYNAMODB.INVALID_PORT',
+            'dynamoDbPort está vacía o no definida.',
+            500
+        );
+    }
+    if (!dynamoDbMaxAttempts || !dynamoDbMaxAttempts.trim()) {
+        logger.error('[getDynamoDbConfig] dynamoDbMaxAttempts está vacía o no definida.');
+        throw new TechnicalError(
+            'DYNAMODB.INVALID_MAX_ATTEMPTS',
+            'dynamoDbMaxAttempts está vacía o no definida.',
+            500
+        );
+    }
+
+    return {
+        awsAccessKeyId,
+        awsSecretAccessKey,
+        awsRegion,
+        dynamoDbEndpoint,
+        dynamoDbPort,
+        dynamoDbMaxAttempts,
+    };
+};
+
 module.exports = {
-    loadCredentials,
-    getSignConfig,
     getAuthConfig,
-    getSecurityKey
+    getSecurityKey,
+    getDynamoDbConfig
 };

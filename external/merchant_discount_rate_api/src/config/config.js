@@ -24,5 +24,22 @@ module.exports = {
       tokenExpiresIn: process.env.EXTERNAL_API_MDR_AUTH_TOKEN_EXPIRES_IN || '1h',
       jwtAlgorithm: process.env.EXTERNAL_API_MDR_AUTH_JWT_ALGORITHM || 'RS256',
     },
+
+    dynamoDb: {
+      awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+      awsRegion: process.env.AWS_REGION,
+
+      dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT,
+      dynamoDbPort: process.env.DYNAMODB_PORT,
+      dynamoDbMaxAttempts: process.env.DYNAMODB_RETRY,
+
+      tableNameUsers: process.env.DYNAMODB_TABLE_NAME_USERS || 'users',
+
+      tableNameMdrAmex: process.env.DYNAMODB_TABLE_NAME_MDR_AMEX || 'mdr_amex',
+      tableNameMdrDiscover: process.env.DYNAMODB_TABLE_NAME_MDR_DISCOVER || 'mdr_discover',
+      tableNameMdrMastercard: process.env.DYNAMODB_TABLE_NAME_MDR_MASTERCARD || 'mdr_mastercard',
+      tableNameMdrVisa: process.env.DYNAMODB_TABLE_NAME_MDR_VISA || 'mdr_visa',
+    }
   },
 };
