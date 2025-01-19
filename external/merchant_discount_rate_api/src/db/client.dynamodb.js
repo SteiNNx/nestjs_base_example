@@ -37,6 +37,12 @@ class ClientDynamoDb {
       dynamoDbMaxAttempts,
     } = getDynamoDbConfig();
 
+    logger.info(`awsAccessKeyId:`, { awsAccessKeyId });
+    logger.info(`awsSecretAccessKey:`, { awsSecretAccessKey });
+    logger.info(`awsRegion:`, { awsRegion });
+    logger.info(`dynamoDbEndpoint:`, { dynamoDbEndpoint });
+    logger.info(`dynamoDbMaxAttempts:`, { dynamoDbMaxAttempts });
+
     this.dynamoDBClient = new DynamoDBClient({
       region: awsRegion,
       endpoint: dynamoDbEndpoint,

@@ -1,6 +1,18 @@
 #!/bin/bash
 # suit-wake-up-local.sh
 # Autor: Jorge Reyes
+#
+# Descripción:
+# Este script valida el entorno de Docker/Docker Compose, permite limpiar
+# contenedores (y volúmenes), inicializarlos y, de forma opcional, mostrar
+# su estado (aunque, de momento, la función de estado no realiza ninguna
+# operación). Se asume la existencia de ficheros con definiciones de tablas
+# y datos de semilla para DynamoDB.
+#
+# Dependencias:
+# - Docker instalado y en ejecución.
+# - Docker Compose instalado.
+# - El archivo .env en la raíz del proyecto.
 
 set -e  # Salir inmediatamente si un comando falla
 
@@ -93,11 +105,30 @@ init_seed_dynamodb_suite_containers() {
 }
 
 ######################################
+# Función para estado de contenedores
+# Invoca el método status_docker_containers
+######################################
+status_dynamodb_suite_containers() {
+    # Llama al método status_docker_containers que se encarga
+    # de mostrar el estado detallado de los contenedores
+    status_docker_containers \
+        "${DYNAMODB_SUITE_PROJECT_NAME}" \
+        "./scripts/docker/docker-compose-dynamodb.yml"
+}
+
+######################################
 # Función principal
 ######################################
 main() {
     validate_environment
     source_env_vars ".env"
+
+    # Si se llama con el argumento '--status', invocamos la función y salimos
+    if [[ "$1" == "--status" ]]; then
+        status_dynamodb_suite_containers
+        exit 0
+    fi
+
     init_dynamodb_suite_containers "$1"
     init_seed_dynamodb_suite_containers
     log "Inicialización de DynamoDB completada exitosamente."
