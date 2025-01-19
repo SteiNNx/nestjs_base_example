@@ -5,7 +5,7 @@
  * Repositorio para interactuar con la tabla 'mdr_visa' en DynamoDB.
  */
 
-const ClientDynamoDb = require('../../db/client-dynamo.db.js');
+const ClientDynamoDb = require('../client.dynamodb');
 const LoggerHelper = require('../../helpers/logger.helper');
 
 const logger = new LoggerHelper('mdr_visa.repository.js');

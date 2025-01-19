@@ -7,7 +7,7 @@
  * @module cardBrandMdrController
  */
 
-const { getAllMerchantsDiscountRateModule } = require('../../services/card_brand_mdr.module');
+const { getAllMerchantsDiscountRateModule } = require('./card_brand_mdr.module');
 const { handleNextError } = require('../../providers/error-handler.provider');
 
 const LoggerHelper = require('../../helpers/logger.helper');
