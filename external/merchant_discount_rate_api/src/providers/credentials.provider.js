@@ -150,7 +150,7 @@ const getDynamoDbConfig = () => {
             500
         );
     }
-    if (!dynamoDbConnectionTimeOut || !dynamoDbConnectionTimeOut.trim()) {
+    if (!dynamoDbConnectionTimeOut) {
         logger.error('[getDynamoDbConfig] dynamoDbConnectionTimeOut está vacía o no definida.');
         throw new TechnicalError(
             'DYNAMODB.CONNECTION_TIME_OUT',

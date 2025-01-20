@@ -33,7 +33,7 @@ module.exports = {
       dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT_HOST,// process.env.DYNAMODB_ENDPOINT,
       dynamoDbPort: process.env.DYNAMODB_PORT,
       dynamoDbMaxAttempts: process.env.DYNAMODB_RETRY,
-      dynamoDbConnectionTimeOut: process.env.DYNAMODB_CONNECTION_TIMEOUT,
+      dynamoDbConnectionTimeOut: parseInt(process.env.DYNAMODB_CONNECTION_TIMEOUT),
 
       tableNameUsers: process.env.DYNAMODB_TABLE_NAME_USERS || 'users',
 
