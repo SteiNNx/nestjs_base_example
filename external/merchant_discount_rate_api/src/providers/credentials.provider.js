@@ -99,6 +99,7 @@ const getDynamoDbConfig = () => {
         dynamoDbEndpoint,
         dynamoDbPort,
         dynamoDbMaxAttempts,
+        dynamoDbConnectionTimeOut,
     } = config.dynamoDb;
 
     if (!awsAccessKeyId || !awsAccessKeyId.trim()) {
@@ -149,6 +150,14 @@ const getDynamoDbConfig = () => {
             500
         );
     }
+    if (!dynamoDbConnectionTimeOut || !dynamoDbConnectionTimeOut.trim()) {
+        logger.error('[getDynamoDbConfig] dynamoDbConnectionTimeOut está vacía o no definida.');
+        throw new TechnicalError(
+            'DYNAMODB.CONNECTION_TIME_OUT',
+            'dynamoDbConnectionTimeOut está vacía o no definida.',
+            500
+        );
+    }
 
     return {
         awsAccessKeyId,
@@ -157,6 +166,7 @@ const getDynamoDbConfig = () => {
         dynamoDbEndpoint,
         dynamoDbPort,
         dynamoDbMaxAttempts,
+        dynamoDbConnectionTimeOut,
     };
 };
 

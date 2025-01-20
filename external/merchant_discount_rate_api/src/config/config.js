@@ -30,9 +30,10 @@ module.exports = {
       awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
       awsRegion: process.env.AWS_REGION,
 
-      dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT_INTERNAL,// process.env.DYNAMODB_ENDPOINT,
+      dynamoDbEndpoint: process.env.DYNAMODB_ENDPOINT_HOST,// process.env.DYNAMODB_ENDPOINT,
       dynamoDbPort: process.env.DYNAMODB_PORT,
       dynamoDbMaxAttempts: process.env.DYNAMODB_RETRY,
+      dynamoDbConnectionTimeOut: process.env.DYNAMODB_CONNECTION_TIMEOUT,
 
       tableNameUsers: process.env.DYNAMODB_TABLE_NAME_USERS || 'users',
 

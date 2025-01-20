@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.726.1",
+    "@aws-sdk/node-http-handler": "^3.370.0",
     "@aws-sdk/util-dynamodb": "^3.731.1",
     "body-parser": "^1.20.3",
     "dotenv": "^16.4.7",

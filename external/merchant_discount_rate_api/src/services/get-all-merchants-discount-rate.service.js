@@ -46,43 +46,78 @@ const logger = new LoggerHelper('get-all-merchants-discount-rate.service.js');
 const getAllMerchantsDiscountRateService = async (req) => {
   logger.info('Inicio del servicio getAllMerchantsDiscountRateService');
 
+  // Instanciamos los repositorios para cada marca
+  const mdrAmexRepo = new MdrAmexRepository();
+  const mdrDiscoverRepo = new MdrDiscoverRepository();
+  const mdrMastercardRepo = new MdrMastercardRepository();
+  const mdrVisaRepo = new MdrVisaRepository();
+
+  let amexData, discoverData, mastercardData, visaData;
+
+  // Invocación para Amex
   try {
-    // Instanciamos los repositorios para cada marca
-    const mdrAmexRepo = new MdrAmexRepository();
-    const mdrDiscoverRepo = new MdrDiscoverRepository();
-    const mdrMastercardRepo = new MdrMastercardRepository();
-    const mdrVisaRepo = new MdrVisaRepository();
-
-    // Realizamos las consultas de forma concurrente
-    const [amexData, discoverData, mastercardData, visaData] = await Promise.all([
-      mdrAmexRepo.scan(),
-      mdrDiscoverRepo.scan(),
-      mdrMastercardRepo.scan(),
-      mdrVisaRepo.scan()
-    ]);
-
-    // Consolida la información de todas las fuentes
-    const data = {
-      discountRates: {
-        amex: amexData,
-        discover: discoverData,
-        mastercard: mastercardData,
-        visa: visaData,
-      },
-    };
-
-    logger.info('Finalización exitosa del servicio getAllMerchantsDiscountRateService');
-    return data;
+    amexData = await mdrAmexRepo.scan();
   } catch (error) {
-    logger.error(`Error en getAllMerchantsDiscountRateService: ${error.message}`, error);
-    // Lanza el error customizado utilizando handleThrownError
+    logger.error(`Error al obtener datos de Amex: ${error.message}`, error);
     return handleThrownError(
       error,
-      'MDR.GETALL.0001',
-      'Error al obtener tasas de descuento para comerciantes.',
+      'MDR.GETALL.AMEX',
+      'Error al obtener tasas de descuento para Amex.',
       500
     );
   }
+
+  // Invocación para Discover
+  try {
+    discoverData = await mdrDiscoverRepo.scan();
+  } catch (error) {
+    logger.error(`Error al obtener datos de Discover: ${error.message}`, error);
+    return handleThrownError(
+      error,
+      'MDR.GETALL.DISCOVER',
+      'Error al obtener tasas de descuento para Discover.',
+      500
+    );
+  }
+
+  // Invocación para Mastercard
+  try {
+    mastercardData = await mdrMastercardRepo.scan();
+  } catch (error) {
+    logger.error(`Error al obtener datos de Mastercard: ${error.message}`, error);
+    return handleThrownError(
+      error,
+      'MDR.GETALL.MASTERCARD',
+      'Error al obtener tasas de descuento para Mastercard.',
+      500
+    );
+  }
+
+  // Invocación para Visa
+  try {
+    visaData = await mdrVisaRepo.scan();
+  } catch (error) {
+    logger.error(`Error al obtener datos de Visa: ${error.message}`, error);
+    return handleThrownError(
+      error,
+      'MDR.GETALL.VISA',
+      'Error al obtener tasas de descuento para Visa.',
+      500
+    );
+  }
+
+  // Consolida la información obtenida de los repositorios
+  const data = {
+    discountRates: {
+      amex: amexData,
+      discover: discoverData,
+      mastercard: mastercardData,
+      visa: visaData,
+    },
+  };
+
+  logger.info('Finalización exitosa del servicio getAllMerchantsDiscountRateService');
+  return data;
 };
 
 module.exports = {
