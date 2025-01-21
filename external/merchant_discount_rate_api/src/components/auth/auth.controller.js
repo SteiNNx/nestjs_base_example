@@ -47,7 +47,12 @@ const authLoginController = async (req, res, next) => {
     } catch (error) {
         logger.error('Error en autenticación (login)', { error: error.message });
 
-        return handleNextError(error, next, 'AUTH.LOGIN.0005', 'Error desconocido en login.');
+        return handleNextError(
+            error,
+            next,
+            'AUTH.LOGIN.0005',
+            'Error desconocido en login.'
+        );
     }
 };
 
@@ -82,7 +87,12 @@ const validateTokenController = async (req, res, next) => {
     } catch (error) {
         logger.error('Error en validación de token', { error: error.message });
 
-        return handleNextError(error, next, 'AUTH.VALIDATE.0005', 'Error desconocido en validación de token.');
+        return handleNextError(
+            error,
+            next,
+            'AUTH.VALIDATE.0005',
+            'Error desconocido en validación de token.'
+        );
     }
 };
 

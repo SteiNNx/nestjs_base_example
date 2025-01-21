@@ -106,6 +106,11 @@ const getAllMerchantsDiscountRateService = async (req) => {
     );
   }
 
+  logger.info('amex: ', { amexData: amexData });
+  logger.info('discover: ', { discoverData: discoverData });
+  logger.info('mastercard: ', { mastercardData: mastercardData });
+  logger.info('visa: ', { visaData: visaData });
+
   // Consolida la información obtenida de los repositorios
   const data = {
     discountRates: {
@@ -117,6 +122,8 @@ const getAllMerchantsDiscountRateService = async (req) => {
   };
 
   logger.info('Finalización exitosa del servicio getAllMerchantsDiscountRateService');
+  logger.info('data: ', { data: data });
+
   return data;
 };
 
