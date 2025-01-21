@@ -8,20 +8,21 @@
  */
 
 const { getAllMerchantsDiscountRateService } = require('../../services/get-all-merchants-discount-rate.service');
-const LoggerHelper = require('../../helpers/logger.helper');
+const { getMerchantsDiscountRateByCardBrandService } = require('../../services/get-merchants-discount-rate-by-card-brand.service');
 
+const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('card_brand_mdr.module.js');
 
 /**
- * Orquesta la obtención de las tasas de descuento para comerciantes (MDR).
+ * Orquesta la obtención de las tasas de descuento para comerciantes (MDR) en todas las marcas.
  *
- * Invoca el servicio que realiza el procesamiento de los datos MDR.
+ * Llama a la capa de servicios para consolidar la información de las diferentes marcas.
  *
  * @async
  * @function getAllMerchantsDiscountRateModule
  * @param {import('express').Request} req - Objeto de solicitud HTTP de Express.
- * @returns {Promise<Object>} Objeto con la información resultante del proceso.
- * @throws {Error} Lanza un error si ocurre algún problema en la capa de servicio.
+ * @returns {Promise<Object>} Objeto con todas las tasas de descuento consolidadas.
+ * @throws {Error} Se relanza el error si ocurre algún problema en la capa de servicio.
  */
 const getAllMerchantsDiscountRateModule = async (req) => {
   logger.info('Inicio del módulo getAllMerchantsDiscountRateModule');
@@ -36,6 +37,31 @@ const getAllMerchantsDiscountRateModule = async (req) => {
   }
 };
 
+/**
+ * Orquesta la obtención de las tasas de descuento (MDR) para una marca de tarjeta específica.
+ *
+ * Llama a la capa de servicios para consultar únicamente la marca solicitada.
+ *
+ * @async
+ * @function getAllMerchantsDiscountRateByCardBrandModule
+ * @param {string} cardBrand - Nombre de la marca de tarjeta ("amex", "discover", "mastercard", "visa").
+ * @returns {Promise<Object>} Objeto con las tasas de descuento para la marca solicitada.
+ * @throws {Error} Se relanza el error si ocurre algún problema en la capa de servicio.
+ */
+const getAllMerchantsDiscountRateByCardBrandModule = async (cardBrand) => {
+  logger.info(`Inicio del módulo getAllMerchantsDiscountRateByCardBrandModule para ${cardBrand}`);
+
+  try {
+    const result = await getMerchantsDiscountRateByCardBrandService(cardBrand);
+    logger.info(`Finalización exitosa del módulo getAllMerchantsDiscountRateByCardBrandModule para ${cardBrand}`);
+    return result;
+  } catch (error) {
+    logger.error(`Error en getAllMerchantsDiscountRateByCardBrandModule: ${error.message}`, error);
+    throw error;
+  }
+};
+
 module.exports = {
   getAllMerchantsDiscountRateModule,
+  getAllMerchantsDiscountRateByCardBrandModule,
 };

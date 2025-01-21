@@ -20,33 +20,20 @@ const LoggerHelper = require('../helpers/logger.helper');
 const logger = new LoggerHelper('get-all-merchants-discount-rate.service.js');
 
 /**
- * Obtiene las tasas de descuento para comerciantes (MDR) de todas las marcas.
+ * Obtiene las tasas de descuento de todas las marcas de tarjetas (Amex, Discover, Mastercard y Visa).
  *
- * Este servicio invoca la capa de repositorios para obtener los registros de las tablas
- * correspondientes a Amex, Discover, Mastercard y Visa, y consolida la información en un único objeto.
+ * Realiza consultas a los repositorios correspondientes y consolida los resultados en un único objeto.
  *
  * @async
  * @function getAllMerchantsDiscountRateService
- * @param {import('express').Request} req - Objeto de solicitud HTTP de Express.
- * @returns {Promise<Object>} Objeto con la información consolidada de las tasas de descuento.
- * @throws {Error} Lanza un error customizado si ocurre algún problema durante el proceso.
- *
- * @example
- * const result = await getAllMerchantsDiscountRateService(req);
- * console.log(result);
- * // {
- * //   discountRates: {
- * //     amex: [ ... ],
- * //     discover: [ ... ],
- * //     mastercard: [ ... ],
- * //     visa: [ ... ]
- * //   }
- * // }
+ * @param {import('express').Request} req - Objeto de solicitud de Express (no se utiliza directamente, pero se mantiene para consistencia).
+ * @returns {Promise<Object>} Objeto con la información de tasas de descuento agrupada por marca.
+ * @throws {Error} Se lanza un error customizado si ocurre algún problema en la consulta a cada repositorio.
  */
 const getAllMerchantsDiscountRateService = async (req) => {
   logger.info('Inicio del servicio getAllMerchantsDiscountRateService');
 
-  // Instanciamos los repositorios para cada marca
+  // Instanciar repositorios para cada marca
   const mdrAmexRepo = new MdrAmexRepository();
   const mdrDiscoverRepo = new MdrDiscoverRepository();
   const mdrMastercardRepo = new MdrMastercardRepository();
@@ -54,7 +41,7 @@ const getAllMerchantsDiscountRateService = async (req) => {
 
   let amexData, discoverData, mastercardData, visaData;
 
-  // Invocación para Amex
+  // Consulta a cada repositorio
   try {
     amexData = await mdrAmexRepo.scan();
   } catch (error) {
@@ -67,7 +54,6 @@ const getAllMerchantsDiscountRateService = async (req) => {
     );
   }
 
-  // Invocación para Discover
   try {
     discoverData = await mdrDiscoverRepo.scan();
   } catch (error) {
@@ -80,7 +66,6 @@ const getAllMerchantsDiscountRateService = async (req) => {
     );
   }
 
-  // Invocación para Mastercard
   try {
     mastercardData = await mdrMastercardRepo.scan();
   } catch (error) {
@@ -93,7 +78,6 @@ const getAllMerchantsDiscountRateService = async (req) => {
     );
   }
 
-  // Invocación para Visa
   try {
     visaData = await mdrVisaRepo.scan();
   } catch (error) {
@@ -106,12 +90,13 @@ const getAllMerchantsDiscountRateService = async (req) => {
     );
   }
 
-  logger.info('amex: ', { amexData: amexData });
-  logger.info('discover: ', { discoverData: discoverData });
-  logger.info('mastercard: ', { mastercardData: mastercardData });
-  logger.info('visa: ', { visaData: visaData });
+  // Logs de los datos recuperados
+  //logger.info('amex:', { amexData });
+  //logger.info('discover:', { discoverData });
+  //logger.info('mastercard:', { mastercardData });
+  //logger.info('visa:', { visaData });
 
-  // Consolida la información obtenida de los repositorios
+  // Consolidar la información de todas las marcas
   const data = {
     discountRates: {
       amex: amexData,
@@ -122,7 +107,7 @@ const getAllMerchantsDiscountRateService = async (req) => {
   };
 
   logger.info('Finalización exitosa del servicio getAllMerchantsDiscountRateService');
-  logger.info('data: ', { data: data });
+  //logger.info('data:', { data });
 
   return data;
 };
