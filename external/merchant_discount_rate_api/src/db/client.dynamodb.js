@@ -14,6 +14,7 @@ const {
   DeleteItemCommand,
   ScanCommand,
   QueryCommand,
+  ListTablesCommand,
 } = require('@aws-sdk/client-dynamodb');
 
 const { marshall, unmarshall } = require('@aws-sdk/util-dynamodb');
@@ -80,6 +81,14 @@ class ClientDynamoDb {
         step: 'initialize',
       }
     );
+    // Se lista todas las tablas en DynamoDB para verificar la conexión y que se haya llegado correctamente
+    // this.dynamoDBClient.send(new ListTablesCommand({}))
+    //   .then((response) => {
+    //     logger.info('Tablas en DynamoDB:', response.TableNames);
+    //   })
+    //   .catch((error) => {
+    //     logger.error('Error al listar las tablas', error);
+    //   });
   }
 
   /**
