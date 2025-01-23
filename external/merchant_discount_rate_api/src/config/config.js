@@ -21,6 +21,11 @@ module.exports = {
 
       headerSecurityKey: process.env.EXTERNAL_API_MDR_HEADER_SECURITY_KEY,
 
+      bcryptPassword: {
+        pepperKey: process.env.BCRYPT_PEPPER_KEY,
+        saltRounds: process.env.BCRYPT_SALT_ROUNDS,
+      },
+
       tokenExpiresIn: process.env.EXTERNAL_API_MDR_AUTH_TOKEN_EXPIRES_IN || '1h',
       jwtAlgorithm: process.env.EXTERNAL_API_MDR_AUTH_JWT_ALGORITHM || 'RS256',
     },

@@ -170,8 +170,46 @@ const getDynamoDbConfig = () => {
     };
 };
 
+/**
+ * Retorna la configuración de bcrypt para hashing de contraseñas.
+ *
+ * @function getBcryptPasswordConfig
+ * @returns {Object} Objeto con las propiedades:
+ *  - pepperKey {String}: Clave adicional (pepper) para concatenar con la contraseña.
+ *  - saltRounds {Number}: Número de rondas para generar el salt en bcrypt.
+ * @throws {TechnicalError} Si alguna de las configuraciones de bcrypt está vacía o inválida.
+ */
+const getBcryptPasswordConfig = () => {
+    const { pepperKey, saltRounds } = config.auth.bcryptPassword;
+
+    if (!pepperKey || !pepperKey.trim()) {
+        logger.error('[getBcryptPasswordConfig] BCRYPT_PEPPER_KEY está vacía o no definida.');
+        throw new TechnicalError(
+            'BCRYPT.INVALID_PEPPER_KEY',
+            'La clave pepper para bcrypt está vacía o no definida.',
+            500
+        );
+    }
+
+    const saltRoundsInt = parseInt(saltRounds, 10);
+    if (isNaN(saltRoundsInt) || saltRoundsInt <= 0) {
+        logger.error('[getBcryptPasswordConfig] BCRYPT_SALT_ROUNDS es inválido.');
+        throw new TechnicalError(
+            'BCRYPT.INVALID_SALT_ROUNDS',
+            'El número de saltRounds para bcrypt es inválido.',
+            500
+        );
+    }
+
+    return {
+        pepperKey,
+        saltRounds: saltRoundsInt,
+    };
+};
+
 module.exports = {
     getAuthConfig,
     getSecurityKey,
-    getDynamoDbConfig
+    getDynamoDbConfig,
+    getBcryptPasswordConfig,
 };
