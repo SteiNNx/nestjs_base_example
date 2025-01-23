@@ -12,6 +12,7 @@ const bcrypt = require('bcrypt');
 const { getBcryptPasswordConfig } = require('../providers/credentials.provider');
 
 const LoggerHelper = require('./logger.helper');
+const TechnicalError = require('../exceptions/technical.exception');
 const logger = new LoggerHelper('bcrypt.helper');
 
 /**
@@ -34,7 +35,7 @@ async function hashPassword(password) {
         return hashedPassword;
     } catch (error) {
         logger.error(`Error al generar el hash: ${error.message}`, error);
-        throw new Error(`Error al generar el hash: ${error.message}`);
+        throw new TechnicalError('BCRYPT.HASHPASSWORD', 'Error al ejecutar bcrypt.hash.', 500, error);
     }
 }
 
@@ -59,7 +60,7 @@ async function verifyPassword(password, hash) {
         return isValid;
     } catch (error) {
         logger.error(`Error al verificar la contraseña: ${error.message}`, error);
-        throw new Error(`Error al verificar la contraseña: ${error.message}`);
+        throw new TechnicalError('BCRYPT.VERIFYPASSWORD', 'Error al ejecutar bcrypt.compare.', 500, error);
     }
 }
 
