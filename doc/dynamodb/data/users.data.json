@@ -7,7 +7,7 @@
                         "S": "admin"
                     },
                     "password": {
-                        "S": "admin123"
+                        "S": "$2b$10$Yq24ByddjxuqjO.4AopJzesG2rGFIER371iiinLy2WytjovT9Nb02"
                     },
                     "userId": {
                         "N": "1"
@@ -28,7 +28,7 @@
                         "S": "test"
                     },
                     "password": {
-                        "S": "test"
+                        "S": "$2b$10$1YSiZnbhI75nKQ.RnRm4/OwJNmPOkrTPJuGwKAlEBklFy2OGjG8uK"
                     },
                     "userId": {
                         "N": "2"

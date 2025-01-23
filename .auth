@@ -1,0 +1,10 @@
+
+const credentialsAdmin = {
+        username: 'admin',
+        password: 'admin123' //$2b$10$Yq24ByddjxuqjO.4AopJzesG2rGFIER371iiinLy2WytjovT9Nb02
+};
+
+const credentialsTest = {
+    username: 'test',
+    password: 'test123' //$2b$10$1YSiZnbhI75nKQ.RnRm4/OwJNmPOkrTPJuGwKAlEBklFy2OGjG8uK
+};
