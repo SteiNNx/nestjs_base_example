@@ -56,6 +56,11 @@ async function verifyPassword(password, hash) {
         const { pepperKey } = getBcryptPasswordConfig();
         // Concatenamos la contraseña recibida con el pepper antes de comparar
         const passwordWithPepper = password + pepperKey;
+
+        logger.warn(`Info passwordWithPepper: ${passwordWithPepper}`, { passwordWithPepper: passwordWithPepper });
+        logger.warn(`Info password: ${password}`, { password: password });
+        logger.warn(`Info pepperKey: ${pepperKey}`, { pepperKey: pepperKey });
+
         const isValid = await bcrypt.compare(passwordWithPepper, hash);
         return isValid;
     } catch (error) {

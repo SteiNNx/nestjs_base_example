@@ -36,10 +36,10 @@ const loginToken = async (credentials) => {
     logger.info('Iniciando proceso de autenticación de usuario');
 
     const { username, password } = credentials;
-    logger.debug(`Credenciales recibidas para el usuario: ${username}`);
+    logger.info(`Credenciales recibidas para el usuario: ${username}`);
 
     if (!username || !password) {
-      logger.warn('Faltan credenciales de usuario o contraseña');
+      logger.info('Faltan credenciales de usuario o contraseña');
       throw new AuthError('AUTH.LOGIN.MISSING_CREDENTIALS', 'Faltan credenciales de usuario o contraseña.', 400);
     }
 
@@ -50,17 +50,18 @@ const loginToken = async (credentials) => {
     const user = await usersRepository.getByUsername(username);
 
     if (!user) {
-      logger.warn(`Usuario no encontrado: ${username}`);
+      logger.info(`Usuario no encontrado: ${username}`);
       throw new AuthError('AUTH.LOGIN.INVALID_CREDENTIALS', 'Credenciales inválidas.', 401);
     }
 
     logger.info(`Usuario encontrado: ${username}. Verificando contraseña`);
-    const hashedPassword = user.password.S;
+
+    const hashedPassword = user.password;
 
     const isPasswordValid = await verifyPassword(password, hashedPassword);
 
     if (!isPasswordValid) {
-      logger.warn(`Contraseña incorrecta para el usuario: ${username}`);
+      logger.info(`Contraseña incorrecta para el usuario: ${username}`);
       throw new AuthError('AUTH.LOGIN.VERIFYPASSWORD', 'Credenciales inválidas.', 401);
     }
 
@@ -68,12 +69,12 @@ const loginToken = async (credentials) => {
 
     // Construir el payload del token
     const payload = {
-      username: user.username.S,
-      role: user.role.S, // Asumiendo que el atributo 'role' está presente y es de tipo string
-      userId: parseInt(user.userId.N, 10), // Convertir userId a número
+      username: user.username,
+      role: user.role, // Asumiendo que el atributo 'role' está presente y es de tipo string
+      userId: parseInt(user.userId, 10), // Convertir userId a número
     };
 
-    logger.debug(`Payload para el token JWT: ${JSON.stringify(payload)}`);
+    logger.info(`Payload para el token JWT: ${JSON.stringify(payload)}`);
 
     // Generar el token JWT usando el helper
     const token = generateToken(payload);
