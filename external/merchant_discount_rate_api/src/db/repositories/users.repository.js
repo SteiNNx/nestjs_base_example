@@ -104,10 +104,6 @@ class UsersRepository {
      * await usersRepository.update('user-123', 'name', 'Carlos');
      */
     async update(username, field, newValue) {
-        logger.error(`username: ${username}`, { username });
-        logger.error(`field: ${field}`, { field });
-        logger.error(`newValue: ${newValue}`, { newValue });
-
         try {
             const params = {
                 TableName: this.tableName,

@@ -16,6 +16,9 @@ const {
 } = require('../../services/auth-refresh-token.service');  // Nuevo servicio que podemos crear
 
 const AuthError = require('../../exceptions/auth.exception');
+const validateBodySchema = require('../../helpers/validate.helper');
+const authLoginTokenSchema = require('../../schemas/request/auth-login-token.schema');
+const authValidateTokenSchema = require('../../schemas/request/auth-validate-token.schema');
 
 const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('auth.module.js');
@@ -31,6 +34,10 @@ const logger = new LoggerHelper('auth.module.js');
  */
 const authLoginModule = async (req) => {
   logger.info('Inicio de autenticación (login)');
+
+  logger.info('Validando el esquema del cuerpo de la solicitud');
+  validateBodySchema(req.body, authLoginTokenSchema, 'XXX.XXX.0001');
+  logger.info('Esquema validado correctamente');
 
   // Extraer las credenciales del body
   const credentials = req.body;
@@ -54,6 +61,10 @@ const authLoginModule = async (req) => {
  */
 const authValidateTokenModule = async (req) => {
   logger.info('Inicio de validación de token');
+
+  logger.info('Validando el esquema del cuerpo de la solicitud');
+  validateBodySchema(req.body, authValidateTokenSchema, 'XXX.XXX.0001');
+  logger.info('Esquema validado correctamente');
 
   // Token en el body
   let token = req.body.token;

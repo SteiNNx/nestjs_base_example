@@ -9,6 +9,7 @@ const UsersRepository = require('../db/repositories/users.repository');
 const { generateToken } = require('../helpers/jsonwebtoken.helper');
 const { verifyPassword } = require('../helpers/bcrypt.helper');
 const { handleThrownError } = require('../providers/error-handler.provider');
+
 const AuthError = require('../exceptions/auth.exception');
 const LoggerHelper = require('../helpers/logger.helper');
 
@@ -40,19 +41,8 @@ const loginToken = async (credentials) => {
     logger.info('1) Iniciando proceso de autenticación de usuario');
 
     const { username, password } = credentials;
-    logger.info(`   - Credenciales recibidas para el usuario: ${username}`);
 
-    // (1) Verificar que vengan credenciales
-    if (!username || !password) {
-      logger.info('   - Faltan credenciales de usuario o contraseña');
-      throw new AuthError(
-        'AUTH.LOGIN.MISSING_CREDENTIALS',
-        'Faltan credenciales de usuario o contraseña.',
-        400
-      );
-    }
-
-    // (2) Instanciar el repositorio y buscar el usuario
+    // (1) Instanciar el repositorio y buscar el usuario
     const usersRepository = new UsersRepository();
     logger.info(`   - Buscando usuario en la base de datos: ${username}`);
     const user = await usersRepository.getByUsername(username);
@@ -69,7 +59,7 @@ const loginToken = async (credentials) => {
     logger.info(`   - Usuario encontrado: ${username}. Verificando contraseña`);
     const hashedPassword = user.password; // Ajustar si tu objeto user está en formato DynamoDB
 
-    // (3) Verificar la contraseña
+    // (2) Verificar la contraseña
     const isPasswordValid = await verifyPassword(password, hashedPassword);
     if (!isPasswordValid) {
       logger.info(`   - Contraseña incorrecta para el usuario: ${username}`);
@@ -82,7 +72,7 @@ const loginToken = async (credentials) => {
 
     logger.info(`   - Contraseña verificada correctamente para el usuario: ${username}`);
 
-    // (4) Construir el payload y generar token
+    // (3) Construir el payload y generar token
     const payload = {
       username: user.username,
       role: user.role || 'user',
@@ -93,12 +83,12 @@ const loginToken = async (credentials) => {
     const token = generateToken(payload);
     logger.info('   - Token JWT generado correctamente');
 
-    // (5) Guardar el token en la BD usando el método "update" genérico
+    // (4) Guardar el token en la BD usando el método "update" genérico
     logger.info('2) Guardando el token en la BD');
     await usersRepository.update(username, 'token', token);
     logger.info('   - Token guardado en la BD correctamente');
 
-    // (6) Retornar token
+    // (5) Retornar token
     return token;
   } catch (error) {
     logger.error('Error durante el proceso de autenticación', {
