@@ -2,14 +2,19 @@
 
 /**
  * Controlador para la autenticación.
- * Define dos métodos:
+ * Métodos:
  * - authLoginController: para la generación del token (login).
- * - validateTokenController: para la validación del token JWT.
+ * - validateTokenController: para la validación del token.
+ * - refreshTokenController: para la generación de un nuevo token (refresh).
  *
  * @module authController
  */
 
-const { authLoginModule, authValidateTokenModule } = require('./auth.module');
+const {
+    authLoginModule,
+    authValidateTokenModule,
+    authRefreshTokenModule
+} = require('./auth.module');
 
 const { handleNextError } = require('../../providers/error-handler.provider');
 
@@ -31,14 +36,10 @@ const authLoginController = async (req, res, next) => {
     logger.info('Inicio de autenticación (login)');
 
     try {
-        // =======================================================================
         // Invocar el módulo de autenticación para obtener el token
-        // =======================================================================
         const token = await authLoginModule(req);
 
-        // =======================================================================
         // Configuración de cabeceras de seguridad
-        // =======================================================================
         res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         res.setHeader('Content-Security-Policy', "script-src 'self'");
 
@@ -58,7 +59,7 @@ const authLoginController = async (req, res, next) => {
 
 /**
  * Controlador para la validación del token JWT.
- * Se espera que el token se envíe en el body (en la propiedad "token") o en el header Authorization.
+ * Puede recibir el token en el body ("token") o en el header Authorization.
  *
  * @async
  * @function validateTokenController
@@ -71,14 +72,10 @@ const validateTokenController = async (req, res, next) => {
     logger.info('Inicio de validación de token');
 
     try {
-        // =======================================================================
         // Invocar el módulo de validación de token
-        // =======================================================================
         const decoded = await authValidateTokenModule(req);
 
-        // =======================================================================
         // Configuración de cabeceras de seguridad
-        // =======================================================================
         res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
         res.setHeader('Content-Security-Policy', "script-src 'self'");
 
@@ -96,7 +93,44 @@ const validateTokenController = async (req, res, next) => {
     }
 };
 
+/**
+ * Controlador para refrescar el token JWT.
+ * Recibe un token actual y devuelve uno nuevo (opcionalmente con un nuevo tiempo de vigencia).
+ *
+ * @async
+ * @function refreshTokenController
+ * @param {import('express').Request} req
+ * @param {import('express').Response} res
+ * @param {import('express').NextFunction} next
+ * @returns {Promise<import('express').Response>}
+ */
+const refreshTokenController = async (req, res, next) => {
+    logger.info('Inicio de refresco de token');
+
+    try {
+        // Invocar el módulo de refresco de token
+        const newToken = await authRefreshTokenModule(req);
+
+        // Configuración de cabeceras de seguridad
+        res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+        res.setHeader('Content-Security-Policy', "script-src 'self'");
+
+        logger.info('Refresco de token exitoso, retornando nuevo token');
+        return res.status(200).json({ token: newToken });
+    } catch (error) {
+        logger.error('Error en refresco de token', { error: error.message });
+
+        return handleNextError(
+            error,
+            next,
+            'AUTH.REFRESH.0005',
+            'Error desconocido al refrescar el token.'
+        );
+    }
+};
+
 module.exports = {
     authLoginController,
     validateTokenController,
+    refreshTokenController,
 };

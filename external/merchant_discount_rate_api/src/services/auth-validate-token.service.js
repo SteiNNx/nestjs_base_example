@@ -23,7 +23,6 @@ const authValidateTokenService = async (token) => {
     return decoded;
   } catch (error) {
     logger.error('Error al validar el token', { error: error.message });
-    // Lanza el error utilizando handleThrownError
     handleThrownError(error, 'AUTH.VALIDATE.0001', 'Error al validar el token JWT.');
   }
 };

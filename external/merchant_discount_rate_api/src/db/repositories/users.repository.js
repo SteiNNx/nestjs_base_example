@@ -96,18 +96,22 @@ class UsersRepository {
      *
      * @async
      * @function update
-     * @param {string} id - ID del registro a actualizar.
+     * @param {string} username - UserName del registro a actualizar.
      * @param {string} field - Nombre del campo que se desea actualizar.
      * @param {any} newValue - Nuevo valor para el campo.
      * @returns {Promise<Object>} Resultado de la actualización.
      * @example
      * await usersRepository.update('user-123', 'name', 'Carlos');
      */
-    async update(id, field, newValue) {
+    async update(username, field, newValue) {
+        logger.error(`username: ${username}`, { username });
+        logger.error(`field: ${field}`, { field });
+        logger.error(`newValue: ${newValue}`, { newValue });
+
         try {
             const params = {
                 TableName: this.tableName,
-                Key: { id: { S: id } },
+                Key: { username: { S: username } },
                 UpdateExpression: 'SET #field = :value',
                 ExpressionAttributeNames: { '#field': field },
                 ExpressionAttributeValues: {
