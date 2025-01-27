@@ -105,11 +105,6 @@ const authRefreshTokenModule = async (req) => {
   // El token de entrada puede venir en el body o en el header
   let token = req.body.token;
 
-  if (!token && req.headers.authorization) {
-    const authHeader = req.headers.authorization; // "Bearer <token>"
-    token = authHeader.split(' ')[1];
-  }
-
   if (!token) {
     throw new AuthError(
       'AUTH.REFRESH.MISSING_TOKEN',

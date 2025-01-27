@@ -18,11 +18,21 @@ const logger = new LoggerHelper('credentials.provider');
  *  - publicKey {String}: Clave pública de autenticación.
  *  - tokenExpiresIn {String}: Tiempo de expiración del token.
  *  - jwtAlgorithm {String}: Algoritmo de firma del token.
+ *  - jwtAudience {String}: Audiencia esperada del token.
+ *  - jwtIssuer {String}: Emisor esperado del token.
  * @throws {AdapterError} Si ocurre un error al leer alguno de los archivos.
- * @throws {TechnicalError} Si alguna de las llaves está vacía o ilegible.
+ * @throws {TechnicalError} Si alguna de las llaves o configuraciones están vacías o ilegibles.
  */
 const getAuthConfig = () => {
-    const { privateKeyPath, publicKeyPath, tokenExpiresIn, jwtAlgorithm } = config.auth;
+    const {
+        privateKeyPath,
+        publicKeyPath,
+        tokenExpiresIn,
+        jwtAlgorithm,
+        jwtAudience,
+        jwtIssuer,
+    } = config.auth;
+
     let privateKey = null;
     let publicKey = null;
 
@@ -47,6 +57,7 @@ const getAuthConfig = () => {
             500
         );
     }
+
     if (!publicKey || !publicKey.trim()) {
         logger.error('[getAuthConfig] La llave pública de autenticación está vacía o ilegible.');
         throw new TechnicalError(
@@ -56,7 +67,32 @@ const getAuthConfig = () => {
         );
     }
 
-    return { privateKey, publicKey, tokenExpiresIn, jwtAlgorithm };
+    if (!jwtAudience || !jwtAudience.trim()) {
+        logger.error('[getAuthConfig] jwtAudience no está definido o está vacío.');
+        throw new TechnicalError(
+            'AUTH.INVALID_JWT_AUDIENCE',
+            'La audiencia (jwtAudience) está vacía o no se encontró.',
+            500
+        );
+    }
+
+    if (!jwtIssuer || !jwtIssuer.trim()) {
+        logger.error('[getAuthConfig] jwtIssuer no está definido o está vacío.');
+        throw new TechnicalError(
+            'AUTH.INVALID_JWT_ISSUER',
+            'El emisor (jwtIssuer) está vacío o no se encontró.',
+            500
+        );
+    }
+
+    return {
+        privateKey,
+        publicKey,
+        tokenExpiresIn,
+        jwtAlgorithm,
+        jwtAudience,
+        jwtIssuer,
+    };
 };
 
 /**

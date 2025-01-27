@@ -80,7 +80,7 @@ const loginToken = async (credentials) => {
     };
     logger.info(`   - Payload para el token JWT: ${JSON.stringify(payload)}`);
 
-    const token = generateToken(payload);
+    const token = generateToken(payload, username);
     logger.info('   - Token JWT generado correctamente');
 
     // (4) Guardar el token en la BD usando el método "update" genérico

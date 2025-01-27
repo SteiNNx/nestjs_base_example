@@ -28,6 +28,8 @@ module.exports = {
 
       tokenExpiresIn: process.env.EXTERNAL_API_MDR_AUTH_TOKEN_EXPIRES_IN || '1h',
       jwtAlgorithm: process.env.EXTERNAL_API_MDR_AUTH_JWT_ALGORITHM || 'RS256',
+      jwtAudience: process.env.EXTERNAL_API_MDR_AUTH_AUDIENCE || 'auth.merchant-discount-rate.com',
+      jwtIssuer: process.env.EXTERNAL_API_MDR_AUTH_ISSUER || 'auth.merchant-discount-rate.com',
     },
 
     dynamoDb: {
