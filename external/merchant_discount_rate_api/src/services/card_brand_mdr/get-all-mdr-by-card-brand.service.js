@@ -1,4 +1,4 @@
-// src/services/get-merchants-discount-rate-by-card-brand.service.js
+// src/services/get-all-mdr-by-card-brand.service.js
 
 /**
  * Servicio para la obtención de tasas de descuento para comerciantes (MDR) de una marca específica.
@@ -9,14 +9,14 @@
  * @module getAllMerchantsDiscountRateByCardBrandService
  */
 
-const MdrAmexRepository = require('../db/repositories/mdr_amex.repository');
-const MdrDiscoverRepository = require('../db/repositories/mdr_discover.repository');
-const MdrMastercardRepository = require('../db/repositories/mdr_mastercard.repository');
-const MdrVisaRepository = require('../db/repositories/mdr_visa.repository');
+const MdrAmexRepository = require('../../db/repositories/mdr_amex.repository');
+const MdrDiscoverRepository = require('../../db/repositories/mdr_discover.repository');
+const MdrMastercardRepository = require('../../db/repositories/mdr_mastercard.repository');
+const MdrVisaRepository = require('../../db/repositories/mdr_visa.repository');
 
-const { handleThrownError } = require('../providers/error-handler.provider');
+const { handleThrownError } = require('../../providers/error-handler.provider');
 
-const LoggerHelper = require('../helpers/logger.helper');
+const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('get-merchants-discount-rate-by-card-brand.service.js');
 
 /**

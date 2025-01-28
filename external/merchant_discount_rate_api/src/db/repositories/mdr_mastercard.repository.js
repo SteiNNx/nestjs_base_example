@@ -2,7 +2,7 @@
 
 /**
  * @file mdr_mastercard.repository.js
- * Repositorio para interactuar con la tabla 'mdr_mastercard' en DynamoDB.
+ * @description Repositorio para interactuar con la tabla 'mdr_mastercard' en DynamoDB.
  */
 
 const ClientDynamoDb = require('../client.dynamodb');
@@ -12,7 +12,7 @@ const logger = new LoggerHelper('mdr_mastercard.repository.js');
 
 class MdrMastercardRepository {
   /**
-   * Crea una instancia de MdrMastercardRepository.
+   * Crea una instancia de MdrMastercardRepository para la tabla 'mdr_mastercard'.
    */
   constructor() {
     this.dynamoClient = new ClientDynamoDb();
@@ -27,13 +27,13 @@ class MdrMastercardRepository {
    * @param {string} mcc - El Merchant Category Code que se desea obtener.
    * @returns {Promise<Object|null>} El registro encontrado o `null` si no existe.
    * @example
-   * const registro = await mdrMastercardRepository.getByMcc('1234');
+   * const registro = await mdrMastercardRepository.getByMcc('5411');
    */
   async getByMcc(mcc) {
     try {
       const params = {
         TableName: this.tableName,
-        Key: { mcc: { S: mcc } }
+        Key: { mcc: { S: mcc } },
       };
       const result = await this.dynamoClient.getItem(params);
       return Object.keys(result).length > 0 ? result : null;
@@ -48,17 +48,17 @@ class MdrMastercardRepository {
    *
    * @async
    * @function add
-   * @param {Object} record - Objeto que representa el nuevo registro.
+   * @param {Object} record - Objeto formateado para DynamoDB.
    * @returns {Promise<Object>} `{ success: true }` si la inserción fue exitosa.
    * @example
-   * const registro = { mcc: { S: '1234' }, rate: { N: '2.5' } };
+   * const registro = { mcc: { S: '5411' }, debito_nacional_presencial_smartpos_rate: { N: '1.50' } };
    * const result = await mdrMastercardRepository.add(registro);
    */
   async add(record) {
     try {
       const params = {
         TableName: this.tableName,
-        Item: record
+        Item: record,
       };
       return await this.dynamoClient.addItem(params);
     } catch (error) {
@@ -68,7 +68,7 @@ class MdrMastercardRepository {
   }
 
   /**
-   * Actualiza uno de los campos de un registro existente.
+   * Actualiza un solo campo de un registro existente en la tabla 'mdr_mastercard'.
    *
    * @async
    * @function update
@@ -77,7 +77,7 @@ class MdrMastercardRepository {
    * @param {any} newValue - Nuevo valor para ese campo.
    * @returns {Promise<Object>} `{ success: true }` si la actualización fue exitosa.
    * @example
-   * await mdrMastercardRepository.update('1234', 'rate', 3.0);
+   * await mdrMastercardRepository.update('5411', 'debito_nacional_presencial_smartpos_rate', 1.60);
    */
   async update(mcc, field, newValue) {
     try {
@@ -85,12 +85,13 @@ class MdrMastercardRepository {
         TableName: this.tableName,
         Key: { mcc: { S: mcc } },
         UpdateExpression: 'SET #field = :value',
-        ExpressionAttributeNames: {
-          '#field': field
-        },
+        ExpressionAttributeNames: { '#field': field },
         ExpressionAttributeValues: {
-          ':value': typeof newValue === 'number' ? { N: newValue.toString() } : { S: newValue }
-        }
+          ':value':
+            typeof newValue === 'number'
+              ? { N: newValue.toString() }
+              : { S: newValue.toString() },
+        },
       };
       return await this.dynamoClient.updateItem(params);
     } catch (error) {
@@ -100,20 +101,76 @@ class MdrMastercardRepository {
   }
 
   /**
-   * Elimina un registro por su MCC.
+   * Actualiza varios campos de un registro existente en la tabla 'mdr_mastercard'.
+   * Se construye una sola UpdateExpression para todos los pares campo-valor.
+   *
+   * @async
+   * @function updateMultipleFields
+   * @param {string} mcc - MCC del registro a actualizar.
+   * @param {Object} updateData - Un objeto con los campos/valores a actualizar.
+   * @returns {Promise<Object>} { success: true, updatedFields: [...] } en caso de éxito.
+   * @example
+   * const fieldsToUpdate = { debito_nacional_presencial_smartpos_rate: 1.99 };
+   * await mdrMastercardRepository.updateMultipleFields('5411', fieldsToUpdate);
+   */
+  async updateMultipleFields(mcc, updateData) {
+    try {
+      logger.info(`Actualizando múltiples campos para mcc=${mcc} en ${this.tableName}`);
+
+      const UpdateExpressionParts = [];
+      const ExpressionAttributeNames = {};
+      const ExpressionAttributeValues = {};
+
+      let index = 1;
+      for (const [field, value] of Object.entries(updateData)) {
+        const fieldName = `#f${index}`;
+        const fieldValue = `:v${index}`;
+
+        UpdateExpressionParts.push(`${fieldName} = ${fieldValue}`);
+        ExpressionAttributeNames[fieldName] = field;
+
+        if (typeof value === 'number') {
+          ExpressionAttributeValues[fieldValue] = { N: value.toString() };
+        } else {
+          ExpressionAttributeValues[fieldValue] = { S: value.toString() };
+        }
+
+        index += 1;
+      }
+
+      const UpdateExpression = 'SET ' + UpdateExpressionParts.join(', ');
+
+      const params = {
+        TableName: this.tableName,
+        Key: { mcc: { S: mcc } },
+        UpdateExpression,
+        ExpressionAttributeNames,
+        ExpressionAttributeValues,
+      };
+
+      await this.dynamoClient.updateItem(params);
+      return { success: true, updatedFields: Object.keys(updateData) };
+    } catch (error) {
+      logger.error(`Error en MdrMastercardRepository.updateMultipleFields: ${error.message}`, error);
+      throw error;
+    }
+  }
+
+  /**
+   * Elimina un registro por su MCC en la tabla 'mdr_mastercard'.
    *
    * @async
    * @function delete
    * @param {string} mcc - MCC del registro que se desea eliminar.
    * @returns {Promise<Object>} `{ success: true }` si la eliminación fue exitosa.
    * @example
-   * await mdrMastercardRepository.delete('1234');
+   * await mdrMastercardRepository.delete('5411');
    */
   async delete(mcc) {
     try {
       const params = {
         TableName: this.tableName,
-        Key: { mcc: { S: mcc } }
+        Key: { mcc: { S: mcc } },
       };
       return await this.dynamoClient.deleteItem(params);
     } catch (error) {
@@ -127,7 +184,7 @@ class MdrMastercardRepository {
    *
    * @async
    * @function scan
-   * @returns {Promise<Array<Object>>} Lista de registros o `[]` si no hay registros.
+   * @returns {Promise<Array<Object>>} Lista de registros o `[]`.
    * @example
    * const registros = await mdrMastercardRepository.scan();
    */
