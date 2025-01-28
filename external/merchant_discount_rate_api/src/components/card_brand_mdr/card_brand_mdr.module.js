@@ -7,8 +7,8 @@
  * @module cardBrandMdrModule
  */
 
-const { getAllMerchantsDiscountRateService } = require('../../services/get-all-merchants-discount-rate.service');
-const { getMerchantsDiscountRateByCardBrandService } = require('../../services/get-merchants-discount-rate-by-card-brand.service');
+const { getAllMerchantsDiscountRateService } = require('../../services/get-all-mdr.service');
+const { getAllMerchantsDiscountRateByCardBrandService } = require('../../services/get-all-mdr-by-card-brand.service');
 
 const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('card_brand_mdr.module.js');
@@ -52,7 +52,7 @@ const getAllMerchantsDiscountRateByCardBrandModule = async (cardBrand) => {
   logger.info(`Inicio del módulo getAllMerchantsDiscountRateByCardBrandModule para ${cardBrand}`);
 
   try {
-    const result = await getMerchantsDiscountRateByCardBrandService(cardBrand);
+    const result = await getAllMerchantsDiscountRateByCardBrandService(cardBrand);
     logger.info(`Finalización exitosa del módulo getAllMerchantsDiscountRateByCardBrandModule para ${cardBrand}`);
     return result;
   } catch (error) {

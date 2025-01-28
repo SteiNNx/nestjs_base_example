@@ -6,7 +6,7 @@
  * Este servicio obtiene la información de las tablas de MDR para una sola marca:
  * Amex, Discover, Mastercard o Visa, según el parámetro proporcionado.
  *
- * @module getMerchantsDiscountRateByCardBrandService
+ * @module getAllMerchantsDiscountRateByCardBrandService
  */
 
 const MdrAmexRepository = require('../db/repositories/mdr_amex.repository');
@@ -26,13 +26,13 @@ const logger = new LoggerHelper('get-merchants-discount-rate-by-card-brand.servi
  * Si la marca no es reconocida, se lanza un error.
  *
  * @async
- * @function getMerchantsDiscountRateByCardBrandService
+ * @function getAllMerchantsDiscountRateByCardBrandService
  * @param {string} cardBrand - Marca de tarjeta: "amex", "discover", "mastercard", "visa".
  * @returns {Promise<Object>} Objeto que contiene la información de la marca solicitada.
  * @throws {Error} Error con mensaje personalizado si la marca no es soportada o si la consulta falla.
  */
-const getMerchantsDiscountRateByCardBrandService = async (cardBrand) => {
-  logger.info(`Inicio del servicio getMerchantsDiscountRateByCardBrandService para la marca: ${cardBrand}`);
+const getAllMerchantsDiscountRateByCardBrandService = async (cardBrand) => {
+  logger.info(`Inicio del servicio getAllMerchantsDiscountRateByCardBrandService para la marca: ${cardBrand}`);
 
   let mdrData;
 
@@ -105,10 +105,10 @@ const getMerchantsDiscountRateByCardBrandService = async (cardBrand) => {
     }
   }
 
-  logger.info(`Finalización exitosa del servicio getMerchantsDiscountRateByCardBrandService para la marca: ${cardBrand}`);
+  logger.info(`Finalización exitosa del servicio getAllMerchantsDiscountRateByCardBrandService para la marca: ${cardBrand}`);
   return { discountRates: { [cardBrand.toLowerCase()]: mdrData } };
 };
 
 module.exports = {
-  getMerchantsDiscountRateByCardBrandService,
+  getAllMerchantsDiscountRateByCardBrandService,
 };
