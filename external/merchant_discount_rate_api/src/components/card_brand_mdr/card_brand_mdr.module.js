@@ -11,6 +11,9 @@ const { getAllMerchantsDiscountRateByCardBrandService } = require('../../service
 const { updateMerchantsDiscountRateByCardBrandAndMccService } = require('../../services/card_brand_mdr/update-mdr-by-card-brand-and-mcc.service');
 const { deleteMerchantsDiscountRateByCardBrandAndMccService } = require('../../services/card_brand_mdr/delete-mdr-by-card-brand-and-mcc.service');
 
+const validateBodySchema = require('../../helpers/validate.helper');
+const mdrUpdateSchema = require('../../schemas/request/mdr-update.schema');
+
 const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('card_brand_mdr.module.js');
 
@@ -19,14 +22,9 @@ const logger = new LoggerHelper('card_brand_mdr.module.js');
  */
 const getAllMerchantsDiscountRateModule = async (req) => {
   logger.info('Inicio del módulo getAllMerchantsDiscountRateModule');
-  try {
-    const result = await getAllMerchantsDiscountRateService(req);
-    logger.info('Finalización exitosa del módulo getAllMerchantsDiscountRateModule');
-    return result;
-  } catch (error) {
-    logger.error(`Error en getAllMerchantsDiscountRateModule: ${error.message}`, error);
-    throw error;
-  }
+  const result = await getAllMerchantsDiscountRateService(req);
+  logger.info('Finalización exitosa del módulo getAllMerchantsDiscountRateModule');
+  return result;
 };
 
 /**
@@ -34,43 +32,23 @@ const getAllMerchantsDiscountRateModule = async (req) => {
  */
 const getAllMerchantsDiscountRateByCardBrandModule = async (cardBrand) => {
   logger.info(`Inicio del módulo getAllMerchantsDiscountRateByCardBrandModule para ${cardBrand}`);
-  try {
-    const result = await getAllMerchantsDiscountRateByCardBrandService(cardBrand);
-    logger.info(`Finalización exitosa del módulo getAllMerchantsDiscountRateByCardBrandModule para ${cardBrand}`);
-    return result;
-  } catch (error) {
-    logger.error(`Error en getAllMerchantsDiscountRateByCardBrandModule: ${error.message}`, error);
-    throw error;
-  }
+  const result = await getAllMerchantsDiscountRateByCardBrandService(cardBrand);
+  logger.info(`Finalización exitosa del módulo getAllMerchantsDiscountRateByCardBrandModule para ${cardBrand}`);
+  return result;
 };
 
-/**
- * NUEVO Módulo que orquesta la actualización de MDR por marca y MCC.
- */
 const updateMerchantsDiscountRateByCardBrandAndMccModule = async (cardBrand, mcc, updateData) => {
   logger.info(`Inicio del módulo updateMerchantsDiscountRateByCardBrandAndMccModule para ${cardBrand}, mcc=${mcc}`);
-  try {
-    const result = await updateMerchantsDiscountRateByCardBrandAndMccService(cardBrand, mcc, updateData);
-    logger.info(`Finalización exitosa del módulo updateMerchantsDiscountRateByCardBrandAndMccModule para ${cardBrand}, mcc=${mcc}`);
-    return result;
-  } catch (error) {
-    logger.error(`Error en updateMerchantsDiscountRateByCardBrandAndMccModule: ${error.message}`, error);
-    throw error;
-  }
+  validateBodySchema(updateData, mdrUpdateSchema, 'XXX.XXX.0001');
+  const result = await updateMerchantsDiscountRateByCardBrandAndMccService(cardBrand, mcc, updateData);
+  logger.info(`Finalización exitosa del módulo updateMerchantsDiscountRateByCardBrandAndMccModule para ${cardBrand}, mcc=${mcc}`);
+  return result;
 };
 
-/**
- * NUEVO Módulo que orquesta la eliminación de MDR por marca y MCC.
- */
 const deleteMerchantsDiscountRateByCardBrandAndMccModule = async (cardBrand, mcc) => {
   logger.info(`Inicio del módulo deleteMerchantsDiscountRateByCardBrandAndMccModule para ${cardBrand}, mcc=${mcc}`);
-  try {
-    await deleteMerchantsDiscountRateByCardBrandAndMccService(cardBrand, mcc);
-    logger.info(`Finalización exitosa del módulo deleteMerchantsDiscountRateByCardBrandAndMccModule para ${cardBrand}, mcc=${mcc}`);
-  } catch (error) {
-    logger.error(`Error en deleteMerchantsDiscountRateByCardBrandAndMccModule: ${error.message}`, error);
-    throw error;
-  }
+  await deleteMerchantsDiscountRateByCardBrandAndMccService(cardBrand, mcc);
+  logger.info(`Finalización exitosa del módulo deleteMerchantsDiscountRateByCardBrandAndMccModule para ${cardBrand}, mcc=${mcc}`);
 };
 
 module.exports = {

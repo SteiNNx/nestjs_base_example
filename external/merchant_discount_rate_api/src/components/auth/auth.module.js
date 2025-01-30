@@ -8,14 +8,9 @@
  */
 
 const { loginToken } = require('../../services/auth-login-token.service');
-const {
-  authValidateTokenService
-} = require('../../services/auth-validate-token.service');
-const {
-  refreshTokenService
-} = require('../../services/auth-refresh-token.service');  // Nuevo servicio que podemos crear
+const { authValidateTokenService } = require('../../services/auth-validate-token.service');
+const { refreshTokenService } = require('../../services/auth-refresh-token.service');
 
-const AuthError = require('../../exceptions/auth.exception');
 const validateBodySchema = require('../../helpers/validate.helper');
 const authLoginTokenSchema = require('../../schemas/request/auth-login-token.schema');
 const authValidateTokenSchema = require('../../schemas/request/auth-validate-token.schema');
@@ -66,22 +61,7 @@ const authValidateTokenModule = async (req) => {
   validateBodySchema(req.body, authValidateTokenSchema, 'XXX.XXX.0001');
   logger.info('Esquema validado correctamente');
 
-  // Token en el body
   let token = req.body.token;
-
-  // Si no está en el body, buscar en el header 'Authorization'
-  if (!token && req.headers.authorization) {
-    const authHeader = req.headers.authorization; // "Bearer <token>"
-    token = authHeader.split(' ')[1];
-  }
-
-  if (!token) {
-    throw new AuthError(
-      'AUTH.TOKEN.MISSING',
-      'Token no provisto en body o en headers.',
-      401
-    );
-  }
 
   // Invocar el servicio de validación
   const decoded = await authValidateTokenService(token);
@@ -102,16 +82,7 @@ const authValidateTokenModule = async (req) => {
 const authRefreshTokenModule = async (req) => {
   logger.info('Inicio de refresco de token');
 
-  // El token de entrada puede venir en el body o en el header
   let token = req.body.token;
-
-  if (!token) {
-    throw new AuthError(
-      'AUTH.REFRESH.MISSING_TOKEN',
-      'Token no provisto para refrescar.',
-      401
-    );
-  }
 
   const newToken = await refreshTokenService(token);
   logger.info('Refresco de token exitoso');
