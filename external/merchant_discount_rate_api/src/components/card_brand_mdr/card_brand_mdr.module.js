@@ -30,14 +30,19 @@ const getAllMerchantsDiscountRateModule = async (req) => {
 /**
  * Orquesta la obtención de las tasas de descuento (MDR) para una marca de tarjeta específica.
  */
-const getAllMerchantsDiscountRateByCardBrandModule = async (cardBrand) => {
+const getAllMerchantsDiscountRateByCardBrandModule = async (req) => {
+  const { cardBrand } = req.params;
   logger.info(`Inicio del módulo getAllMerchantsDiscountRateByCardBrandModule para ${cardBrand}`);
   const result = await getAllMerchantsDiscountRateByCardBrandService(cardBrand);
   logger.info(`Finalización exitosa del módulo getAllMerchantsDiscountRateByCardBrandModule para ${cardBrand}`);
   return result;
 };
 
-const updateMerchantsDiscountRateByCardBrandAndMccModule = async (cardBrand, mcc, updateData) => {
+const updateMerchantsDiscountRateByCardBrandAndMccModule = async (req) => {
+
+  const { cardBrand, mcc } = req.params;
+  const updateData = req.body;
+
   logger.info(`Inicio del módulo updateMerchantsDiscountRateByCardBrandAndMccModule para ${cardBrand}, mcc=${mcc}`);
   validateBodySchema(updateData, mdrUpdateSchema, 'XXX.XXX.0001');
   const result = await updateMerchantsDiscountRateByCardBrandAndMccService(cardBrand, mcc, updateData);
@@ -45,7 +50,8 @@ const updateMerchantsDiscountRateByCardBrandAndMccModule = async (cardBrand, mcc
   return result;
 };
 
-const deleteMerchantsDiscountRateByCardBrandAndMccModule = async (cardBrand, mcc) => {
+const deleteMerchantsDiscountRateByCardBrandAndMccModule = async (req) => {
+  const { cardBrand, mcc } = req.params;
   logger.info(`Inicio del módulo deleteMerchantsDiscountRateByCardBrandAndMccModule para ${cardBrand}, mcc=${mcc}`);
   await deleteMerchantsDiscountRateByCardBrandAndMccService(cardBrand, mcc);
   logger.info(`Finalización exitosa del módulo deleteMerchantsDiscountRateByCardBrandAndMccModule para ${cardBrand}, mcc=${mcc}`);

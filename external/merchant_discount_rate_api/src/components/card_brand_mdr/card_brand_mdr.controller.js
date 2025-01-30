@@ -51,9 +51,7 @@ const getAllMerchantsDiscountRateController = async (req, res, next) => {
 const getAllMerchantsDiscountRateByCardBrandController = async (req, res, next) => {
   logger.info('Inicio del controlador getAllMerchantsDiscountRateByCardBrandController');
   try {
-    const { cardBrand } = req.params;
-
-    const result = await getAllMerchantsDiscountRateByCardBrandModule(cardBrand);
+    const result = await getAllMerchantsDiscountRateByCardBrandModule(req);
 
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     res.setHeader('Content-Security-Policy', "script-src 'self'");
@@ -76,18 +74,10 @@ const getAllMerchantsDiscountRateByCardBrandController = async (req, res, next) 
   }
 };
 
-/**
- * NUEVO Controlador para actualizar campos de MDR según la marca y MCC.
- * Endpoint: PUT /card-brand-mdr/update/:cardBrand/mcc/:mcc
- */
 const updateMerchantsDiscountRateByCardBrandAndMccController = async (req, res, next) => {
   logger.info('Inicio del controlador updateMerchantsDiscountRateByCardBrandAndMccController');
   try {
-    const { cardBrand, mcc } = req.params;
-    // El body contendrá los campos a actualizar (rate, uf, etc.)
-    const updateData = req.body;
-
-    const result = await updateMerchantsDiscountRateByCardBrandAndMccModule(cardBrand, mcc, updateData);
+    const result = await updateMerchantsDiscountRateByCardBrandAndMccModule(req);
 
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     res.setHeader('Content-Security-Policy', "script-src 'self'");
@@ -112,16 +102,12 @@ const updateMerchantsDiscountRateByCardBrandAndMccController = async (req, res, 
   }
 };
 
-/**
- * NUEVO Controlador para eliminar un registro por marca y MCC.
- * Endpoint: DELETE /card-brand-mdr/delete/:cardBrand/mcc/:mcc
- */
+
 const deleteMerchantsDiscountRateByCardBrandAndMccController = async (req, res, next) => {
   logger.info('Inicio del controlador deleteMerchantsDiscountRateByCardBrandAndMccController');
   try {
-    const { cardBrand, mcc } = req.params;
 
-    await deleteMerchantsDiscountRateByCardBrandAndMccModule(cardBrand, mcc);
+    await deleteMerchantsDiscountRateByCardBrandAndMccModule(req);
 
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
     res.setHeader('Content-Security-Policy', "script-src 'self'");
