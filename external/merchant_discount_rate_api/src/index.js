@@ -7,6 +7,7 @@
  * @module index
  */
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
 
@@ -20,38 +21,47 @@ const { port } = config;
 const app = express();
 
 // ============================================================================
-// 1) Configuración de bodyParser para parsear JSON y XML
+// A) RUTA DE ARCHIVOS ESTÁTICOS
+//    - Servimos la carpeta "_public" en la ruta "/static"
+// ============================================================================
+app.use('/static', express.static(path.join(__dirname, 'components', '_public')));
+
+// ============================================================================
+// B) CONFIGURACIÓN DE BODY PARSER PARA JSON Y XML
+//    - Parsear JSON (Content-Type: application/json)
+//    - Parsear XML como texto (Content-Type: application/xml o text/xml)
 // ============================================================================
 app.use(
   bodyParser.json({
-    type: ['application/json'], // Solo parsea JSON si el Content-Type es "application/json"
+    type: ['application/json'],
     limit: '10mb',
   })
 );
 
 app.use(
   bodyParser.text({
-    type: ['application/xml', 'text/xml'], // Parsea XML como texto
+    type: ['application/xml', 'text/xml'],
     limit: '10mb',
   })
 );
 
 // ============================================================================
-// 2) Aplicación de helmet para seguridad y configuración de cabeceras
+// C) APLICACIÓN DE HELMET PARA SEGURIDAD DE CABECERAS
 // ============================================================================
 app.use(helmet());
 app.disable('x-powered-by');
 
 // ============================================================================
-// 3) Registro de rutas principales de la aplicación
+// D) REGISTRO DE RUTAS PRINCIPALES DE LA APLICACIÓN
 // ============================================================================
 routes(app);
 
 // ============================================================================
-// 4) Inicio del servidor en el puerto configurado
+// E) INICIO DEL SERVIDOR EN EL PUERTO CONFIGURADO
 // ============================================================================
 app.listen(port, () => {
   logger.info(`[index] Servidor escuchando en http://localhost:${port}`);
+  logger.info(`[index] Servidor Publico escuchando en http://localhost:${port}/static/index.html`);
 });
 
 module.exports = { app };
