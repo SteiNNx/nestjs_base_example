@@ -21,27 +21,28 @@ const { port } = config;
 const app = express();
 
 // ============================================================================
-// A) RUTA DE ARCHIVOS ESTÁTICOS
-//    - Servimos la carpeta "_public" en la ruta "/static"
+// A) CONTROLADOR DE ARCHIVOS PÚBLICOS
+//    - Se delega la entrega de la parte "pública" a un controller ubicado en
+//      "src/components/_public". Así se evita colidir con otras rutas.
 // ============================================================================
-app.use('/static', express.static(path.join(__dirname, 'components', '_public')));
+// Al acceder a /static o /static/upload_file_mdr se invoca el controller.
+app.use('/static', require('./components/_public/controller'));
 
 // ============================================================================
 // B) CONFIGURACIÓN DE BODY PARSER PARA JSON Y XML
-//    - Parsear JSON (Content-Type: application/json)
-//    - Parsear XML como texto (Content-Type: application/xml o text/xml)
+//    - Parsea JSON (Content-Type: application/json)
+//    - Parsea XML como texto (Content-Type: application/xml o text/xml)
 // ============================================================================
 app.use(
   bodyParser.json({
     type: ['application/json'],
-    limit: '10mb',
+    limit: '10mb'
   })
 );
-
 app.use(
   bodyParser.text({
     type: ['application/xml', 'text/xml'],
-    limit: '10mb',
+    limit: '10mb'
   })
 );
 
@@ -52,16 +53,23 @@ app.use(helmet());
 app.disable('x-powered-by');
 
 // ============================================================================
-// D) REGISTRO DE RUTAS PRINCIPALES DE LA APLICACIÓN
+// D) CONFIGURACIÓN DEL MOTOR DE VISTAS (EJS)
+// ============================================================================
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+// ============================================================================
+// E) REGISTRO DE RUTAS PRINCIPALES DE LA APLICACIÓN
+//    - Se registran otras rutas (por ejemplo, el endpoint /upload para recibir el formulario).
 // ============================================================================
 routes(app);
 
 // ============================================================================
-// E) INICIO DEL SERVIDOR EN EL PUERTO CONFIGURADO
+// F) INICIO DEL SERVIDOR EN EL PUERTO CONFIGURADO
 // ============================================================================
 app.listen(port, () => {
   logger.info(`[index] Servidor escuchando en http://localhost:${port}`);
-  logger.info(`[index] Servidor Publico escuchando en http://localhost:${port}/static/index.html`);
+  logger.info(`[index] Vista Pública accesible en http://localhost:${port}/static/upload_file_mdr`);
 });
 
 module.exports = { app };

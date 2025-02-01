@@ -9,6 +9,7 @@
 const healthCheckRoutes = require('../components/healthcheck/healthcheck.route');
 const authRoutes = require('../components/auth/auth.route');
 const cardBrandMdrRoutes = require('../components/card_brand_mdr/card_brand_mdr.routes');
+const uploadFileMdrRoutes = require('../components/upload_file_mdr/upload_file_mdr.routes');
 
 const globalErrorHandlerMiddleware = require('../middlewares/global-error-handler.middleware');
 const InterceptorLoggerMiddleware = require('../middlewares/interceptor-logger.middleware');
@@ -45,6 +46,7 @@ const routes = (app) => {
   healthCheckRoutes(app, prefixApi);
   authRoutes(app, prefixApi);
   cardBrandMdrRoutes(app, prefixApi);
+  uploadFileMdrRoutes(app, prefixApi);
 
   // ============================================================================
   // 4) Registrar middleware global de manejo de errores

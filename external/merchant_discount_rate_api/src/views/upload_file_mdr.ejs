@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Meta tag para asegurar un buen comportamiento en dispositivos móviles -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario de Subida (EJS)</title>
+
+    <!-- Enlace al archivo CSS (servido desde /static/style.css) -->
+    <link rel="stylesheet" href="/static/style.css">
+
+    <!-- Favicon para evitar el error de solicitud /favicon.ico -->
+    <link rel="icon" type="image/svg+xml" href="/static/icon.svg">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Formulario de Subida de Archivo</h1>
+        <form action="/ms/mdr/v1/mdr/upload" method="POST" enctype="multipart/form-data" class="upload-form">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" required>
+            </div>
+            <div class="form-group">
+                <label for="archivo">Archivo:</label>
+                <input type="file" name="archivo" id="archivo" accept=".txt,.pdf" required>
+            </div>
+            <button type="submit" class="btn-submit">Enviar</button>
+        </form>
+    </div>
+</body>
+
+</html>
