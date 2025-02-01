@@ -8,8 +8,8 @@
 
 const healthCheckRoutes = require('../components/healthcheck/healthcheck.route');
 const authRoutes = require('../components/auth/auth.route');
-const cardBrandMdrRoutes = require('../components/card_brand_mdr/card_brand_mdr.routes');
-const uploadFileMdrRoutes = require('../components/upload_file_mdr/upload_file_mdr.routes');
+const cardBrandMdrRoutes = require('../components/card_brand_mdr/card_brand_mdr.route');
+const uploadFileMdrRoutes = require('../components/upload_file_mdr/upload_file_mdr.route');
 
 const globalErrorHandlerMiddleware = require('../middlewares/global-error-handler.middleware');
 const InterceptorLoggerMiddleware = require('../middlewares/interceptor-logger.middleware');
