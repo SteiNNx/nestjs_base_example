@@ -1,17 +1,17 @@
-// src/services/auth-login-token.service.js
+// src/services/auth/auth-login-token.service.js
 
 /**
  * @file auth-login-token.service.js
  * @description Servicio para manejar la autenticación de usuarios y generación de tokens JWT.
  */
 
-const UsersRepository = require('../db/repositories/users.repository');
-const { generateToken } = require('../helpers/jsonwebtoken.helper');
-const { verifyPassword } = require('../helpers/bcrypt.helper');
-const { handleThrownError } = require('../providers/error-handler.provider');
+const UsersRepository = require('../../db/repositories/users.repository');
+const { generateToken } = require('../../helpers/jsonwebtoken.helper');
+const { verifyPassword } = require('../../helpers/bcrypt.helper');
+const { handleThrownError } = require('../../providers/error-handler.provider');
 
-const AuthError = require('../exceptions/auth.exception');
-const LoggerHelper = require('../helpers/logger.helper');
+const AuthError = require('../../exceptions/auth.exception');
+const LoggerHelper = require('../../helpers/logger.helper');
 
 /**
  *  Servicio de generación de token (login).

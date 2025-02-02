@@ -1,4 +1,4 @@
-// src/services/delete-merchants-discount-rate-by-card-brand-and-mcc.service.js
+// src/services/card_brand_mdr/delete-merchants-discount-rate-by-card-brand-and-mcc.service.js
 
 /**
  * Servicio para eliminar registros de MDR según la marca y el MCC.

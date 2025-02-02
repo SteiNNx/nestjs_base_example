@@ -7,7 +7,7 @@
  * @module uploadFileMdrModule
  */
 
-const { uploadFileMdrService } = require('../../services/upload_file_mdr.service');
+const { uploadFileMdrService } = require('../../services/upload_file_mdr/upload_file_mdr.service');
 
 const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('upload_file_mdr.module.js');

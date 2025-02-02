@@ -1,16 +1,16 @@
-// src/services/auth-refresh-token.service.js
+// src/services/auth/auth-refresh-token.service.js
 
 /**
  * @file auth-refresh-token.service.js
  * @description Servicio para refrescar un token JWT.
  */
 
-const UsersRepository = require('../db/repositories/users.repository');
+const UsersRepository = require('../../db/repositories/users.repository');
 const { authValidateTokenService } = require('./auth-validate-token.service');
-const { generateToken } = require('../helpers/jsonwebtoken.helper');
-const { handleThrownError } = require('../providers/error-handler.provider');
-const LoggerHelper = require('../helpers/logger.helper');
-const AuthError = require('../exceptions/auth.exception');
+const { generateToken } = require('../../helpers/jsonwebtoken.helper');
+const { handleThrownError } = require('../../providers/error-handler.provider');
+const LoggerHelper = require('../../helpers/logger.helper');
+const AuthError = require('../../exceptions/auth.exception');
 
 /**
  *  Servicio de refresco de token (refresh).

@@ -7,9 +7,9 @@
  * @module authModule
  */
 
-const { loginToken } = require('../../services/auth-login-token.service');
-const { authValidateTokenService } = require('../../services/auth-validate-token.service');
-const { refreshTokenService } = require('../../services/auth-refresh-token.service');
+const { loginToken } = require('../../services/auth/auth-login-token.service');
+const { authValidateTokenService } = require('../../services/auth/auth-validate-token.service');
+const { refreshTokenService } = require('../../services/auth/auth-refresh-token.service');
 
 const validateBodySchema = require('../../helpers/validate.helper');
 const authLoginTokenSchema = require('../../schemas/request/auth-login-token.schema');

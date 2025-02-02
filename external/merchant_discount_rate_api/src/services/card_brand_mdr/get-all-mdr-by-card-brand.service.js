@@ -1,4 +1,4 @@
-// src/services/get-all-mdr-by-card-brand.service.js
+// src/services/card_brand_mdr/get-all-mdr-by-card-brand.service.js
 
 /**
  * Servicio para la obtención de tasas de descuento para comerciantes (MDR) de una marca específica.

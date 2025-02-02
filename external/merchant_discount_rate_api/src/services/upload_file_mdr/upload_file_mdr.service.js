@@ -1,4 +1,4 @@
-// src/services/upload_file_mdr.service.js
+// src/services/upload_file_mdr/upload_file_mdr.service.js
 
 /**
  * Servicio para la carga y procesamiento de archivos MDR.
@@ -7,11 +7,11 @@
  * @module uploadFileMdrService
  */
 
-const { parseTarifaLineToItem, readDynamicFile } = require('../helpers/file-system.helper');
-const { tarifasMdrMapping } = require('../helpers/mapping-attributes.helper');
-const { handleThrownError } = require('../providers/error-handler.provider');
+const { parseTarifaLineToItem, readDynamicFile } = require('../../helpers/file-system.helper');
+const { tarifasMdrMapping } = require('../../helpers/mapping-attributes.helper');
+const { handleThrownError } = require('../../providers/error-handler.provider');
 
-const LoggerHelper = require('../helpers/logger.helper');
+const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('upload_file_mdr.service.js');
 
 /**

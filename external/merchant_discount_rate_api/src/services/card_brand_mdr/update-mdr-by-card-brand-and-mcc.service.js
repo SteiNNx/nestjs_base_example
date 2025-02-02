@@ -1,4 +1,4 @@
-// src/services/update-merchants-discount-rate-by-card-brand-and-mcc.service.js
+// src/services/card_brand_mdr/update-merchants-discount-rate-by-card-brand-and-mcc.service.js
 
 const MdrAmexRepository = require('../../db/repositories/mdr_amex.repository');
 const MdrDiscoverRepository = require('../../db/repositories/mdr_discover.repository');

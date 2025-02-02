@@ -1,12 +1,12 @@
-// src/services/auth-validate-token.service.js
+// src/services/auth/auth-validate-token.service.js
 
-const UsersRepository = require('../db/repositories/users.repository');
-const { validateToken } = require('../helpers/jsonwebtoken.helper');
-const { handleThrownError } = require('../providers/error-handler.provider');
+const UsersRepository = require('../../db/repositories/users.repository');
+const { validateToken } = require('../../helpers/jsonwebtoken.helper');
+const { handleThrownError } = require('../../providers/error-handler.provider');
 
-const AuthError = require('../exceptions/auth.exception');
+const AuthError = require('../../exceptions/auth.exception');
 
-const LoggerHelper = require('../helpers/logger.helper');
+const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('auth-validate-token.service.js');
 
 /**
