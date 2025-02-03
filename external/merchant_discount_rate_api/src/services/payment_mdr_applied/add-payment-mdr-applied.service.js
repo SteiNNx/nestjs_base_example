@@ -34,9 +34,6 @@ const addPaymentMerchantDiscountRateAppliedService = async (addData) => {
   logger.warn(`Marca de tarjeta : ${addData.card_brand}. `);
   logger.warn(`Mcc de tarjeta : ${addData.mcc}. `);
 
-  logger.warn(`||| Marca de tarjeta : ${(addData.card_brand || '').toLowerCase()}. `);
-
-
   // 2) Determinamos el repositorio según la marca de la tarjeta (card_brand).
   let brandRepository;
   switch ((addData.card_brand || '').toLowerCase()) {
