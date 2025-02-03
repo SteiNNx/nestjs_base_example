@@ -5,9 +5,10 @@
  * @description Repositorio para interactuar con la tabla 'mdr_mastercard' en DynamoDB.
  */
 
+const { getDynamoDbTablesNames } = require('../../providers/credentials.provider');
 const ClientDynamoDb = require('../client.dynamodb');
-const LoggerHelper = require('../../helpers/logger.helper');
 
+const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('mdr_mastercard.repository.js');
 
 class MdrMastercardRepository {
@@ -15,8 +16,9 @@ class MdrMastercardRepository {
    * Crea una instancia de MdrMastercardRepository para la tabla 'mdr_mastercard'.
    */
   constructor() {
+    const { tableNameMdrMastercard } = getDynamoDbTablesNames();
     this.dynamoClient = new ClientDynamoDb();
-    this.tableName = 'mdr_mastercard';
+    this.tableName = tableNameMdrMastercard;
   }
 
   /**

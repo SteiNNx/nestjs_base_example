@@ -4,7 +4,7 @@
  * @file payment_mdr_applied.repository.js
  * @description Repositorio para interactuar con la tabla 'payment_mdr_applied' en DynamoDB.
  */
-
+const { getDynamoDbTablesNames } = require('../../providers/credentials.provider');
 const ClientDynamoDb = require('../client.dynamodb');
 
 const LoggerHelper = require('../../helpers/logger.helper');
@@ -15,8 +15,9 @@ class PaymentMdrAppliedRepository {
      * Crea una instancia de PaymentMdrAppliedRepository para la tabla 'payment_mdr_applied'.
      */
     constructor() {
+        const { tableNamePaymentsMdrApplied } = getDynamoDbTablesNames();
         this.dynamoClient = new ClientDynamoDb();
-        this.tableName = 'payment_mdr_applied';
+        this.tableName = tableNamePaymentsMdrApplied;
     }
 
     /**

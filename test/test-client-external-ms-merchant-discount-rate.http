@@ -245,3 +245,51 @@ DELETE http://localhost:3003/ms/mdr/v1/card-brand-mdr/delete/visa/mcc/5812
 Content-Type: application/json; charset=utf-8
 X-Security-Header-Key: 7374b7ba0d5a8fa0c866097d401a96c5
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiVVNFUiIsInVzZXJJZCI6MiwiaWF0IjoxNzM4MjAwODA0LCJleHAiOjE4MzI4MDg4MDQsImF1ZCI6ImF1dGgubWVyY2hhbnQtZGlzY291bnQtcmF0ZS5jb20iLCJpc3MiOiJhdXRoLm1lcmNoYW50LWRpc2NvdW50LXJhdGUuY29tIiwic3ViIjoidGVzdCIsImp0aSI6ImRiMWE4OWZhLThlNzUtNDgzMC05MTg4LTIzMGNlZWRkNzIzYyJ9.RXsze9E-Fe7ZviFOksDQz-psGF1YMv65YQ2iXGlZPT_zr8kjwo-b6S3nxl8KS8vdafQKVapz6v7A6H1O9zS8uLNPLdDn-rTA323gjUd8vp1qY0nlVo0-cFZsc8LcNn7anUSRAMxlyTKEFf-u-nIJKEn8fHeKVAwUxBTGU3LJnHrIIi6OfbV0MNm_dBbAZjpuTyuHUS8WsUu3vdDKKAMkNXYDtePYeWdpY3BZqU6dSlXYluf2NmaUb7iJUYcxoAsFJqVk8AaSuhHOHm0gIWzB5tPDhB4tFFqh3YPhwUaqx_NBrzZgOc79cjKWixMLmc4kKuuzH0GjcYDuSvAya904jw
+
+### MDR: pago
+POST http://localhost:3003/ms/mdr/v1/payment-mdr-applied/add
+Content-Type: application/json; charset=utf-8
+X-Security-Header-Key: 7374b7ba0d5a8fa0c866097d401a96c5
+Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiVVNFUiIsInVzZXJJZCI6MiwiaWF0IjoxNzM4MjAwODA0LCJleHAiOjE4MzI4MDg4MDQsImF1ZCI6ImF1dGgubWVyY2hhbnQtZGlzY291bnQtcmF0ZS5jb20iLCJpc3MiOiJhdXRoLm1lcmNoYW50LWRpc2NvdW50LXJhdGUuY29tIiwic3ViIjoidGVzdCIsImp0aSI6ImRiMWE4OWZhLThlNzUtNDgzMC05MTg4LTIzMGNlZWRkNzIzYyJ9.RXsze9E-Fe7ZviFOksDQz-psGF1YMv65YQ2iXGlZPT_zr8kjwo-b6S3nxl8KS8vdafQKVapz6v7A6H1O9zS8uLNPLdDn-rTA323gjUd8vp1qY0nlVo0-cFZsc8LcNn7anUSRAMxlyTKEFf-u-nIJKEn8fHeKVAwUxBTGU3LJnHrIIi6OfbV0MNm_dBbAZjpuTyuHUS8WsUu3vdDKKAMkNXYDtePYeWdpY3BZqU6dSlXYluf2NmaUb7iJUYcxoAsFJqVk8AaSuhHOHm0gIWzB5tPDhB4tFFqh3YPhwUaqx_NBrzZgOc79cjKWixMLmc4kKuuzH0GjcYDuSvAya904jw
+
+{
+  "transaction_id": "txn-123456",
+  "card_number": "411111******1111",
+  "amount": 100.50,
+  "currency": "USD",
+  "timestamp": "2025-02-01T12:34:56Z",
+  "merchant": {
+    "merchant_id": "m-001",
+    "name": "Restaurante El Buen Sabor",
+    "category": "Restaurante",
+    "location": {
+      "address": "Av. Siempre Viva 123",
+      "city": "Springfield",
+      "country": "USA",
+      "latitude": 39.7817,
+      "longitude": -89.6501
+    }
+  },
+  "transaction_type": "Pago",
+  "auth_code": "AUTH1234",
+  "response_code": "00",
+  "terminal_id": "term-001",
+  "issuer": {
+    "bank_id": "bank-001",
+    "name": "Banco Central",
+    "country": "USA"
+  },
+  "cardholder_verification_method": "Firma",
+  "emv_data": {
+    "application_id": "A0000000031010",
+    "application_label": "VISA CREDIT",
+    "transaction_counter": 5,
+    "unpredictable_number": "1A2B3C4D",
+    "issuer_application_data": "01020304"
+  },
+  "additional_data": {
+    "installments": 1,
+    "tip_amount": 0.00,
+    "cashback_amount": 0.00
+  }
+}

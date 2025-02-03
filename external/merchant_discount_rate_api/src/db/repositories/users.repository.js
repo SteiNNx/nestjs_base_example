@@ -5,6 +5,7 @@
  * Repositorio para interactuar con la tabla 'users' en DynamoDB.
  */
 
+const { getDynamoDbTablesNames } = require('../../providers/credentials.provider');
 const ClientDynamoDb = require('../client.dynamodb');
 const LoggerHelper = require('../../helpers/logger.helper');
 
@@ -15,8 +16,9 @@ class UsersRepository {
      * Crea una instancia de UsersRepository.
      */
     constructor() {
+        const { tableNamePayments } = getDynamoDbTablesNames();
         this.dynamoClient = new ClientDynamoDb();
-        this.tableName = 'users';
+        this.tableName = tableNamePayments;
     }
 
     /**

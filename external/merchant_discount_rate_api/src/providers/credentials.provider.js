@@ -5,8 +5,8 @@ const { config } = require('../config/config.js');
 
 const AdapterError = require('../exceptions/adapter.exception');
 const TechnicalError = require('../exceptions/technical.exception');
-const LoggerHelper = require('../helpers/logger.helper.js');
 
+const LoggerHelper = require('../helpers/logger.helper.js');
 const logger = new LoggerHelper('credentials.provider');
 
 /**
@@ -243,9 +243,63 @@ const getBcryptPasswordConfig = () => {
     };
 };
 
+/**
+ * @function getDynamoDbTablesNames
+ * @description Retorna los nombres de las tablas de DynamoDB configuradas en config.dynamoDb.
+ * Realiza validaciones para asegurar que cada uno de los nombres no sea vacío o indefinido.
+ * @returns {Object} Objeto con las siguientes propiedades:
+ *   - tableNameUsers {string}: Nombre de la tabla de usuarios.
+ *   - tableNameMdrAmex {string}: Nombre de la tabla para Amex.
+ *   - tableNameMdrDiscover {string}: Nombre de la tabla para Discover.
+ *   - tableNameMdrMastercard {string}: Nombre de la tabla para Mastercard.
+ *   - tableNameMdrVisa {string}: Nombre de la tabla para Visa.
+ *   - tableNamePayments {string}: Nombre de la tabla para pagos.
+ *   - tableNamePaymentsMdrApplied {string}: Nombre de la tabla para Payment MDR Applied.
+ *   - tableNameMerchants {string}: Nombre de la tabla para comerciantes.
+ * @throws {TechnicalError} Si alguna de las variables requeridas está vacía o no definida.
+ */
+const getDynamoDbTablesNames = () => {
+    const {
+        tableNameUsers,
+        tableNameMdrAmex,
+        tableNameMdrDiscover,
+        tableNameMdrMastercard,
+        tableNameMdrVisa,
+        tableNamePayments,
+        tableNamePaymentsMdrApplied,
+        tableNameMerchants,
+    } = config.dynamoDb;
+
+    // Validar cada uno de los nombres de las tablas
+    const requiredTables = {
+        tableNameUsers,
+        tableNameMdrAmex,
+        tableNameMdrDiscover,
+        tableNameMdrMastercard,
+        tableNameMdrVisa,
+        tableNamePayments,
+        tableNamePaymentsMdrApplied,
+        tableNameMerchants,
+    };
+
+    for (const [key, value] of Object.entries(requiredTables)) {
+        if (typeof value !== 'string' || !value.trim()) {
+            logger.error(`[getDynamoDbTablesNames] ${key} está vacía o no definida.`);
+            throw new TechnicalError(
+                `DYNAMODB.INVALID_${key.toUpperCase()}`,
+                `${key} está vacía o no definida.`,
+                500
+            );
+        }
+    }
+
+    return requiredTables;
+};
+
 module.exports = {
     getAuthConfig,
     getSecurityKey,
     getDynamoDbConfig,
     getBcryptPasswordConfig,
+    getDynamoDbTablesNames,
 };

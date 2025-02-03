@@ -5,6 +5,7 @@
  * @description Repositorio para interactuar con la tabla 'mdr_amex' en DynamoDB.
  */
 
+const { getDynamoDbTablesNames } = require('../../providers/credentials.provider');
 const ClientDynamoDb = require('../client.dynamodb');
 
 const LoggerHelper = require('../../helpers/logger.helper');
@@ -15,8 +16,9 @@ class MdrAmexRepository {
    * Crea una instancia de MdrAmexRepository para la tabla 'mdr_amex'.
    */
   constructor() {
+    const { tableNameMdrAmex } = getDynamoDbTablesNames();
     this.dynamoClient = new ClientDynamoDb();
-    this.tableName = 'mdr_amex';
+    this.tableName = tableNameMdrAmex;
   }
 
   /**

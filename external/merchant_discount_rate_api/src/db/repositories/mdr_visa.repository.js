@@ -5,6 +5,7 @@
  * @description Repositorio para interactuar con la tabla 'mdr_visa' en DynamoDB.
  */
 
+const { getDynamoDbTablesNames } = require('../../providers/credentials.provider');
 const ClientDynamoDb = require('../client.dynamodb');
 const LoggerHelper = require('../../helpers/logger.helper');
 
@@ -15,8 +16,9 @@ class MdrVisaRepository {
    * Crea una instancia de MdrVisaRepository para la tabla 'mdr_visa'.
    */
   constructor() {
+    const { tableNameMdrVisa } = getDynamoDbTablesNames();
     this.dynamoClient = new ClientDynamoDb();
-    this.tableName = 'mdr_visa';
+    this.tableName = tableNameMdrVisa;
   }
 
   /**

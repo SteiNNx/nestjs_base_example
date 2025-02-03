@@ -5,6 +5,7 @@
  * @description Repositorio para interactuar con la tabla 'mdr_discover' en DynamoDB.
  */
 
+const { getDynamoDbTablesNames } = require('../../providers/credentials.provider');
 const ClientDynamoDb = require('../client.dynamodb');
 const LoggerHelper = require('../../helpers/logger.helper');
 
@@ -15,8 +16,9 @@ class MdrDiscoverRepository {
    * Crea una instancia de MdrDiscoverRepository para la tabla 'mdr_discover'.
    */
   constructor() {
+    const { tableNameMdrAmex } = getDynamoDbTablesNames();
     this.dynamoClient = new ClientDynamoDb();
-    this.tableName = 'mdr_discover';
+    this.tableName = tableNameMdrAmex;
   }
 
   /**
