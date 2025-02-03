@@ -5,7 +5,7 @@
  * @description Middleware para validar un token JWT y comprobar que coincida con el token almacenado en la BD.
  */
 
-const { authValidateTokenService } = require('../services/auth-validate-token.service');
+const { authValidateTokenService } = require('../services/auth/auth-validate-token.service');
 const AuthError = require('../exceptions/auth.exception');
 const UsersRepository = require('../db/repositories/users.repository');
 const LoggerHelper = require('../helpers/logger.helper');

@@ -1,9 +1,8 @@
 // src/components/card_brand_mdr/card_brand_mdr.module.js
 
 /**
- * Módulo para la orquestación de la obtención y modificación de tasas de descuento (MDR).
- *
  * @module cardBrandMdrModule
+ * @description Módulo para la orquestación de la obtención y modificación de tasas de descuento (MDR) para marcas de tarjetas.
  */
 
 const { getAllMerchantsDiscountRateService } = require('../../services/card_brand_mdr/get-all-mdr.service');
@@ -18,7 +17,11 @@ const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('card_brand_mdr.module.js');
 
 /**
- * Orquesta la obtención de las tasas de descuento para todas las marcas.
+ * @async
+ * @function getAllMerchantsDiscountRateModule
+ * @description Orquesta la obtención de las tasas de descuento para todas las marcas.
+ * @param {import('express').Request} req - Objeto de solicitud HTTP.
+ * @returns {Promise<Object>} Resultado obtenido por el servicio.
  */
 const getAllMerchantsDiscountRateModule = async (req) => {
   logger.info('Inicio del módulo getAllMerchantsDiscountRateModule');
@@ -28,7 +31,11 @@ const getAllMerchantsDiscountRateModule = async (req) => {
 };
 
 /**
- * Orquesta la obtención de las tasas de descuento (MDR) para una marca de tarjeta específica.
+ * @async
+ * @function getAllMerchantsDiscountRateByCardBrandModule
+ * @description Orquesta la obtención de las tasas de descuento (MDR) para una marca de tarjeta específica.
+ * @param {import('express').Request} req - Objeto de solicitud HTTP, se espera que req.params.cardBrand esté definido.
+ * @returns {Promise<Object>} Resultado obtenido por el servicio.
  */
 const getAllMerchantsDiscountRateByCardBrandModule = async (req) => {
   const { cardBrand } = req.params;
@@ -38,8 +45,14 @@ const getAllMerchantsDiscountRateByCardBrandModule = async (req) => {
   return result;
 };
 
+/**
+ * @async
+ * @function updateMerchantsDiscountRateByCardBrandAndMccModule
+ * @description Orquesta la actualización de uno o varios campos de la tasa de descuento para una marca y un MCC específicos.
+ * @param {import('express').Request} req - Objeto de solicitud HTTP; se espera que req.params.cardBrand y req.params.mcc estén definidos, y req.body contenga los datos a actualizar.
+ * @returns {Promise<Object>} Resultado obtenido por el servicio.
+ */
 const updateMerchantsDiscountRateByCardBrandAndMccModule = async (req) => {
-
   const { cardBrand, mcc } = req.params;
   const updateData = req.body;
 
@@ -50,6 +63,13 @@ const updateMerchantsDiscountRateByCardBrandAndMccModule = async (req) => {
   return result;
 };
 
+/**
+ * @async
+ * @function deleteMerchantsDiscountRateByCardBrandAndMccModule
+ * @description Orquesta la eliminación del registro de tasa de descuento para una marca y MCC específicos.
+ * @param {import('express').Request} req - Objeto de solicitud HTTP; se espera que req.params.cardBrand y req.params.mcc estén definidos.
+ * @returns {Promise<void>} No retorna datos, sólo ejecuta la eliminación.
+ */
 const deleteMerchantsDiscountRateByCardBrandAndMccModule = async (req) => {
   const { cardBrand, mcc } = req.params;
   logger.info(`Inicio del módulo deleteMerchantsDiscountRateByCardBrandAndMccModule para ${cardBrand}, mcc=${mcc}`);

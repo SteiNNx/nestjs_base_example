@@ -1,9 +1,8 @@
 // src/components/card_brand_mdr/card_brand_mdr.route.js
 
 /**
- * Rutas relacionadas con la obtención de tasas de descuento para comerciantes (MDR).
- *
  * @module cardBrandMdrRoutes
+ * @description Rutas para la gestión de tasas de descuento (MDR) de comerciantes.
  */
 
 const validateAuthTokenMiddleware = require('../../middlewares/validate-auth-token.middleware');
@@ -18,19 +17,8 @@ const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('card_brand_mdr.route.js');
 
 /**
- * Registra las rutas en la aplicación para obtener las tasas de descuento (MDR),
- * actualizar y eliminar registros.
- *
- * - GET /card-brand-mdr/get-all-mdr
- *   Devuelve la información consolidada de todas las marcas.
- * - GET /card-brand-mdr/get-all-mdr-by-card-brand/:cardBrand
- *   Devuelve la información de la marca específica.
- * - PUT /card-brand-mdr/update/:cardBrand/mcc/:mcc
- *   Actualiza uno o varios campos de un MCC en la marca específica.
- * - DELETE /card-brand-mdr/delete/:cardBrand/mcc/:mcc
- *   Elimina el registro (MCC) en la marca específica.
- *
  * @function cardBrandMdrRoutes
+ * @description Registra las rutas relacionadas con las tasas de descuento (MDR) para comerciantes.
  * @param {import('express').Application} app - Instancia de la aplicación Express.
  * @param {string} prefixApi - Prefijo para las rutas de la API.
  */
@@ -43,41 +31,41 @@ const cardBrandMdrRoutes = (app, prefixApi) => {
   app.get(
     routeAll,
     validateAuthTokenMiddleware,
-    getAllMerchantsDiscountRateController,
+    getAllMerchantsDiscountRateController
   );
 
   // ==============================================
-  // Ruta para obtener tasas de descuento de una marca específica
-  // Param :cardBrand = "amex", "discover", "mastercard" o "visa"
+  // Ruta para obtener tasas de descuento de una marca específica.
+  // Se espera que el parámetro :cardBrand sea "amex", "discover", "mastercard" o "visa".
   // ==============================================
   const routeByBrand = `${prefixApi}/card-brand-mdr/get-all-mdr-by-card-brand/:cardBrand`;
   logger.info(`Registrando ruta: [GET] ${routeByBrand}`);
   app.get(
     routeByBrand,
     validateAuthTokenMiddleware,
-    getAllMerchantsDiscountRateByCardBrandController,
+    getAllMerchantsDiscountRateByCardBrandController
   );
 
   // ==============================================
-  // NUEVA RUTA: Actualizar campos de MDR por marca y MCC
+  // Ruta para actualizar campos de MDR por marca y MCC.
   // ==============================================
   const routeUpdate = `${prefixApi}/card-brand-mdr/update/:cardBrand/mcc/:mcc`;
   logger.info(`Registrando ruta: [PUT] ${routeUpdate}`);
   app.put(
     routeUpdate,
     validateAuthTokenMiddleware,
-    updateMerchantsDiscountRateByCardBrandAndMccController,
+    updateMerchantsDiscountRateByCardBrandAndMccController
   );
 
   // ==============================================
-  // NUEVA RUTA: Eliminar registro (MCC) por marca
+  // Ruta para eliminar el registro (MCC) por marca.
   // ==============================================
   const routeDelete = `${prefixApi}/card-brand-mdr/delete/:cardBrand/mcc/:mcc`;
   logger.info(`Registrando ruta: [DELETE] ${routeDelete}`);
   app.delete(
     routeDelete,
     validateAuthTokenMiddleware,
-    deleteMerchantsDiscountRateByCardBrandAndMccController,
+    deleteMerchantsDiscountRateByCardBrandAndMccController
   );
 };
 

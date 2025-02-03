@@ -1,7 +1,6 @@
 ### Healthcheck: Verificar estado del servidor
 GET http://localhost:3003/ms/mdr/v1/healthcheck
 X-Security-Header-Key: 7374b7ba0d5a8fa0c866097d401a96c5
-X-Security-Signature: signature_TYPE=SHARSA;PAYLOADSIGNED=HASHEDPAYLOADBYPEMANDTYPE
 Accept: application/json
 
 
