@@ -9,11 +9,10 @@ const logger = new LoggerHelper('add-payment-merchant-discount-rate-applied.serv
 /**
  * Agrega un registro de Payment Merchant Discount Rate Applied a la tabla correspondiente.
  *
- * @param {Object} req - Request object.
  * @param {Object} addData - Datos a insertar (ya validados).
  * @returns {Promise<Object>} Resultado de la operación.
  */
-const addPaymentMerchantDiscountRateAppliedService = async (req, addData) => {
+const addPaymentMerchantDiscountRateAppliedService = async (addData) => {
     logger.info('Inicio de addPaymentMerchantDiscountRateAppliedService');
 
     // Se instancia el repositorio correspondiente

@@ -25,7 +25,7 @@ const AddPaymentMerchantDiscountRateAppliedModule = async (req) => {
     logger.info('Inicio del módulo AddPaymentMerchantDiscountRateAppliedModule');
     const addData = req.body;
     validateBodySchema(addData, addPaymentMdrAppliedSchema, 'XXX.XXX.0001');
-    const result = await addPaymentMerchantDiscountRateAppliedService(req, addData);
+    const result = await addPaymentMerchantDiscountRateAppliedService(addData);
     logger.info('Finalización exitosa del módulo AddPaymentMerchantDiscountRateAppliedModule');
     return result;
 };
