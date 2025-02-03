@@ -52,7 +52,6 @@ module.exports = {
       tableNamePayments: process.env.DYNAMODB_TABLE_NAME_PAYMENTS || 'payments',
       tableNamePaymentsMdrApplied: process.env.DYNAMODB_TABLE_NAME_PAYMENTS_MDR_APPLIED || 'mdr_payments_mdr_applied',
       tableNameMerchants: process.env.DYNAMODB_TABLE_NAME_MERCHANTS || 'merchants',
-
     }
   },
 };

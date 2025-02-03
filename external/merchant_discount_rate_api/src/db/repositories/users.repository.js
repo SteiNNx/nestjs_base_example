@@ -16,9 +16,11 @@ class UsersRepository {
      * Crea una instancia de UsersRepository.
      */
     constructor() {
-        const { tableNamePayments } = getDynamoDbTablesNames();
+        const { tableNameUsers } = getDynamoDbTablesNames();
         this.dynamoClient = new ClientDynamoDb();
-        this.tableName = tableNamePayments;
+        logger.error(`tableNameUsers: ${tableNameUsers}`);
+
+        this.tableName = tableNameUsers;
     }
 
     /**
