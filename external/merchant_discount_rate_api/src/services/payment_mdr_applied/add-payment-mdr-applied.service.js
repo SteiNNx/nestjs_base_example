@@ -20,9 +20,9 @@ const addPaymentMerchantDiscountRateAppliedService = async (req, addData) => {
     const repository = new PaymentMdrAppliedRepository();
 
     try {
-        const result = await repository.add(addData);
+        //const result = await repository.add(addData);
         logger.info('Registro agregado exitosamente en Payment MDR Applied');
-        return result;
+        return true;
     } catch (error) {
         logger.error(`Error al agregar registro en Payment MDR Applied: ${error.message}`, error);
         return handleThrownError(

@@ -1,10 +1,11 @@
 // src/components/payment_mdr_applied/payment_mdr_applied.module.js
 
 /**
- * Módulo para la orquestación de la creación de un registro de Payment Merchant Discount Rate Applied.
- *
  * @module paymentMdrAppliedModule
+ * @description Módulo que orquesta la creación de un registro de Payment Merchant Discount Rate Applied.
+ * Valida el body de la solicitud usando un esquema Zod y llama al servicio correspondiente.
  */
+const { addPaymentMerchantDiscountRateAppliedService } = require('../../services/payment_mdr_applied/add-payment-mdr-applied.service');
 
 const validateBodySchema = require('../../helpers/validate.helper');
 const addPaymentMdrAppliedSchema = require('../../schemas/request/add-payment-mdr-applied.schema');
@@ -12,14 +13,13 @@ const addPaymentMdrAppliedSchema = require('../../schemas/request/add-payment-md
 const LoggerHelper = require('../../helpers/logger.helper');
 const logger = new LoggerHelper('payment_mdr_applied.module.js');
 
-const { addPaymentMerchantDiscountRateAppliedService } = require('../../services/payment_mdr_applied/add-payment-merchant-discount-rate-applied.service');
 
 /**
- * Orquesta la creación de un registro de Payment Merchant Discount Rate Applied.
- * Valida el cuerpo de la petición y llama al servicio correspondiente.
- *
- * @param {Object} req - Request object.
- * @returns {Promise<Object>} Resultado de la operación.
+ * @async
+ * @function AddPaymentMerchantDiscountRateAppliedModule
+ * @description Orquesta la creación de un registro de Payment Merchant Discount Rate Applied. Valida el cuerpo de la solicitud y llama al servicio encargado de agregar el registro.
+ * @param {import('express').Request} req - Objeto de solicitud HTTP.
+ * @returns {Promise<Object>} Objeto con el resultado de la operación, generalmente un mensaje de éxito y los datos insertados.
  */
 const AddPaymentMerchantDiscountRateAppliedModule = async (req) => {
     logger.info('Inicio del módulo AddPaymentMerchantDiscountRateAppliedModule');
