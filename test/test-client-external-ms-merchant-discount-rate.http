@@ -253,43 +253,60 @@ X-Security-Header-Key: 7374b7ba0d5a8fa0c866097d401a96c5
 Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJyb2xlIjoiVVNFUiIsInVzZXJJZCI6MiwiaWF0IjoxNzM4NjA1OTY2LCJleHAiOjE4MzMyMTM5NjYsImF1ZCI6ImF1dGgubWVyY2hhbnQtZGlzY291bnQtcmF0ZS5jb20iLCJpc3MiOiJhdXRoLm1lcmNoYW50LWRpc2NvdW50LXJhdGUuY29tIiwic3ViIjoidGVzdCIsImp0aSI6ImIwMTNkMWU1LWQ3MGYtNDJiZS04ODFmLTdkNTE1NzIyMmYwMCJ9.AQZCwpsOu36uFAevlD2JQ7PCg9p3juae5iKdz1hGVCFGET2LXVGSK40OFA4QZJXVSubECn2v70tUJe4GYAqTHC9vb6bW9yN7TBrEnFNF3gyeUcKCfwvdAIbdiad-ZqsJ7IZ_AhDDsJP2J-cRiF5tMFkF1iE2FYQUxCEf6VJSevKIrvM6tK31Y5rf7aSN1t5Hzxjc2xzackD0MEe6VKNb3bAJNdjJ1JCaQYbdBTHnqi0FyqplmBIeoV0w2p8l8NdTGuux_G3NgbzObPfG3ScpvyhgZY-l9F7GNvQEX3JotnxBXtfszuKPyrqRfctny-a0Z6kDeGoeT-qUdtuxLJ_bDg
 
 {
-  "transaction_id": "txn-123456",
-  "card_number": "411111******1111",
-  "amount": 100.50,
-  "currency": "USD",
-  "timestamp": "2025-02-01T12:34:56Z",
+  "transaction_id": "txn-9999-abc123",
+  "timestamp": "2025-01-10T12:30:00Z",
+  "timestamp_local": "2025-01-10T09:30:00-03:00",
+  "channel": "SmartPOS",
+  "mcc": "5411",
+  "card_type": "Débito",
+  "card_brand": "MasterCard",
+  "card_type_national_international": "Nacional",
+  "card_number": "550000******9999",
+  "amount": 108.75,
+  "currency": "CLP",
+  "transaction_type": "Pago",
+  "auth_code": "AUTH993211",
+  "response_code": "00",
+  "terminal_id": "term-9999",
+  "merchant_id": "m-1001",
   "merchant": {
-    "merchant_id": "m-001",
-    "name": "Restaurante El Buen Sabor",
-    "category": "Restaurante",
+    "merchant_id": "m-1001",
+    "name": "Supermercado Real",
+    "category": "Supermercado",
     "location": {
-      "address": "Av. Siempre Viva 123",
-      "city": "Springfield",
-      "country": "USA",
-      "latitude": 39.7817,
-      "longitude": -89.6501
+      "address": "Av. Principal 123",
+      "city": "Santiago",
+      "country": "Chile",
+      "latitude": -33.4489,
+      "longitude": -70.6693
     }
   },
-  "transaction_type": "Pago",
-  "auth_code": "AUTH1234",
-  "response_code": "00",
-  "terminal_id": "term-001",
   "issuer": {
-    "bank_id": "bank-001",
-    "name": "Banco Central",
-    "country": "USA"
+    "bank_id": "bank-2001",
+    "name": "Banco de Chile",
+    "country": "Chile"
   },
-  "cardholder_verification_method": "Firma",
+  "card_details": {
+    "masked_number": "550000******9999",
+    "payment_method": "Chip",
+    "chip_type": "EMV",
+    "entry_mode": "Chip",
+    "pinpad_used": true,
+    "signature_method": "N/A",
+    "installments": 1,
+    "network": "MasterCard",
+    "expiry_date": "2026-10"
+  },
   "emv_data": {
-    "application_id": "A0000000031010",
-    "application_label": "VISA CREDIT",
-    "transaction_counter": 5,
-    "unpredictable_number": "1A2B3C4D",
+    "application_id": "A0000000051010",
+    "application_label": "MASTERCARD DEBITO",
+    "transaction_counter": 12,
+    "unpredictable_number": "1A2B9C8D",
     "issuer_application_data": "01020304"
   },
   "additional_data": {
     "installments": 1,
-    "tip_amount": 0.00,
-    "cashback_amount": 0.00
+    "tip_amount": 0.0,
+    "cashback_amount": 0.0
   }
 }
