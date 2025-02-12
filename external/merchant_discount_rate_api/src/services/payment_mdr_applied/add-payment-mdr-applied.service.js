@@ -2,6 +2,7 @@
 
 const PaymentMdrAppliedRepository = require('../../db/repositories/payment_mdr_applied.repository');
 const { handleThrownError } = require('../../providers/error-handler.provider');
+const { computeCommissionCA } = require('../../helpers/mdr-engine.helper');
 
 const MdrAmexRepository = require('../../db/repositories/mdr_amex.repository');
 const MdrDiscoverRepository = require('../../db/repositories/mdr_discover.repository');
@@ -66,12 +67,24 @@ const addPaymentMerchantDiscountRateAppliedService = async (addData) => {
 
       if (brandMdrRecord) {
         logger.info(`Registro MDR encontrado para ${addData.card_brand}, MCC=${addData.mcc}`);
-        // Aquí podrías extraer la tasa que necesites, por ejemplo:
-        // const { debit_nacional_rate } = brandMdrRecord;
-        // addData.rateApplied = parseFloat(debit_nacional_rate?.N) || 0;
-        //
-        // O guardar en la tabla Payment MDR Applied la tasa
-        // etc.
+        const {
+          amount,
+          amountDiscountApplicated,
+          discountAmount,
+          discountRateApplicated,
+          discountUfApplicated,
+          rateKeyApplicated,
+          ufKeyApplicated,
+        } = await computeCommissionCA(addData, brandMdrRecord);
+
+        logger.info(`amount: ${amount}`);
+        logger.info(`amountDiscountApplicated: ${amountDiscountApplicated}`);
+        logger.info(`discountAmount: ${discountAmount}`);
+        logger.info(`discountRateApplicated: ${discountRateApplicated}`);
+        logger.info(`discountUfApplicated: ${discountUfApplicated}`);
+        logger.info(`rateKeyApplicated: ${rateKeyApplicated}`);
+        logger.info(`ufKeyApplicated: ${ufKeyApplicated}`);
+
       } else {
         logger.warn(`No se encontró MDR para brand=${addData.card_brand}, MCC=${addData.mcc}`);
       }

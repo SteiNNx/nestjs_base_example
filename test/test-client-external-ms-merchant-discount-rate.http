@@ -258,7 +258,7 @@ Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc
   "timestamp_local": "2025-01-10T09:30:00-03:00",
   "channel": "SmartPOS",
   "mcc": "5411",
-  "card_type": "Débito",
+  "card_type": "Debito",
   "card_brand": "MasterCard",
   "card_type_national_international": "Nacional",
   "card_number": "550000******9999",
